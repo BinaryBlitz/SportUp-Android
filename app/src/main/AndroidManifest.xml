@@ -2,6 +2,7 @@
     package="ru.binaryblitz.sportup">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +24,7 @@
         </activity>
 
         <activity
-            android:name=".activities.SelectLocationActivity"
+            android:name=".activities.SelectCityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
