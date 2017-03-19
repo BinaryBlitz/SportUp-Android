@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SportUp</string>
+
+    <string name="start">Найти игру</string>
+    <string name="lost_connection">Потеряно соединение с интернетом.</string>
+    <string name="location_error">Невозможно получить текущее местоположение.</string>
 </resources>
