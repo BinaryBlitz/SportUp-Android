@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
@@ -69,6 +70,15 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+
+        val item = menu.findItem(R.id.action_search)
+        searchView?.setMenuItem(item)
+
+        return true
+    }
+
     private fun initSearchView() {
         searchView = findViewById(R.id.search_view) as MaterialSearchView
         searchView?.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
@@ -88,6 +98,7 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
             }
         })
 
+        searchView?.setHint(getString(R.string.items_search))
         searchView?.setVoiceSearch(false)
     }
 
@@ -139,7 +150,7 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
                     getLocation()
                 }
             } catch (ignored: Exception) {
-                layout!!.isRefreshing = false
+                layout?.isRefreshing = false
             }
 
         } else {
@@ -161,11 +172,11 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     override fun onConnectionSuspended(i: Int) {
-        mGoogleApiClient!!.connect()
+        mGoogleApiClient?.connect()
     }
 
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        layout!!.isRefreshing = false
+        layout?.isRefreshing = false
         onLocationError()
     }
 
@@ -189,27 +200,28 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
         view.adapter = adapter
 
         layout = findViewById(R.id.refresh) as SwipeRefreshLayout
-        layout!!.setOnRefreshListener(this)
-        layout!!.setColorSchemeResources(R.color.colorAccent)
+        layout?.setOnRefreshListener(this)
+        layout?.setColorSchemeResources(R.color.colorAccent)
     }
 
     private fun load() {
         ServerApi.get(this).api().citiesList.enqueue(object : Callback<JsonArray> {
             override fun onResponse(call: Call<JsonArray>, response: Response<JsonArray>) {
-                layout!!.isRefreshing = false
+                layout?.isRefreshing = false
                 if (response.isSuccessful) {
                     parseAnswer(response.body())
                 }
             }
 
             override fun onFailure(call: Call<JsonArray>, t: Throwable) {
-                layout!!.isRefreshing = false
+                layout?.isRefreshing = false
                 onInternetConnectionError()
             }
         })
     }
 
     private fun parseAnswer(array: JsonArray) {
+        LogUtil.logError(array.toString())
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
                 .map {
@@ -222,8 +234,8 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
 
         allCitiesList = collection as ArrayList<CitiesAdapter.City>
 
-        adapter!!.setCollection(collection)
-        adapter!!.notifyDataSetChanged()
+        adapter?.setCollection(collection)
+        adapter?.notifyDataSetChanged()
     }
 
     private fun load(latitude: Double, longitude: Double) {
@@ -235,7 +247,7 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
                 if (adapter!!.itemCount == 0) {
                     cityError()
                 } else {
-                    adapter!!.selectCity(addresses[0].latitude, addresses[0].longitude)
+                    adapter?.selectCity(addresses[0].latitude, addresses[0].longitude)
                 }
             } else {
                 onLocationError()
@@ -247,7 +259,7 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     private fun getLocation() {
-        layout!!.isRefreshing = false
+        layout?.isRefreshing = false
         if (mGoogleApiClient!!.isConnected) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 onLocationError()
@@ -260,7 +272,7 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
                 onLocationError()
             }
         } else {
-            mGoogleApiClient!!.connect()
+            mGoogleApiClient?.connect()
         }
     }
 

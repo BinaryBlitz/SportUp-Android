@@ -2,7 +2,6 @@ package ru.binaryblitz.sportup.server;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import ru.binaryblitz.Chisto.Server.ServerConfig;
 import ru.binaryblitz.sportup.models.City;
 import ru.binaryblitz.sportup.models.User;
 import ru.binaryblitz.sportup.utils.LogUtil;

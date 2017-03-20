@@ -10,11 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp">
-        <ru.binaryblitz.Chisto.Custom.RecyclerListView
+        <ru.binaryblitz.sportup.custom.RecyclerListView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </ru.binaryblitz.Chisto.Custom.RecyclerListView>
+        </ru.binaryblitz.sportup.custom.RecyclerListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.AppBarLayout
@@ -50,17 +50,6 @@
                         android:layout_gravity="start"
                         />
 
-                    <ImageView
-                        android:id="@+id/my_loc_btn"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:layout_width="56dp"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_search"
-                        android:padding="18dp"
-                        android:layout_gravity="end"
-                        />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -71,6 +60,8 @@
                         android:gravity="center_vertical"
                         android:typeface="sans"
                         android:textSize="22sp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginLeft="32dp"
                         android:textColor="#ffffff" />
 
                 </FrameLayout>

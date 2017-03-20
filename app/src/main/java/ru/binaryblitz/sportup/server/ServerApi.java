@@ -12,7 +12,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.binaryblitz.Chisto.Server.ServerConfig;
 import ru.binaryblitz.sportup.utils.AndroidUtilities;
 
 public class ServerApi {

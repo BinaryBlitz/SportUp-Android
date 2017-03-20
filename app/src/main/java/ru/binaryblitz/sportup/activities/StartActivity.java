@@ -18,7 +18,7 @@ public class StartActivity extends BaseActivity {
         findViewById(R.id.start_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(StartActivity.this, SelectLocationActivity.class));
+                startActivity(new Intent(StartActivity.this, SelectCityActivity.class));
                 finish();
             }
         });

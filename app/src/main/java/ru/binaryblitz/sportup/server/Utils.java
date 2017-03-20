@@ -1,4 +1,4 @@
-package ru.binaryblitz.Chisto.Server;
+package ru.binaryblitz.sportup.server;
 
 import java.io.File;
 
