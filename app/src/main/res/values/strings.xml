@@ -4,4 +4,6 @@
     <string name="start">Найти игру</string>
     <string name="lost_connection">Потеряно соединение с интернетом.</string>
     <string name="location_error">Невозможно получить текущее местоположение.</string>
+    <string name="city_select">Выбор города</string>
+    <string name="city_error">Вашего города нет в списке.</string>
 </resources>
