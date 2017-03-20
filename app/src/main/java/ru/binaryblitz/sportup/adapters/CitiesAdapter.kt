@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.sportup.R
+import ru.binaryblitz.sportup.activities.SportsActivity
 import ru.binaryblitz.sportup.models.User
 import ru.binaryblitz.sportup.server.DeviceInfoStore
 import java.util.*
@@ -42,14 +43,14 @@ class CitiesAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
         }
 
         holder.itemView.setOnClickListener {
-//            val intent = Intent(context, OrdersActivity::class.java)
-//            DeviceInfoStore.saveCity(context, city)
-//            if (DeviceInfoStore.getToken(context) == "null") {
-//                saveUser(city)
-//            }
-//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//            context.startActivity(intent)
-//            context.finish()
+            val intent = Intent(context, SportsActivity::class.java)
+            DeviceInfoStore.saveCity(context, city)
+            if (DeviceInfoStore.getToken(context) == "null") {
+                saveUser(city)
+            }
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(intent)
+            context.finish()
         }
     }
 
