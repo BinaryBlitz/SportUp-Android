@@ -7,4 +7,9 @@
     <string name="city_select">Выбор города</string>
     <string name="city_error">Вашего города нет в списке</string>
     <string name="items_search">Поиск</string>
+    <string name="select_sport">Выберите вид спорта</string>
+
+    <string name="search_sports">Поиск игр</string>
+    <string name="my_games">Мои события</string>
+    <string name="profile">Профиль</string>
 </resources>
