@@ -1,0 +1,16 @@
+<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ru.binaryblitz.sportup.custom.RecyclerListView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ru.binaryblitz.sportup.custom.RecyclerListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</FrameLayout>
