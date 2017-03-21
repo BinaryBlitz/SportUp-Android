@@ -1,6 +1,5 @@
 package ru.binaryblitz.sportup.activities
 
-import kotlinx.android.synthetic.main.activity_select_city.*
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
@@ -21,15 +20,14 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import com.miguelcatalan.materialsearchview.MaterialSearchView
+import kotlinx.android.synthetic.main.activity_select_city.*
 import ru.binaryblitz.sportup.R
 import ru.binaryblitz.sportup.adapters.CitiesAdapter
 import ru.binaryblitz.sportup.base.BaseActivity
-import ru.binaryblitz.sportup.custom.RecyclerListView
 import ru.binaryblitz.sportup.presenters.CitiesPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
 import ru.binaryblitz.sportup.utils.AndroidUtilities
 import ru.binaryblitz.sportup.utils.LocationManager
-import ru.binaryblitz.sportup.utils.LogUtil
 import javax.inject.Inject
 
 class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
@@ -75,9 +73,9 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     private fun setOnClickListeners() {
-        findViewById(R.id.back_btn).setOnClickListener { finish() }
+        backBtn.setOnClickListener { finish() }
 
-        findViewById(R.id.near_btn).setOnClickListener { checkPermissions() }
+        nearBtn.setOnClickListener { checkPermissions() }
     }
 
     fun getGoogleApiClient(): GoogleApiClient? {
@@ -85,7 +83,6 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     fun initGoogleApiClient() {
-        LogUtil.logError((mGoogleApiClient == null).toString())
         if (mGoogleApiClient == null) {
             mGoogleApiClient = GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -190,17 +187,16 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     fun cityError() {
-        Snackbar.make(findViewById(R.id.main), R.string.city_error, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(main, R.string.city_error, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun initList() {
-        val view = findViewById(R.id.recyclerView) as RecyclerListView
-        view.layoutManager = LinearLayoutManager(this)
-        view.itemAnimator = DefaultItemAnimator()
-        view.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView.setHasFixedSize(true)
 
         adapter = CitiesAdapter(this)
-        view.adapter = adapter
+        recyclerView.adapter = adapter
 
         refresh.setOnRefreshListener(this)
         refresh.setColorSchemeResources(R.color.colorAccent)
