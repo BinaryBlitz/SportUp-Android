@@ -6,11 +6,11 @@ import ru.binaryblitz.sportup.R
 
 open class BaseActivity : AppCompatActivity() {
 
-    protected fun onInternetConnectionError() {
+    fun onInternetConnectionError() {
         Snackbar.make(findViewById(R.id.main), R.string.lost_connection, Snackbar.LENGTH_SHORT).show()
     }
 
-    protected fun onLocationError() {
+    fun onLocationError() {
         Snackbar.make(findViewById(R.id.main), R.string.location_error, Snackbar.LENGTH_SHORT).show()
     }
 }

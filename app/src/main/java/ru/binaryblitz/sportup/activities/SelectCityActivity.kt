@@ -2,9 +2,6 @@ package ru.binaryblitz.sportup.activities
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -30,19 +27,30 @@ import ru.binaryblitz.sportup.custom.RecyclerListView
 import ru.binaryblitz.sportup.models.City
 import ru.binaryblitz.sportup.server.ServerApi
 import ru.binaryblitz.sportup.utils.AndroidUtilities
-import ru.binaryblitz.sportup.utils.LogUtil
-import java.io.IOException
-import java.util.*
-import kotlin.collections.ArrayList
+import ru.binaryblitz.sportup.utils.LocationManager
 
 class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private var adapter: CitiesAdapter? = null
     private var layout: SwipeRefreshLayout? = null
     private var mGoogleApiClient: GoogleApiClient? = null
-    private var mLastLocation: Location? = null
     private var searchView: MaterialSearchView? = null
     private var allCitiesList: ArrayList<CitiesAdapter.City>? = null
+
+    val locationManager = LocationManager(this@SelectCityActivity, mGoogleApiClient,
+            object : LocationManager.LocationUpdateListener {
+                override fun onLocationUpdated(latitude: Double?, longitude: Double?) {
+                    this@SelectCityActivity.onLocationUpdated(latitude, longitude)
+                }
+            })
+
+    private fun onLocationUpdated(latitude: Double?, longitude: Double?) {
+        if (adapter!!.itemCount == 0 || latitude == null || longitude == null) {
+            cityError()
+        } else {
+            adapter?.selectCity(latitude, longitude)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,23 +155,22 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION)
                 } else {
-                    getLocation()
+                    locationManager.getLocation()
                 }
             } catch (ignored: Exception) {
                 layout?.isRefreshing = false
             }
 
         } else {
-            getLocation()
+            locationManager.getLocation()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             LOCATION_PERMISSION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLocation()
+                    locationManager.getLocation()
                 } else {
                     onLocationError()
                 }
@@ -187,7 +194,9 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
     private fun setOnClickListeners() {
         findViewById(R.id.back_btn).setOnClickListener { finish() }
 
-        findViewById(R.id.near_btn).setOnClickListener { getLocation() }
+        findViewById(R.id.near_btn).setOnClickListener {
+            locationManager.getLocation()
+        }
     }
 
     private fun initList() {
@@ -221,7 +230,6 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     private fun parseAnswer(array: JsonArray) {
-        LogUtil.logError(array.toString())
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
                 .map {
@@ -236,44 +244,6 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
 
         adapter?.setCollection(collection)
         adapter?.notifyDataSetChanged()
-    }
-
-    private fun load(latitude: Double, longitude: Double) {
-        val gcd = Geocoder(this, Locale.getDefault())
-        val addresses: List<Address>
-        try {
-            addresses = gcd.getFromLocation(latitude, longitude, 1)
-            if (addresses.isNotEmpty()) {
-                if (adapter!!.itemCount == 0) {
-                    cityError()
-                } else {
-                    adapter?.selectCity(addresses[0].latitude, addresses[0].longitude)
-                }
-            } else {
-                onLocationError()
-            }
-        } catch (e: IOException) {
-            LogUtil.logException(e)
-        }
-
-    }
-
-    private fun getLocation() {
-        layout?.isRefreshing = false
-        if (mGoogleApiClient!!.isConnected) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                onLocationError()
-                return
-            }
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
-            if (mLastLocation != null) {
-                load(mLastLocation!!.latitude, mLastLocation!!.longitude)
-            } else {
-                onLocationError()
-            }
-        } else {
-            mGoogleApiClient?.connect()
-        }
     }
 
     companion object {
