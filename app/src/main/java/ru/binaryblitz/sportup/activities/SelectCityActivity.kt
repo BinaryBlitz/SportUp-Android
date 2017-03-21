@@ -35,7 +35,7 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
 
     private var adapter: CitiesAdapter? = null
     private var allCitiesList: ArrayList<CitiesAdapter.City>? = null
-    private var mGoogleApiClient: GoogleApiClient? = null
+    private var googleApiClient: GoogleApiClient? = null
 
     @Inject
     lateinit var api: EndpointsService
@@ -79,12 +79,12 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     fun getGoogleApiClient(): GoogleApiClient? {
-        return mGoogleApiClient
+        return googleApiClient
     }
 
     fun initGoogleApiClient() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = GoogleApiClient.Builder(this)
+        if (googleApiClient == null) {
+            googleApiClient = GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
@@ -178,7 +178,7 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     override fun onConnectionSuspended(i: Int) {
-        mGoogleApiClient?.connect()
+        googleApiClient?.connect()
     }
 
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
