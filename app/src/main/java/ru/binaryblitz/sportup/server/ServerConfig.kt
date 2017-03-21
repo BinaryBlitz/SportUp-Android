@@ -1,7 +1,7 @@
 package ru.binaryblitz.sportup.server
 
 object ServerConfig {
-    val baseUrl = "https://sportup-staging.herokuapp.com"
+    val baseUrl = "https://chisto.xyz"
     val apiURL = baseUrl + "/api/"
 
     val imageUrl: String

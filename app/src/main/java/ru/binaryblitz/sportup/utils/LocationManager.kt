@@ -1,18 +1,14 @@
 package ru.binaryblitz.sportup.utils
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.support.v4.app.ActivityCompat
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
-import ru.binaryblitz.sportup.base.BaseActivity
+import ru.binaryblitz.sportup.activities.SelectCityActivity
 import java.io.IOException
 import java.util.*
 
-class LocationManager(val activity: BaseActivity, val googleApiClient: GoogleApiClient?, val listener: LocationUpdateListener) {
+class LocationManager(val activity: SelectCityActivity, val listener: LocationUpdateListener) {
     private var lastLocation: Location? = null
 
     interface LocationUpdateListener {
@@ -36,19 +32,16 @@ class LocationManager(val activity: BaseActivity, val googleApiClient: GoogleApi
     }
 
     fun getLocation() {
-        if (!googleApiClient!!.isConnected) {
-            googleApiClient.connect()
-            listener.onLocationUpdated(null, null)
+        if (activity.getGoogleApiClient() == null) {
+            activity.initGoogleApiClient()
+            return
+        }
+        if (!activity.getGoogleApiClient()!!.isConnected) {
+            activity.getGoogleApiClient()!!.connect()
             return
         }
 
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            activity.onLocationError()
-            listener.onLocationUpdated(null, null)
-            return
-        }
-
-        lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
+        lastLocation = LocationServices.FusedLocationApi.getLastLocation(activity.getGoogleApiClient())
 
         if (lastLocation != null) {
             load(lastLocation!!.latitude, lastLocation!!.longitude)

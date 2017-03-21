@@ -1,77 +1,82 @@
 package ru.binaryblitz.sportup.server;
 
-import android.content.Context;
-
+import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.binaryblitz.sportup.utils.AndroidUtilities;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+@Module
 public class ServerApi {
+    private File cacheFile;
 
-    private static ServerApi api;
-    private static ApiEndpoints apiService;
-    private static Retrofit retrofit;
+    public ServerApi(File cacheFile) {
+        this.cacheFile = cacheFile;
+    }
 
-    private static final int TIME_OUT = 10;
+    @Provides
+    @Singleton
+    Retrofit provideCall() {
+        Cache cache = null;
+        try {
+            cache = new Cache(cacheFile, 10 * 1024 * 1024);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    private void initRetrofit(final Context context) {
-
-        OkHttpClient client = new OkHttpClient
-                .Builder()
-                .cache(new Cache(context.getCacheDir(), 10 * 1024 * 1024))
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
                     @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request request = chain.request();
-                        Request.Builder builder = request.newBuilder().header("Accept", "application/json");
-                        if (AndroidUtilities.INSTANCE.isConnected(context)) {
-                            request = builder.header("Cache-Control", "public, max-age=" + 60).build();
-                        } else {
-                            request = builder.header("Cache-Control",
-                                    "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7).build();
-                        }
-                        return chain.proceed(request);
+                    public okhttp3.Response intercept(Chain chain) throws IOException {
+                        Request original = chain.request();
+
+                        Request request = original.newBuilder()
+                                .header("Content-Type", "application/json")
+                                .removeHeader("Pragma")
+                                .header("Cache-Control", "max-age=600")
+                                .build();
+
+                        okhttp3.Response response = chain.proceed(request);
+                        response.cacheResponse();
+
+                        return response;
                     }
                 })
-                .readTimeout(TIME_OUT, TimeUnit.SECONDS)
-                .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .cache(cache)
                 .build();
 
-        retrofit = new Retrofit.Builder()
-                .client(client)
+
+        return new Retrofit.Builder()
                 .baseUrl(ServerConfig.INSTANCE.getApiURL())
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-
-        apiService = retrofit.create(ApiEndpoints.class);
     }
 
-    public static ServerApi get(Context context) {
-        if (api == null) {
-            synchronized (ServerApi.class) {
-                if (api == null) api = new ServerApi(context);
-            }
-        }
-        return api;
+    @Provides
+    @Singleton
+    public ApiEndpoints providesNetworkService(
+            Retrofit retrofit) {
+        return retrofit.create(ApiEndpoints.class);
     }
 
-    public static Retrofit retrofit() {
-        return retrofit;
+    @Provides
+    @Singleton
+    public EndpointsService providesService(
+            ApiEndpoints networkService) {
+        return new EndpointsService(networkService);
     }
 
-    private ServerApi(Context context) {
-        initRetrofit(context);
-    }
-
-    public ApiEndpoints api() {
-        return apiService;
-    }
 }

@@ -28,6 +28,13 @@ object AndroidUtilities {
         imm.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
+    fun nameEqualsTo(item: String?, query: String): Boolean {
+        if (item == null) {
+            return false
+        }
+        return item.toLowerCase().contains(query)
+    }
+
     fun dpToPx(context: Context, dipValue: Float): Int {
         val scale = context.resources.displayMetrics.density
         return (dipValue * scale + 0.5f).toInt()
