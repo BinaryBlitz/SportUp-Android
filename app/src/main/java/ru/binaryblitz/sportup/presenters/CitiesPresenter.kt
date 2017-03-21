@@ -23,7 +23,6 @@ class CitiesPresenter(private val service: EndpointsService, private val view: S
             override fun onError(networkError: String) {
                 view.onInternetConnectionError()
                 view.hideLoadingIndicator()
-                LogUtil.logError(networkError)
             }
         })
     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import ru.binaryblitz.sportup.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.binaryblitz.sportup.R
+import ru.binaryblitz.sportup.fragments.SportsListFragment
 
 
 class SportsActivity : BaseActivity() {
@@ -11,9 +12,10 @@ class SportsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportFragmentManager.beginTransaction().replace(R.id.container, SportsListFragment()).commit()
+
         bottomBar.setOnTabSelectListener { tabId ->
-//            if (tabId == R.id.tab_favorites) {
-//            }
+            // TODO
         }
     }
 }

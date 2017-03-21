@@ -12,4 +12,22 @@
     <string name="search_sports">Поиск игр</string>
     <string name="my_games">Мои события</string>
     <string name="profile">Профиль</string>
+
+    <plurals name="places">
+        <item quantity="zero">0 площадок</item>
+        <item quantity="one">%1$d площадка</item>
+        <item quantity="two">%1$d площадки</item>
+        <item quantity="few">%1$d площадки</item>
+        <item quantity="many">%1$d площадок</item>
+        <item quantity="other">%1$d площадок</item>
+    </plurals>
+
+    <plurals name="games">
+        <item quantity="zero">0 игр</item>
+        <item quantity="one">%1$d игра</item>
+        <item quantity="two">%1$d игры</item>
+        <item quantity="few">%1$d игры</item>
+        <item quantity="many">%1$d игр</item>
+        <item quantity="other">%1$d игр</item>
+    </plurals>
 </resources>
