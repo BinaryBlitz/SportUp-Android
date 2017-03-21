@@ -8,4 +8,7 @@ import retrofit2.http.GET;
 public interface ApiEndpoints {
     @GET("cities")
     Observable<JsonArray> getCitiesList();
+
+    @GET("sport_types")
+    Observable<JsonArray> getSportTypes();
 }
