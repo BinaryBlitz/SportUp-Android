@@ -2,11 +2,11 @@ package ru.binaryblitz.sportup.activities
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import devs.mulham.horizontalcalendar.HorizontalCalendar
+import kotlinx.android.synthetic.main.activity_games_feed.*
 import ru.binaryblitz.sportup.R
 import ru.binaryblitz.sportup.adapters.GamesAdapter
 import ru.binaryblitz.sportup.base.BaseActivity
@@ -15,7 +15,6 @@ import ru.binaryblitz.sportup.presenters.GamesPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
 import java.util.*
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.activity_games_feed.*
 
 class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var adapter: GamesAdapter
@@ -36,6 +35,7 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
         initCalendar()
         initList()
         initToolbar()
+        setOnClickListeners()
 
         load()
     }
@@ -43,6 +43,10 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
     private fun initToolbar() {
         titleTextView.text = intent.getStringExtra(EXTRA_NAME)
         appBarView.setBackgroundColor(intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR))
+    }
+
+    private fun setOnClickListeners() {
+        backBtn.setOnClickListener { finish() }
     }
 
     private fun initCalendar() {

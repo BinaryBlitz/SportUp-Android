@@ -38,6 +38,17 @@
                         android:layout_gravity="start"
                         />
 
+                    <ImageView
+                        android:id="@+id/rightBtn"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_nav_map_white"
+                        android:padding="13dp"
+                        android:layout_gravity="end"
+                        />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
