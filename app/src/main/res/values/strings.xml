@@ -23,7 +23,7 @@
         <item quantity="other">%1$d площадок</item>
     </plurals>
 
-    <plurals name="games">
+    <plurals name="events">
         <item quantity="zero">0 игр</item>
         <item quantity="one">%1$d игра</item>
         <item quantity="two">%1$d игры</item>

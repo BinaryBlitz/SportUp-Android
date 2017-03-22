@@ -57,7 +57,7 @@ class SportTypesAdapter(private val context: Activity) : RecyclerView.Adapter<Re
     }
 
     private fun generateDescription(sportType: SportType): String {
-        val gamesText = context.resources.getQuantityString(R.plurals.games,
+        val gamesText = context.resources.getQuantityString(R.plurals.events,
                 sportType.gamesQuantity, sportType.gamesQuantity)
         val placesText = context.resources.getQuantityString(R.plurals.places,
                 sportType.placesQuantity, sportType.placesQuantity)

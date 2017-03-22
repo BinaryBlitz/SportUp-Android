@@ -2,14 +2,14 @@ package ru.binaryblitz.sportup.presenters
 
 import com.google.gson.JsonArray
 import ru.binaryblitz.sportup.activities.SportEventsActivity
-import ru.binaryblitz.sportup.models.Game
+import ru.binaryblitz.sportup.models.Event
 import ru.binaryblitz.sportup.server.EndpointsService
 import ru.binaryblitz.sportup.server.JsonArrayResponseListener
 import ru.binaryblitz.sportup.utils.AndroidUtilities
 import ru.binaryblitz.sportup.utils.DateUtils
 import ru.binaryblitz.sportup.utils.LogUtil
 
-class GamesPresenter(private val service: EndpointsService, private val view: SportEventsActivity) {
+class EventsPresenter(private val service: EndpointsService, private val view: SportEventsActivity) {
 
     fun getGames(id: Int, date: String) {
         service.getGames(id, date, object : JsonArrayResponseListener {
@@ -28,7 +28,7 @@ class GamesPresenter(private val service: EndpointsService, private val view: Sp
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
                 .map {
-                    Game(AndroidUtilities.getIntFieldFromJson(it.get("id")),
+                    Event(AndroidUtilities.getIntFieldFromJson(it.get("id")),
                             AndroidUtilities.getStringFieldFromJson(it.get("name")),
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("starts_at"))),
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("starts_at"))),
@@ -39,7 +39,7 @@ class GamesPresenter(private val service: EndpointsService, private val view: Sp
                             AndroidUtilities.getIntFieldFromJson(it.get("price")))
                 }
 
-        view.onLoaded(collection = collection as ArrayList<Game>)
+        view.onLoaded(collection = collection as ArrayList<Event>)
     }
 
 }

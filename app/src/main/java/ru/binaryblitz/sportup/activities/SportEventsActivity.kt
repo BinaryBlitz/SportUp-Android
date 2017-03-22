@@ -8,16 +8,16 @@ import android.support.v7.widget.LinearLayoutManager
 import devs.mulham.horizontalcalendar.HorizontalCalendar
 import kotlinx.android.synthetic.main.activity_games_feed.*
 import ru.binaryblitz.sportup.R
-import ru.binaryblitz.sportup.adapters.GamesAdapter
+import ru.binaryblitz.sportup.adapters.EventsAdapter
 import ru.binaryblitz.sportup.base.BaseActivity
-import ru.binaryblitz.sportup.models.Game
-import ru.binaryblitz.sportup.presenters.GamesPresenter
+import ru.binaryblitz.sportup.models.Event
+import ru.binaryblitz.sportup.presenters.EventsPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
 import java.util.*
 import javax.inject.Inject
 
 class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
-    private lateinit var adapter: GamesAdapter
+    private lateinit var adapter: EventsAdapter
 
     val EXTRA_COLOR = "color"
     val EXTRA_ID = "id"
@@ -68,20 +68,20 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.setHasFixedSize(true)
 
-        adapter = GamesAdapter(this)
+        adapter = EventsAdapter(this)
         recyclerView.adapter = adapter
 
         refresh.setOnRefreshListener(this)
         refresh.setColorSchemeResources(R.color.colorAccent)
     }
 
-    fun onLoaded(collection: ArrayList<Game>) {
+    fun onLoaded(collection: ArrayList<Event>) {
         adapter.setCollection(collection)
         adapter.notifyDataSetChanged()
     }
 
     private fun load() {
-        val presenter = GamesPresenter(api, this)
+        val presenter = EventsPresenter(api, this)
         presenter.getGames(intent.getIntExtra(EXTRA_ID, 0), "21-04-2017")
     }
 

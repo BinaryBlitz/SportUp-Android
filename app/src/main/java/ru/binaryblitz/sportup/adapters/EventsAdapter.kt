@@ -8,19 +8,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.sportup.R
-import ru.binaryblitz.sportup.models.Game
+import ru.binaryblitz.sportup.models.Event
 import ru.binaryblitz.sportup.utils.DateUtils
 import java.util.*
 
-class GamesAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var games: ArrayList<Game>
+    private var games: ArrayList<Event>
     init {
-        games = ArrayList<Game>()
+        games = ArrayList<Event>()
     }
 
-    fun setCollection(games: ArrayList<Game>) {
-        this.games = games
+    fun setCollection(events: ArrayList<Event>) {
+        this.games = events
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -41,13 +41,6 @@ class GamesAdapter(private val context: Activity) : RecyclerView.Adapter<Recycle
         holder.price.text = game.price.toString() + context.getString(R.string.ruble_sign)
 
         holder.isPublic.visibility = if (game.isPublic) View.VISIBLE else View.GONE
-
-//        holder.itemView.setOnClickListener {
-//            val intent = Intent(context, SportEventsActivity::class.java)
-//            intent.putExtra(EXTRA_ID, sportType.id)
-//            intent.putExtra(EXTRA_COLOR, sportType.color)
-//            context.startActivity(intent)
-//        }
     }
 
     override fun getItemCount(): Int {
