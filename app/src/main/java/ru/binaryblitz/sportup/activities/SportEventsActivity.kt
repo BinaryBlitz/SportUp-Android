@@ -6,7 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import devs.mulham.horizontalcalendar.HorizontalCalendar
-import kotlinx.android.synthetic.main.activity_games_feed.*
+import kotlinx.android.synthetic.main.activity_events_feed.*
 import ru.binaryblitz.sportup.R
 import ru.binaryblitz.sportup.adapters.EventsAdapter
 import ru.binaryblitz.sportup.base.BaseActivity
@@ -29,7 +29,7 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_games_feed)
+        setContentView(R.layout.activity_events_feed)
         dependencies()!!.inject(this)
 
         initCalendar()

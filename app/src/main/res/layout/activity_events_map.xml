@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="ru.binaryblitz.sportup.custom.CustomMapFragment$MySupportMapFragment"/>
+
+    <ImageView
+        android:id="@+id/back_btn"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_back"
+        android:padding="13dp"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/nearBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="normal"
+        app:backgroundTint="@color/whiteColor"
+        android:src="@drawable/icon_locationpoint_black"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="end|bottom"/>
+</FrameLayout>

@@ -1,7 +1,5 @@
 package ru.binaryblitz.sportup.activities
 
-import android.Manifest
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
@@ -10,44 +8,25 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.LocationServices
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.single.PermissionListener
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import kotlinx.android.synthetic.main.activity_select_city.*
 import ru.binaryblitz.sportup.R
 import ru.binaryblitz.sportup.adapters.CitiesAdapter
-import ru.binaryblitz.sportup.base.BaseActivity
+import ru.binaryblitz.sportup.base.LocationDependentActivity
 import ru.binaryblitz.sportup.presenters.CitiesPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
 import ru.binaryblitz.sportup.utils.AndroidUtilities
-import ru.binaryblitz.sportup.utils.LocationManager
 import javax.inject.Inject
 
-class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+class SelectCityActivity : LocationDependentActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private var adapter: CitiesAdapter? = null
     private var allCitiesList: ArrayList<CitiesAdapter.City>? = null
-    private var googleApiClient: GoogleApiClient? = null
 
     @Inject
     lateinit var api: EndpointsService
 
-    val locationManager = LocationManager(this@SelectCityActivity,
-            object : LocationManager.LocationUpdateListener {
-                override fun onLocationUpdated(latitude: Double?, longitude: Double?) {
-                    this@SelectCityActivity.onLocationUpdated(latitude, longitude)
-                }
-            })
-
-    private fun onLocationUpdated(latitude: Double?, longitude: Double?) {
+    override fun onLocationUpdated(latitude: Double?, longitude: Double?) {
         if (adapter!!.itemCount == 0 || latitude == null || longitude == null) {
             cityError()
         } else {
@@ -78,20 +57,6 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
         nearBtn.setOnClickListener { checkPermissions() }
     }
 
-    fun getGoogleApiClient(): GoogleApiClient? {
-        return googleApiClient
-    }
-
-    fun initGoogleApiClient() {
-        if (googleApiClient == null) {
-            googleApiClient = GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
 
@@ -99,24 +64,6 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
         searchView.setMenuItem(item)
 
         return true
-    }
-
-    private fun checkPermissions() {
-        Dexter.withActivity(this)
-                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                .withListener(object: PermissionListener {
-                    override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                        locationManager.getLocation()
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest?, token: PermissionToken?) {
-                    }
-
-                    override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                        onLocationError()
-                    }
-                })
-                .check()
     }
 
     private fun initSearchView() {
@@ -167,23 +114,6 @@ class SelectCityActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener,
 
     override fun onRefresh() {
         load()
-    }
-
-    override fun onConnected(bundle: Bundle?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkPermissions()
-        } else {
-            locationManager.getLocation()
-        }
-    }
-
-    override fun onConnectionSuspended(i: Int) {
-        googleApiClient?.connect()
-    }
-
-    override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        refresh.isRefreshing = false
-        onLocationError()
     }
 
     fun cityError() {

@@ -4,11 +4,11 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import com.google.android.gms.location.LocationServices
-import ru.binaryblitz.sportup.activities.SelectCityActivity
+import ru.binaryblitz.sportup.base.LocationDependentActivity
 import java.io.IOException
 import java.util.*
 
-class LocationManager(val activity: SelectCityActivity, val listener: LocationUpdateListener) {
+class LocationManager(val activity: LocationDependentActivity, val listener: LocationUpdateListener) {
     private var lastLocation: Location? = null
 
     interface LocationUpdateListener {
@@ -32,16 +32,16 @@ class LocationManager(val activity: SelectCityActivity, val listener: LocationUp
     }
 
     fun getLocation() {
-        if (activity.getGoogleApiClient() == null) {
+        if (activity.client() == null) {
             activity.initGoogleApiClient()
             return
         }
-        if (!activity.getGoogleApiClient()!!.isConnected) {
-            activity.getGoogleApiClient()!!.connect()
+        if (!activity.client()!!.isConnected) {
+            activity.client()!!.connect()
             return
         }
 
-        lastLocation = LocationServices.FusedLocationApi.getLastLocation(activity.getGoogleApiClient())
+        lastLocation = LocationServices.FusedLocationApi.getLastLocation(activity.client())
 
         if (lastLocation != null) {
             load(lastLocation!!.latitude, lastLocation!!.longitude)

@@ -24,7 +24,7 @@ class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_game_event, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false)
 
         return ViewHolder(itemView)
     }
