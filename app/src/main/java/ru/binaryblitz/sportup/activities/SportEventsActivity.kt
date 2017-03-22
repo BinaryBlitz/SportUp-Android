@@ -7,20 +7,23 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import devs.mulham.horizontalcalendar.HorizontalCalendar
-import kotlinx.android.synthetic.main.activity_select_city.*
 import ru.binaryblitz.sportup.R
 import ru.binaryblitz.sportup.adapters.GamesAdapter
 import ru.binaryblitz.sportup.base.BaseActivity
 import ru.binaryblitz.sportup.models.Game
 import ru.binaryblitz.sportup.presenters.GamesPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
-import ru.binaryblitz.sportup.utils.DateUtils
 import java.util.*
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_games_feed.*
 
 class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var adapter: GamesAdapter
+
+    val EXTRA_COLOR = "color"
     val EXTRA_ID = "id"
+    val EXTRA_NAME = "name"
+    val DEFAULT_COLOR = Color.parseColor("#212121")
 
     @Inject
     lateinit var api: EndpointsService
@@ -32,8 +35,14 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
         initCalendar()
         initList()
+        initToolbar()
 
         load()
+    }
+
+    private fun initToolbar() {
+        titleTextView.text = intent.getStringExtra(EXTRA_NAME)
+        appBarView.setBackgroundColor(intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR))
     }
 
     private fun initCalendar() {
@@ -44,7 +53,7 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
                 .monthFormat("MMM")
                 .showDayName(true)
                 .showMonthName(false)
-                .textColor(Color.WHITE, ContextCompat.getColor(this, R.color.colorPrimary))
+                .textColor(Color.WHITE, intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR))
                 .selectedDateBackground(Color.WHITE)
                 .selectorColor(Color.TRANSPARENT)
                 .build()
