@@ -20,6 +20,7 @@ class SportTypesAdapter(private val context: Activity) : RecyclerView.Adapter<Re
 
     val EXTRA_COLOR = "color"
     val EXTRA_ID = "id"
+    val EXTRA_NAME = "name"
 
     init {
         sportTypes = ArrayList<SportType>()
@@ -50,12 +51,13 @@ class SportTypesAdapter(private val context: Activity) : RecyclerView.Adapter<Re
             val intent = Intent(context, SportEventsActivity::class.java)
             intent.putExtra(EXTRA_ID, sportType.id)
             intent.putExtra(EXTRA_COLOR, sportType.color)
+            intent.putExtra(EXTRA_NAME, sportType.name)
             context.startActivity(intent)
         }
     }
 
     private fun generateDescription(sportType: SportType): String {
-        val gamesText = context.resources.getQuantityString(R.plurals.games,
+        val gamesText = context.resources.getQuantityString(R.plurals.events,
                 sportType.gamesQuantity, sportType.gamesQuantity)
         val placesText = context.resources.getQuantityString(R.plurals.places,
                 sportType.placesQuantity, sportType.placesQuantity)

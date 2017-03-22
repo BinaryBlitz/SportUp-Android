@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiEndpoints {
     @GET("cities")
@@ -11,4 +13,7 @@ public interface ApiEndpoints {
 
     @GET("sport_types")
     Observable<JsonArray> getSportTypes();
+
+    @GET("sport_types/{id}/events")
+    Observable<JsonArray> getGames(@Path("id") int id, @Query("date") String date);
 }

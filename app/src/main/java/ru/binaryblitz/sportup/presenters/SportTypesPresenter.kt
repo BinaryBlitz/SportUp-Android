@@ -6,6 +6,7 @@ import ru.binaryblitz.sportup.fragments.SportsListFragment
 import ru.binaryblitz.sportup.models.SportType
 import ru.binaryblitz.sportup.server.EndpointsService
 import ru.binaryblitz.sportup.server.JsonArrayResponseListener
+import ru.binaryblitz.sportup.server.ServerConfig
 import ru.binaryblitz.sportup.utils.AndroidUtilities
 import ru.binaryblitz.sportup.utils.LogUtil
 
@@ -30,10 +31,10 @@ class SportTypesPresenter(private val service: EndpointsService, private val vie
                 .map {
                     SportType(AndroidUtilities.getIntFieldFromJson(it.get("id")),
                             AndroidUtilities.getStringFieldFromJson(it.get("name")),
-                            2,
+                            AndroidUtilities.getIntFieldFromJson(it.get("events_count")),
                             3,
-                            AndroidUtilities.getStringFieldFromJson(it.get("icon_url")),
-                            Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("color"))))
+                            ServerConfig.imageUrl + AndroidUtilities.getStringFieldFromJson(it.get("icon_url")),
+                            Color.parseColor("#212121")) //Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("color"))))
                 }
 
         view.onLoaded(collection = collection as ArrayList<SportType>)
