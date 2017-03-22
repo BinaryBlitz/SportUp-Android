@@ -12,6 +12,7 @@
     <string name="search_sports">Поиск игр</string>
     <string name="my_games">Мои события</string>
     <string name="profile">Профиль</string>
+    <string name="ruble_sign">" ₽"</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
