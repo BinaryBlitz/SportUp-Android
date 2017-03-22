@@ -19,7 +19,6 @@ import ru.binaryblitz.sportup.utils.AndroidUtilities
 import javax.inject.Inject
 
 class SelectCityActivity : LocationDependentActivity(), SwipeRefreshLayout.OnRefreshListener {
-
     private var adapter: CitiesAdapter? = null
     private var allCitiesList: ArrayList<CitiesAdapter.City>? = null
 
@@ -32,6 +31,9 @@ class SelectCityActivity : LocationDependentActivity(), SwipeRefreshLayout.OnRef
         } else {
             adapter?.selectCity(latitude, longitude)
         }
+    }
+
+    override fun onLocationPermissionGranted() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

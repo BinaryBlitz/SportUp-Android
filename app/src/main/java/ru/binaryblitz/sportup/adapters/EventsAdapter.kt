@@ -36,7 +36,7 @@ class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
 
         holder.name.text = game.name
         holder.address.text = game.address
-        holder.endsAt.text = DateUtils.getTimeStringRepresentation(game.endsAt)
+        holder.startsAt.text = DateUtils.getTimeStringRepresentation(game.startsAt)
         holder.userLimit.text = game.userLimit.toString() + " / " + game.teamLimit.toString()
         holder.price.text = game.price.toString() + context.getString(R.string.ruble_sign)
 
@@ -50,7 +50,7 @@ class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
     private inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var name = itemView.findViewById(R.id.name) as TextView
         internal var address = itemView.findViewById(R.id.address) as TextView
-        internal var endsAt = itemView.findViewById(R.id.endsAt) as TextView
+        internal var startsAt = itemView.findViewById(R.id.startsAt) as TextView
         internal var userLimit = itemView.findViewById(R.id.userLimit) as TextView
         internal var isPublic = itemView.findViewById(R.id.isPublic) as ImageView
         internal var price = itemView.findViewById(R.id.price) as TextView

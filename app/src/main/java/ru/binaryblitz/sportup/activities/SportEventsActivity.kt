@@ -82,7 +82,7 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
     private fun load() {
         val presenter = EventsPresenter(api, this)
-        presenter.getGames(intent.getIntExtra(EXTRA_ID, 0), "21-04-2017")
+        presenter.getEvents(intent.getIntExtra(EXTRA_ID, 0), "21-04-2017")
     }
 
     override fun onRefresh() {

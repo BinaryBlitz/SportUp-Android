@@ -22,6 +22,8 @@ abstract class LocationDependentActivity : BaseActivity(), GoogleApiClient.Conne
 
     abstract protected fun onLocationUpdated(latitude: Double?, longitude: Double?)
 
+    abstract protected fun onLocationPermissionGranted()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,6 +54,7 @@ abstract class LocationDependentActivity : BaseActivity(), GoogleApiClient.Conne
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .withListener(object: PermissionListener {
                     override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+                        onLocationPermissionGranted()
                         locationManager.getLocation()
                     }
 

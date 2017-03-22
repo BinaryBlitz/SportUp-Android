@@ -63,6 +63,10 @@ dependencies {
     compile 'com.roughike:bottom-bar:2.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
 
+    compile ('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
+        transitive = true;
+    }
+
     compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
         transitive = true;
     }
@@ -70,7 +74,6 @@ dependencies {
 repositories {
     mavenCentral()
     jcenter()
+    maven { url "https://jitpack.io" }
     maven { url 'https://maven.fabric.io/public' }
 }
-
-apply plugin: 'com.google.gms.google-services'

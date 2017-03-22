@@ -7,12 +7,11 @@ import ru.binaryblitz.sportup.server.EndpointsService
 import ru.binaryblitz.sportup.server.JsonArrayResponseListener
 import ru.binaryblitz.sportup.utils.AndroidUtilities
 import ru.binaryblitz.sportup.utils.DateUtils
-import ru.binaryblitz.sportup.utils.LogUtil
 
 class EventsPresenter(private val service: EndpointsService, private val view: SportEventsActivity) {
 
-    fun getGames(id: Int, date: String) {
-        service.getGames(id, date, object : JsonArrayResponseListener {
+    fun getEvents(id: Int, date: String) {
+        service.getEvents(id, date, object : JsonArrayResponseListener {
             override fun onSuccess(array: JsonArray) {
                 parseAnswer(array)
             }
@@ -24,7 +23,6 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
     }
 
     private fun parseAnswer(array: JsonArray) {
-        LogUtil.logError(array.toString())
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
                 .map {
@@ -41,5 +39,4 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
 
         view.onLoaded(collection = collection as ArrayList<Event>)
     }
-
 }

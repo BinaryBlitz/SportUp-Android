@@ -79,8 +79,39 @@ public class EndpointsService {
                 });
     }
 
-    public void getGames(int id, String date, final JsonArrayResponseListener callback) {
-        networkService.getGames(id, date)
+    public void getEvents(int id, String date, final JsonArrayResponseListener callback) {
+        networkService.getEvents(id, date)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonArray>>() {
+                    @Override
+                    public ObservableSource<? extends JsonArray> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonArray>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonArray value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    public void getMapEvents(int id, final JsonArrayResponseListener callback) {
+        networkService.getMapEvents(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonArray>>() {
