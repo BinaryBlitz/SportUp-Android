@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp">
+        <ru.binaryblitz.sportup.custom.RecyclerListView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ru.binaryblitz.sportup.custom.RecyclerListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:contentInsetStart="0dp"
+                android:contentInsetLeft="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                android:background="@color/colorPrimary"
+                android:minHeight="?attr/actionBarSize">
+                <FrameLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/action_bar">
+
+                    <ImageView
+                        android:id="@+id/backBtn"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_back"
+                        android:padding="13dp"
+                        android:layout_gravity="start"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/city_select"
+                        android:layout_gravity="center"
+                        android:id="@+id/date_text_view"
+                        android:gravity="center_vertical"
+                        android:typeface="sans"
+                        android:textSize="22sp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginLeft="32dp"
+                        android:textColor="#ffffff" />
+
+                </FrameLayout>
+            </android.support.v7.widget.Toolbar>
+            <devs.mulham.horizontalcalendar.HorizontalCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:textColorSelected="#FFFF"/>
+        </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/nearBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorAccent"
+        android:src="@drawable/ic_near_me"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="end|bottom"/>
+</FrameLayout>

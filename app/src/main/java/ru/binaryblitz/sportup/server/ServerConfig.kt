@@ -6,7 +6,7 @@ object ServerConfig {
 
     val imageUrl: String
         get() {
-            return ""
+            return baseUrl
         }
 
     val prefsName = "SportUpPrefs"
