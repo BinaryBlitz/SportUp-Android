@@ -1,22 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="56dp">
-        <ru.binaryblitz.sportup.custom.RecyclerListView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ru.binaryblitz.sportup.custom.RecyclerListView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -55,14 +42,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/city_select"
                         android:layout_gravity="center"
                         android:id="@+id/date_text_view"
                         android:gravity="center_vertical"
                         android:typeface="sans"
                         android:textSize="22sp"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginLeft="32dp"
                         android:textColor="#ffffff" />
 
                 </FrameLayout>
@@ -75,16 +59,15 @@
                 app:textColorSelected="#FFFF"/>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/nearBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorAccent"
-        android:src="@drawable/ic_near_me"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="end|bottom"/>
-</FrameLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ru.binaryblitz.sportup.custom.RecyclerListView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ru.binaryblitz.sportup.custom.RecyclerListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

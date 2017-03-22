@@ -4,10 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
-import java.util.Date;
-
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
-import devs.mulham.horizontalcalendar.HorizontalCalendarListener;
 import ru.binaryblitz.sportup.R;
 import ru.binaryblitz.sportup.base.BaseActivity;
 
