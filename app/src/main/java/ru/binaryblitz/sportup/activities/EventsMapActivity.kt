@@ -10,20 +10,24 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_events_map.*
 import ru.binaryblitz.sportup.R
 import ru.binaryblitz.sportup.base.LocationDependentActivity
 import ru.binaryblitz.sportup.custom.CustomMapFragment
 import ru.binaryblitz.sportup.models.MapEvent
 import ru.binaryblitz.sportup.presenters.EventMapPresenter
+import ru.binaryblitz.sportup.presenters.EventPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
-import ru.binaryblitz.sportup.utils.LogUtil
 import java.util.*
 import javax.inject.Inject
+
 
 class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.TouchableWrapper.UpdateMapAfterUserInteraction, OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     val EXTRA_ID = "id"
+
+    private val markers = HashMap<LatLng, Int>()
 
     @Inject
     lateinit var api: EndpointsService
@@ -32,7 +36,6 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_events_map)
         dependencies()!!.inject(this)
-
         initGoogleApiClient()
         initMap()
         setOnClickListeners()
@@ -80,6 +83,12 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         }
 
         googleMap?.isMyLocationEnabled = true
+
+        googleMap?.setOnMarkerClickListener { marker ->
+            val id = markers[marker!!.position]
+            loadEvent(id!!)
+            false
+        }
     }
 
     override fun onResume() {
@@ -105,18 +114,28 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
     }
 
     fun onLoaded(collection: ArrayList<MapEvent>) {
-        val icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pins_regbimid)
+        val icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pins_footballmid)
 
-        for ((_, latitude, longitude) in collection) {
+        for ((id, latitude, longitude) in collection) {
+            markers.put(LatLng (latitude, longitude), id)
             googleMap?.addMarker(MarkerOptions()
                     .position(LatLng (latitude, longitude))
                     .icon(icon))
         }
     }
 
+    fun onEventLoaded(obj: JsonObject) {
+
+    }
+
     private fun load() {
         val presenter = EventMapPresenter(api, this)
         presenter.getMapEvents(intent.getIntExtra(EXTRA_ID, 0))
+    }
+
+    private fun loadEvent(id: Int) {
+        val presenter = EventPresenter(api, this)
+        presenter.getEvent(id)
     }
 }
 

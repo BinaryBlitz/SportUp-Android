@@ -6,7 +6,6 @@ import ru.binaryblitz.sportup.models.MapEvent
 import ru.binaryblitz.sportup.server.EndpointsService
 import ru.binaryblitz.sportup.server.JsonArrayResponseListener
 import ru.binaryblitz.sportup.utils.AndroidUtilities
-import ru.binaryblitz.sportup.utils.LogUtil
 
 class EventMapPresenter(private val service: EndpointsService, private val view: EventsMapActivity) {
 
