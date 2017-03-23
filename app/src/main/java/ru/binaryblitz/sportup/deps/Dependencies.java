@@ -3,6 +3,7 @@ package ru.binaryblitz.sportup.deps;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import ru.binaryblitz.sportup.activities.EventsMapActivity;
 import ru.binaryblitz.sportup.activities.SelectCityActivity;
 import ru.binaryblitz.sportup.activities.SportEventsActivity;
 import ru.binaryblitz.sportup.fragments.SportsListFragment;
@@ -16,4 +17,6 @@ public interface Dependencies {
     void inject(SportsListFragment sportsListFragment);
 
     void inject(SportEventsActivity sportEventsActivity);
+
+    void inject(EventsMapActivity eventsMapActivity);
 }

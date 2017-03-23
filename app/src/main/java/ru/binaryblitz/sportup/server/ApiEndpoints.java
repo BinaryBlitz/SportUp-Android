@@ -1,6 +1,7 @@
 package ru.binaryblitz.sportup.server;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -15,5 +16,5 @@ public interface ApiEndpoints {
     Observable<JsonArray> getSportTypes();
 
     @GET("sport_types/{id}/events")
-    Observable<JsonArray> getGames(@Path("id") int id, @Query("date") String date);
+    Observable<JsonArray> getEvents(@Path("id") int id, @Query("date") String date);
 }

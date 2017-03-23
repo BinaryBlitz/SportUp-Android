@@ -79,8 +79,8 @@ public class EndpointsService {
                 });
     }
 
-    public void getGames(int id, String date, final JsonArrayResponseListener callback) {
-        networkService.getGames(id, date)
+    public void getEvents(int id, String date, final JsonArrayResponseListener callback) {
+        networkService.getEvents(id, date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonArray>>() {

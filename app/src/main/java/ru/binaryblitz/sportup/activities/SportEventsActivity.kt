@@ -1,19 +1,19 @@
 package ru.binaryblitz.sportup.activities
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import devs.mulham.horizontalcalendar.HorizontalCalendar
-import kotlinx.android.synthetic.main.activity_games_feed.*
+import kotlinx.android.synthetic.main.activity_events_feed.*
 import ru.binaryblitz.sportup.R
 import ru.binaryblitz.sportup.adapters.EventsAdapter
 import ru.binaryblitz.sportup.base.BaseActivity
 import ru.binaryblitz.sportup.models.Event
 import ru.binaryblitz.sportup.presenters.EventsPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
-import java.util.*
 import javax.inject.Inject
 
 class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
@@ -24,12 +24,15 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
     val EXTRA_NAME = "name"
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
+    var typeId = 0
+    var color = 0
+
     @Inject
     lateinit var api: EndpointsService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_games_feed)
+        setContentView(R.layout.activity_events_feed)
         dependencies()!!.inject(this)
 
         initCalendar()
@@ -42,11 +45,19 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
     private fun initToolbar() {
         titleTextView.text = intent.getStringExtra(EXTRA_NAME)
-        appBarView.setBackgroundColor(intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR))
+        color = intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR)
+        appBarView.setBackgroundColor(color)
     }
 
     private fun setOnClickListeners() {
         backBtn.setOnClickListener { finish() }
+
+        rightBtn.setOnClickListener {
+            val intent = Intent(this@SportEventsActivity, EventsMapActivity::class.java)
+            intent.putExtra(EXTRA_ID, typeId)
+            intent.putExtra(EXTRA_COLOR, color)
+            startActivity(intent)
+        }
     }
 
     private fun initCalendar() {
@@ -76,16 +87,22 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
     }
 
     fun onLoaded(collection: ArrayList<Event>) {
+        eventsCollection = collection
         adapter.setCollection(collection)
         adapter.notifyDataSetChanged()
     }
 
     private fun load() {
         val presenter = EventsPresenter(api, this)
-        presenter.getGames(intent.getIntExtra(EXTRA_ID, 0), "21-04-2017")
+        typeId = intent.getIntExtra(EXTRA_ID, 0)
+        presenter.getEvents(typeId, "21-04-2017")
     }
 
     override fun onRefresh() {
         load()
+    }
+
+    companion object {
+        var eventsCollection = ArrayList<Event>()
     }
 }
