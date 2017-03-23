@@ -51,10 +51,10 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
     }
 
     private fun initMap() {
-        val mMap = supportFragmentManager
-                .findFragmentById(R.id.scroll) as SupportMapFragment
+        val map = supportFragmentManager
+                .findFragmentById(R.id.map) as SupportMapFragment
 
-        Handler().post { mMap.getMapAsync(this@EventsMapActivity) }
+        Handler().post { map.getMapAsync(this@EventsMapActivity) }
     }
 
     private fun initToolbar() {
