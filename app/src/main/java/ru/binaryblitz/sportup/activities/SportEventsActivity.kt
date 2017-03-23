@@ -1,5 +1,6 @@
 package ru.binaryblitz.sportup.activities
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -13,6 +14,7 @@ import ru.binaryblitz.sportup.base.BaseActivity
 import ru.binaryblitz.sportup.models.Event
 import ru.binaryblitz.sportup.presenters.EventsPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
+import ru.binaryblitz.sportup.utils.LogUtil
 import java.util.*
 import javax.inject.Inject
 
@@ -23,6 +25,8 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
     val EXTRA_ID = "id"
     val EXTRA_NAME = "name"
     val DEFAULT_COLOR = Color.parseColor("#212121")
+
+    var typeId = 0
 
     @Inject
     lateinit var api: EndpointsService
@@ -47,6 +51,12 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
     private fun setOnClickListeners() {
         backBtn.setOnClickListener { finish() }
+
+        rightBtn.setOnClickListener {
+            val intent = Intent(this@SportEventsActivity, EventsMapActivity::class.java)
+            intent.putExtra(EXTRA_ID, typeId)
+            startActivity(intent)
+        }
     }
 
     private fun initCalendar() {
@@ -82,7 +92,8 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
     private fun load() {
         val presenter = EventsPresenter(api, this)
-        presenter.getEvents(intent.getIntExtra(EXTRA_ID, 0), "21-04-2017")
+        typeId = intent.getIntExtra(EXTRA_ID, 0)
+        presenter.getEvents(typeId, "21-04-2017")
     }
 
     override fun onRefresh() {

@@ -34,7 +34,7 @@ class SportTypesPresenter(private val service: EndpointsService, private val vie
                             AndroidUtilities.getIntFieldFromJson(it.get("events_count")),
                             3,
                             ServerConfig.imageUrl + AndroidUtilities.getStringFieldFromJson(it.get("icon_url")),
-                            Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("color"))))
+                            Color.parseColor("#212121")) //Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("color"))))
                 }
 
         view.onLoaded(collection = collection as ArrayList<SportType>)

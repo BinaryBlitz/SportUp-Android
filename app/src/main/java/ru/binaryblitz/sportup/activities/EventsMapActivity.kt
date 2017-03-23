@@ -9,17 +9,16 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_events_map.*
 import ru.binaryblitz.sportup.R
 import ru.binaryblitz.sportup.base.LocationDependentActivity
 import ru.binaryblitz.sportup.custom.CustomMapFragment
-import ru.binaryblitz.sportup.models.Event
 import ru.binaryblitz.sportup.models.MapEvent
 import ru.binaryblitz.sportup.presenters.EventMapPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
-import java.util.ArrayList
+import ru.binaryblitz.sportup.utils.LogUtil
+import java.util.*
 import javax.inject.Inject
 
 class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.TouchableWrapper.UpdateMapAfterUserInteraction, OnMapReadyCallback {
@@ -34,6 +33,7 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         setContentView(R.layout.activity_events_map)
         dependencies()!!.inject(this)
 
+        initGoogleApiClient()
         initMap()
         setOnClickListeners()
 
@@ -64,8 +64,8 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
     override fun onUpdateMapAfterUserInteraction() {
     }
 
-    override fun onMapReady(p0: GoogleMap?) {
-        this.googleMap = googleMap
+    override fun onMapReady(map: GoogleMap?) {
+        this.googleMap = map
         setUpMap()
     }
 
@@ -105,7 +105,13 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
     }
 
     fun onLoaded(collection: ArrayList<MapEvent>) {
+        val icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pins_regbimid)
 
+        for ((_, latitude, longitude) in collection) {
+            googleMap?.addMarker(MarkerOptions()
+                    .position(LatLng (latitude, longitude))
+                    .icon(icon))
+        }
     }
 
     private fun load() {
