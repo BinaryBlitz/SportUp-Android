@@ -3,44 +3,51 @@ package ru.binaryblitz.sportup.activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
-import com.google.gson.JsonObject
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_events_map.*
 import ru.binaryblitz.sportup.R
 import ru.binaryblitz.sportup.base.LocationDependentActivity
 import ru.binaryblitz.sportup.custom.CustomMapFragment
-import ru.binaryblitz.sportup.models.MapEvent
-import ru.binaryblitz.sportup.presenters.EventMapPresenter
-import ru.binaryblitz.sportup.presenters.EventPresenter
+import ru.binaryblitz.sportup.models.Event
 import ru.binaryblitz.sportup.server.EndpointsService
+import ru.binaryblitz.sportup.utils.Animations
+import ru.binaryblitz.sportup.utils.DateUtils
 import java.util.*
 import javax.inject.Inject
 
 
 class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.TouchableWrapper.UpdateMapAfterUserInteraction, OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
-    val EXTRA_ID = "id"
+    private var isEventOpened = false
 
     private val markers = HashMap<LatLng, Int>()
 
     @Inject
     lateinit var api: EndpointsService
 
+    val EXTRA_COLOR = "color"
+    val DEFAULT_COLOR = Color.parseColor("#212121")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_events_map)
         dependencies()!!.inject(this)
+
+        initToolbar()
         initGoogleApiClient()
         initMap()
         setOnClickListeners()
-
-        load()
     }
 
     private fun initMap() {
@@ -48,6 +55,10 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
                 .findFragmentById(R.id.scroll) as SupportMapFragment
 
         Handler().post { mMap.getMapAsync(this@EventsMapActivity) }
+    }
+
+    private fun initToolbar() {
+        appBarView.setBackgroundColor(intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR))
     }
 
     override fun onLocationUpdated(latitude: Double?, longitude: Double?) {
@@ -62,9 +73,15 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         backBtn.setOnClickListener { finish() }
 
         nearBtn.setOnClickListener { checkPermissions() }
+
+        hideBtn.setOnClickListener {
+            isEventOpened = false
+            Animations.animateRevealHide(cardView)
+        }
     }
 
     override fun onUpdateMapAfterUserInteraction() {
+        hideEventInformation()
     }
 
     override fun onMapReady(map: GoogleMap?) {
@@ -83,23 +100,38 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         }
 
         googleMap?.isMyLocationEnabled = true
+        googleMap?.uiSettings?.isMyLocationButtonEnabled = false
+        googleMap?.uiSettings?.isMapToolbarEnabled = false
 
         googleMap?.setOnMarkerClickListener { marker ->
             val id = markers[marker!!.position]
             loadEvent(id!!)
             false
         }
+
+        googleMap?.setOnMapClickListener {
+            hideEventInformation()
+        }
+
+        onLoaded()
+    }
+
+    private fun hideEventInformation() {
+        if (isEventOpened) {
+            isEventOpened = false
+            Animations.animateRevealHide(cardView)
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        Handler().postDelayed({
+        Handler().post({
             if (googleApiClient!!.isConnected) {
                 checkPermissions()
             } else {
                 googleApiClient?.connect()
             }
-        }, 50)
+        })
     }
 
     private fun moveCamera(latitude: Double?, longitude: Double?) {
@@ -113,29 +145,37 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
-    fun onLoaded(collection: ArrayList<MapEvent>) {
+    fun onLoaded() {
         val icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pins_footballmid)
 
-        for ((id, latitude, longitude) in collection) {
-            markers.put(LatLng (latitude, longitude), id)
+        for (event in SportEventsActivity.eventsCollection) {
+            markers.put(LatLng (event.latitude, event.longitude), event.id)
             googleMap?.addMarker(MarkerOptions()
-                    .position(LatLng (latitude, longitude))
+                    .position(LatLng (event.latitude, event.longitude))
                     .icon(icon))
         }
     }
 
-    fun onEventLoaded(obj: JsonObject) {
-
-    }
-
-    private fun load() {
-        val presenter = EventMapPresenter(api, this)
-        presenter.getMapEvents(intent.getIntExtra(EXTRA_ID, 0))
-    }
-
     private fun loadEvent(id: Int) {
-        val presenter = EventPresenter(api, this)
-        presenter.getEvent(id)
+        for (event in SportEventsActivity.eventsCollection) {
+            if (event.id == id) {
+                showEvent(event)
+                break
+            }
+        }
+    }
+
+    private fun showEvent(event: Event) {
+        Animations.animateRevealShow(cardView, this)
+        isEventOpened = true
+
+        name.text = event.name
+        address.text = event.address
+        startsAt.text = DateUtils.getTimeStringRepresentation(event.startsAt)
+        userLimit.text = event.userLimit.toString() + " / " + event.teamLimit.toString()
+        price.text = event.price.toString() + getString(R.string.ruble_sign)
+
+        isPublic.visibility = if (event.isPublic) View.VISIBLE else View.GONE
     }
 }
 

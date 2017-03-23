@@ -23,7 +23,6 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Любительская лига"
             android:layout_margin="16dp"
             android:id="@+id/name"
             android:textSize="18sp"
@@ -45,7 +44,6 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:text="3/12"
                 android:layout_marginEnd="8dp"
                 android:id="@+id/userLimit"
                 android:layout_marginLeft="8dp"
@@ -63,7 +61,6 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:text="21:00"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -81,7 +78,6 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:text="500Р"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:id="@+id/price"
@@ -99,12 +95,14 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_height="wrap_content">
+
             <ImageView
-                android:layout_width="22dp"
-                android:layout_gravity="end|bottom"
                 android:id="@+id/isPublic"
-                android:src="@drawable/icon_lock"
-                android:layout_height="22dp" />
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:visibility="gone"
+                android:layout_gravity="end|bottom"
+                android:src="@drawable/icon_lock" />
 
             <ImageView
                 android:layout_width="32dp"
@@ -124,7 +122,6 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Москва"
             android:id="@+id/address"
             android:layout_marginStart="46dp"
             android:layout_marginTop="98dp"

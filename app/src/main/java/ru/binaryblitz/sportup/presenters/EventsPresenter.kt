@@ -34,7 +34,9 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
                             AndroidUtilities.getIntFieldFromJson(it.get("user_limit")),
                             AndroidUtilities.getIntFieldFromJson(it.get("team_limit")),
                             AndroidUtilities.getBooleanFieldFromJson(it.get("public")),
-                            AndroidUtilities.getIntFieldFromJson(it.get("price")))
+                            AndroidUtilities.getIntFieldFromJson(it.get("price")),
+                            AndroidUtilities.getDoubleFieldFromJson(it.get("latitude")),
+                            AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")))
                 }
 
         view.onLoaded(collection = collection as ArrayList<Event>)

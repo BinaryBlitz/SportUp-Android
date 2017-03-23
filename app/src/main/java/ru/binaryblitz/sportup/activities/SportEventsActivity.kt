@@ -14,8 +14,6 @@ import ru.binaryblitz.sportup.base.BaseActivity
 import ru.binaryblitz.sportup.models.Event
 import ru.binaryblitz.sportup.presenters.EventsPresenter
 import ru.binaryblitz.sportup.server.EndpointsService
-import ru.binaryblitz.sportup.utils.LogUtil
-import java.util.*
 import javax.inject.Inject
 
 class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
@@ -27,6 +25,7 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
     var typeId = 0
+    var color = 0
 
     @Inject
     lateinit var api: EndpointsService
@@ -46,7 +45,8 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
     private fun initToolbar() {
         titleTextView.text = intent.getStringExtra(EXTRA_NAME)
-        appBarView.setBackgroundColor(intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR))
+        color = intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR)
+        appBarView.setBackgroundColor(color)
     }
 
     private fun setOnClickListeners() {
@@ -55,6 +55,7 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
         rightBtn.setOnClickListener {
             val intent = Intent(this@SportEventsActivity, EventsMapActivity::class.java)
             intent.putExtra(EXTRA_ID, typeId)
+            intent.putExtra(EXTRA_COLOR, color)
             startActivity(intent)
         }
     }
@@ -86,6 +87,7 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
     }
 
     fun onLoaded(collection: ArrayList<Event>) {
+        eventsCollection = collection
         adapter.setCollection(collection)
         adapter.notifyDataSetChanged()
     }
@@ -98,5 +100,9 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
     override fun onRefresh() {
         load()
+    }
+
+    companion object {
+        var eventsCollection = ArrayList<Event>()
     }
 }

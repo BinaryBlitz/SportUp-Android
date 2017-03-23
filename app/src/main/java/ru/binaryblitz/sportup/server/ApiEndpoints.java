@@ -17,10 +17,4 @@ public interface ApiEndpoints {
 
     @GET("sport_types/{id}/events")
     Observable<JsonArray> getEvents(@Path("id") int id, @Query("date") String date);
-
-    @GET("sport_types/{id}/map_events")
-    Observable<JsonArray> getMapEvents(@Path("id") int id);
-
-    @GET("events/{id}")
-    Observable<JsonObject> getEvent(@Path("id") int id);
 }
