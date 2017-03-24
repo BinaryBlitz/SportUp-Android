@@ -14,6 +14,10 @@
     <string name="profile">Профиль</string>
     <string name="ruble_sign">" ₽"</string>
     <string name="events_on_map">Игры на карте</string>
+    <string name="event_price">Стоимость участия</string>
+    <string name="share_game">Поделиться игрой</string>
+    <string name="description">Описание</string>
+    <string name="players">Игроки</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
