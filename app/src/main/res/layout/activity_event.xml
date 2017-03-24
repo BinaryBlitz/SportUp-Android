@@ -111,7 +111,7 @@
                     </LinearLayout>
                     <TextView
                         android:layout_width="match_parent"
-                        android:text="До начала 2 ч 34 мин"
+                        android:id="@+id/timeUntilEventStarts"
                         android:textColor="#b9ffffff"
                         android:layout_marginStart="24dp"
                         android:gravity="center_vertical"
@@ -225,7 +225,7 @@
                     android:textColor="#727272"
                     android:gravity="center_vertical"
                     android:textSize="22sp"
-                    android:text="3/12"
+                    android:id="@+id/membersCountText"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1.0"
@@ -233,7 +233,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="(2 команды)"
+                    android:id="@+id/teamsText"
                     android:textColor="#727272"
                     android:gravity="center_vertical"
                     android:textSize="22sp"

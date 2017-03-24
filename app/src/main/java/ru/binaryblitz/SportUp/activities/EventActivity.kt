@@ -25,6 +25,9 @@ import ru.binaryblitz.SportUp.utils.DateUtils
 import ru.binaryblitz.SportUp.utils.TimeSpan
 import javax.inject.Inject
 import com.google.android.gms.maps.model.MapStyleOptions
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import java.util.*
 
 class EventActivity : BaseActivity(), OnMapReadyCallback {
     val EXTRA_COLOR = "color"
@@ -41,8 +44,13 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_event)
         dependencies()!!.inject(this)
 
+        initToolbar()
         setOnClickListeners()
         initMap()
+    }
+
+    private fun initToolbar() {
+        appBarView.setBackgroundColor(intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR))
     }
 
     private fun initMap() {
@@ -71,8 +79,11 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
     fun onLoaded(obj: JsonObject) {
         parseGeneralInfo(obj)
+        parseMembersInfo(obj)
 
         timeString.text = parseTime(obj)
+
+        parseEventStartDate(DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("starts_at"))))
 
         onLoaded(AndroidUtilities.getDoubleFieldFromJson(obj.get("latitude")),
                 AndroidUtilities.getDoubleFieldFromJson(obj.get("longitude")))
@@ -97,6 +108,29 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         priceText.text = AndroidUtilities.getStringFieldFromJson(obj.get("price")) + getString(R.string.ruble_sign)
     }
 
+    private fun parseEventStartDate(date: Date) {
+        val calendar = getTimeBeforEventStarts(date)
+
+        if (calendar == null) {
+            timeUntilEventStarts.text = getString(R.string.completed)
+            return
+        }
+
+        if (calendar.get(Calendar.DAY_OF_MONTH) > 0) {
+            val daysText = resources.getQuantityString(R.plurals.days, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+            timeUntilEventStarts.text = getString(R.string.before_start) + calendar.get(Calendar.DAY_OF_MONTH) + " " + daysText
+            return
+        }
+
+        timeUntilEventStarts.text = getString(R.string.before_start) + calendar.get(Calendar.HOUR_OF_DAY) +
+                getString(R.string.hours_code) + calendar.get(Calendar.MINUTE) + getString(R.string.minute_code)
+    }
+
+    private fun parseMembersInfo(obj: JsonObject) {
+        membersCountText.text = obj.get("memberships_count").asString + " / " + obj.get("user_limit").asString
+        teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
+    }
+
     fun getTimeString(date: String): SpannableStringBuilder {
         val result = date.replace(":", "")
 
@@ -118,6 +152,18 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
                 .build()
 
         googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+    }
+
+    private fun getTimeBeforEventStarts(date: Date): Calendar? {
+        val millisUntilEventStarts = date.time - System.currentTimeMillis()
+        val calendar = Calendar.getInstance()
+
+        if (millisUntilEventStarts < 0) {
+            return null
+        }
+
+        calendar.time = DateTime(millisUntilEventStarts, DateTimeZone.getDefault()).toDate()
+        return calendar
     }
 
     fun onLoaded(latitude: Double, longitude: Double) {

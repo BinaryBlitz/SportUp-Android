@@ -10,12 +10,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.EventActivity
+import ru.binaryblitz.SportUp.activities.SportEventsActivity
 import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
 
 class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val EXTRA_ID = "id"
+    val EXTRA_COLOR = "color"
+
     private var events: ArrayList<Event>
 
     init {
@@ -48,6 +51,7 @@ class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
         holder.itemView.setOnClickListener {
             val intent = Intent(context, EventActivity::class.java)
             intent.putExtra(EXTRA_ID, event.id)
+            intent.putExtra(EXTRA_COLOR, SportEventsActivity.color)
             context.startActivity(intent)
         }
     }
