@@ -7,7 +7,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "ru.binaryblitz.sportup"
+        applicationId "ru.binaryblitz.SportUp"
         minSdkVersion 17
         targetSdkVersion 25
         versionCode 2
