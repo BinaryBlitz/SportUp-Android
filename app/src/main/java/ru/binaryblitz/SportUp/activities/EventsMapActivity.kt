@@ -26,7 +26,6 @@ import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
 import javax.inject.Inject
 
-
 class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.TouchableWrapper.UpdateMapAfterUserInteraction, OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private var isEventOpened = false
