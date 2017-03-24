@@ -132,4 +132,6 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun load() {
         val presenter = EventPresenter(api, this)
-        presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), "foo
+        presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), "foobar")
+    }
+}
