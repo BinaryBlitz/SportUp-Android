@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.binaryblitz.sportup">
+    package="ru.binaryblitz.SportUp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -17,7 +17,7 @@
             android:value="AIzaSyAleTZalgq4WoXgb1aAaiAD2-GK3WSGoSY"/>
 
         <activity
-            android:name=".activities.StartActivity"
+            android:name="ru.binaryblitz.SportUp.activities.StartActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -28,28 +28,28 @@
         </activity>
 
         <activity
-            android:name=".activities.SelectCityActivity"
+            android:name="ru.binaryblitz.SportUp.activities.SelectCityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
 
         <activity
-            android:name=".activities.SportEventsActivity"
+            android:name="ru.binaryblitz.SportUp.activities.SportEventsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
 
         <activity
-            android:name=".activities.SportsActivity"
+            android:name="ru.binaryblitz.SportUp.activities.SportsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
 
         <activity
-            android:name=".activities.EventsMapActivity"
+            android:name="ru.binaryblitz.SportUp.activities.EventsMapActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
