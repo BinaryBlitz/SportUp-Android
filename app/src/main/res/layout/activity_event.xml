@@ -59,7 +59,6 @@
                         android:id="@+id/titleTextView"
                         android:gravity="top"
                         android:typeface="sans"
-                        android:text="fgfdgdfgdfgdf"
                         android:textSize="16sp"
                         android:textColor="#ffffff" />
 
@@ -72,7 +71,6 @@
                         android:id="@+id/idText"
                         android:gravity="bottom"
                         android:typeface="sans"
-                        android:text="#37373"
                         android:textSize="16sp"
                         android:textColor="#9effffff" />
 
@@ -105,8 +103,8 @@
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:text="2200-2345"
-                            android:textSize="20sp"
+                            android:id="@+id/timeString"
+                            android:textSize="22sp"
                             android:gravity="center_vertical"
                             android:textColor="#ffffff"
                             android:layout_height="match_parent" />
@@ -136,8 +134,8 @@
                             android:layout_height="match_parent" />
                         <TextView
                             android:layout_width="match_parent"
-                            android:text="500Р"
                             android:textSize="20sp"
+                            android:id="@+id/priceText"
                             android:gravity="center_vertical"
                             android:textColor="#ffffff"
                             android:layout_height="match_parent" />
@@ -166,10 +164,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/map"
                     android:layout_width="match_parent"
-                    android:background="#eaeaea"
-                    android:layout_height="160dp" />
+                    android:layout_height="150dp"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_gravity="bottom"
@@ -186,10 +185,10 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:text="Москва"
                         android:textColor="#212121"
                         android:gravity="center_vertical"
                         android:textSize="16sp"
+                        android:id="@+id/locationText"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1.0"
                         android:layout_height="wrap_content" />
@@ -275,7 +274,7 @@
                 android:layout_height="1px"/>
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Описание\nОписание\nОписание"
+                android:id="@+id/descriptionText"
                 android:textColor="#212121"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
