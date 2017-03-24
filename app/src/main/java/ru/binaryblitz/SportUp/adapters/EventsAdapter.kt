@@ -15,7 +15,7 @@ import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
 
 class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+    val EXTRA_ID = "id"
     private var events: ArrayList<Event>
 
     init {
@@ -47,6 +47,7 @@ class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, EventActivity::class.java)
+            intent.putExtra(EXTRA_ID, event.id)
             context.startActivity(intent)
         }
     }

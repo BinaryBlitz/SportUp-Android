@@ -18,6 +18,7 @@
     <string name="share_game">Поделиться игрой</string>
     <string name="description">Описание</string>
     <string name="players">Игроки</string>
+    <string name="join">Принять участие</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
