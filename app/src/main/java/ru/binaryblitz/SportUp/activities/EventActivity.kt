@@ -46,8 +46,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initMap() {
-        val map = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
+        val map = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 
         Handler().post { map.getMapAsync(this@EventActivity) }
     }
@@ -71,17 +70,31 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     fun onLoaded(obj: JsonObject) {
+        parseGeneralInfo(obj)
+
+        timeString.text = parseTime(obj)
+
+        onLoaded(AndroidUtilities.getDoubleFieldFromJson(obj.get("latitude")),
+                AndroidUtilities.getDoubleFieldFromJson(obj.get("longitude")))
+    }
+
+    private fun parseTime(obj: JsonObject): SpannableStringBuilder {
+        return getTimeString(
+                DateUtils.getTimeStringRepresentation(
+                        DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("starts_at")))
+                ) + " - " +
+                DateUtils.getTimeStringRepresentation(
+                        DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("ends_at")))
+                )
+        )
+    }
+
+    private fun parseGeneralInfo(obj: JsonObject) {
         titleTextView.text = AndroidUtilities.getStringFieldFromJson(obj.get("name"))
         idText.text = "#" + AndroidUtilities.getStringFieldFromJson(obj.get("id"))
         descriptionText.text = AndroidUtilities.getStringFieldFromJson(obj.get("description"))
         locationText.text = AndroidUtilities.getStringFieldFromJson(obj.get("address"))
         priceText.text = AndroidUtilities.getStringFieldFromJson(obj.get("price")) + getString(R.string.ruble_sign)
-
-        timeString.text =
-                getTimeString(DateUtils.getTimeStringRepresentation(DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("starts_at")))) + " - " +
-                        DateUtils.getTimeStringRepresentation(DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("ends_at")))))
-
-        onLoaded(AndroidUtilities.getDoubleFieldFromJson(obj.get("latitude")), AndroidUtilities.getDoubleFieldFromJson(obj.get("longitude")))
     }
 
     fun getTimeString(date: String): SpannableStringBuilder {
@@ -95,7 +108,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
         return builder
     }
-    
+
     private fun moveCamera(latitude: Double?, longitude: Double?) {
         val cameraPosition = CameraPosition.Builder()
                 .target(LatLng(latitude!!, longitude!!))
@@ -117,9 +130,6 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         moveCamera(latitude, longitude)
     }
 
-
     private fun load() {
         val presenter = EventPresenter(api, this)
-        presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), "foobar")
-    }
-}
+        presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), "foo

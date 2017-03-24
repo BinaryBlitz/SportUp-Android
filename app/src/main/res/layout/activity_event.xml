@@ -211,13 +211,34 @@
                     android:src="@drawable/icon_players_gray" />
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:text="@string/players"
                     android:textColor="#212121"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="12dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textColor="#727272"
+                    android:gravity="center_vertical"
+                    android:textSize="22sp"
+                    android:text="3/12"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="(2 команды)"
+                    android:textColor="#727272"
+                    android:gravity="center_vertical"
+                    android:textSize="22sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="4dp"
                     android:layout_weight="1.0"
                     android:layout_height="wrap_content" />
 
