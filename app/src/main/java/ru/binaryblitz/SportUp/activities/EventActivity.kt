@@ -1,8 +1,10 @@
 package ru.binaryblitz.SportUp.activities
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.content.ContextCompat
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
@@ -27,12 +29,15 @@ import javax.inject.Inject
 import com.google.android.gms.maps.model.MapStyleOptions
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
+import ru.binaryblitz.SportUp.utils.LogUtil
 import java.util.*
 
 class EventActivity : BaseActivity(), OnMapReadyCallback {
     val EXTRA_COLOR = "color"
     val EXTRA_ID = "id"
     val DEFAULT_COLOR = Color.parseColor("#212121")
+
+    var color = 0
 
     private var googleMap: GoogleMap? = null
 
@@ -50,7 +55,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initToolbar() {
-        appBarView.setBackgroundColor(intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR))
+        color = intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR)
+        appBarView.setBackgroundColor(color)
     }
 
     private fun initMap() {
@@ -116,9 +122,9 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
             return
         }
 
-        if (calendar.get(Calendar.DAY_OF_MONTH) > 0) {
-            val daysText = resources.getQuantityString(R.plurals.days, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-            timeUntilEventStarts.text = getString(R.string.before_start) + calendar.get(Calendar.DAY_OF_MONTH) + " " + daysText
+        if (calendar.get(Calendar.DAY_OF_YEAR) > 0) {
+            val daysText = resources.getQuantityString(R.plurals.days, calendar.get(Calendar.DAY_OF_YEAR), calendar.get(Calendar.DAY_OF_YEAR))
+            timeUntilEventStarts.text = getString(R.string.before_start) + daysText
             return
         }
 
@@ -127,8 +133,20 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun parseMembersInfo(obj: JsonObject) {
-        membersCountText.text = obj.get("memberships_count").asString + " / " + obj.get("user_limit").asString
+        membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
+
+        initButton(obj.get("membership") != null && !obj.get("membership").isJsonNull)
+    }
+
+    private fun initButton(isJoined: Boolean) {
+        try {
+            joinBtn.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
+                else ColorStateList.valueOf(color)
+            joinBtn.text = if (isJoined) getString(R.string.leave) else getString(R.string.join)
+        } catch (e: Exception) {
+            LogUtil.logException(e)
+        }
     }
 
     fun getTimeString(date: String): SpannableStringBuilder {

@@ -163,37 +163,34 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                <fragment
                     android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_gravity="bottom"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="4dp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:background="@drawable/white_gradient"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/icon_location_gray" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:textColor="#212121"
-                        android:gravity="center_vertical"
-                        android:textSize="16sp"
-                        android:id="@+id/locationText"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1.0"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                    android:layout_height="135dp" />
             </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/icon_location_gray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:textColor="#212121"
+                    android:gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:id="@+id/locationText"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -366,7 +363,7 @@
                 android:background="#f7f9fa"
                 android:layout_height="100dp">
                 <Button
-                    android:id="@+id/promo_btn"
+                    android:id="@+id/joinBtn"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="170dp"
                     android:layout_height="48dp"

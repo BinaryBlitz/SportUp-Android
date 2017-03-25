@@ -24,6 +24,7 @@
     <string name="hours_code">" ч "</string>
     <string name="teams_code">" команды )"</string>
     <string name="completed">Завершено</string>
+    <string name="leave">Отказаться</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
