@@ -45,6 +45,19 @@
     <string name="share_app">Поделиться</string>
     <string name="type_promocode">Ввести промокод</string>
     <string name="reply">Оставить отзыв</string>
+    <string name="event_creation">Создание события</string>
+    <string name="event_name">Название игры</string>
+    <string name="date_and_time">Дата и время</string>
+    <string name="game_end">Конец игры</string>
+    <string name="game_type">Вид спорта</string>
+    <string name="select">Выбрать</string>
+    <string name="teams_quantity">Количество команд</string>
+    <string name="players_quantity">Количество участников</string>
+    <string name="membership_price">Цена участия</string>
+    <string name="description_help">Указания по местоположению, правилах, покрытию поля и т.д.</string>
+    <string name="add_description">Добавить описание игры</string>
+    <string name="public_event">Публичное</string>
+    <string name="event_location">Место проведения игры</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
