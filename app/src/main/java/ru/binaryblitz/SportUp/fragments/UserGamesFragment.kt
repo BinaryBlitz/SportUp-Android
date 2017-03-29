@@ -3,12 +3,13 @@ package ru.binaryblitz.SportUp.fragments
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_select_city.*
 import ru.binaryblitz.SportUp.R
-import ru.binaryblitz.SportUp.adapters.SportTypesAdapter
+import ru.binaryblitz.SportUp.adapters.MyEventsAdapter
 import ru.binaryblitz.SportUp.base.BaseFragment
 import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.presenters.SportTypesPresenter
@@ -16,7 +17,7 @@ import ru.binaryblitz.SportUp.server.EndpointsService
 import javax.inject.Inject
 
 class UserGamesFragment : BaseFragment() {
-    private var adapter: SportTypesAdapter? = null
+    private lateinit var adapter: MyEventsAdapter
 
     @Inject
     lateinit var api: EndpointsService
@@ -38,15 +39,15 @@ class UserGamesFragment : BaseFragment() {
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.setHasFixedSize(true)
 
-        adapter = SportTypesAdapter(activity)
+        adapter = MyEventsAdapter(activity)
         recyclerView.adapter = adapter
 
         refresh.setColorSchemeResources(R.color.colorAccent)
     }
 
-    fun onLoaded(collection: ArrayList<SportType>) {
-        adapter?.setCollection(collection)
-        adapter?.notifyDataSetChanged()
+    fun onLoaded(collection: ArrayList<Pair<String, Any>>) {
+        adapter.setCollection(collection)
+        adapter.notifyDataSetChanged()
     }
 
     private fun load() {
