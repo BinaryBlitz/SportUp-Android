@@ -44,7 +44,7 @@ class SportTypesAdapter(private val context: Activity) : RecyclerView.Adapter<Re
         holder.name.text = sportType.name
         holder.description.text = generateDescription(sportType)
 
-        Image.loadPhoto(context, sportType.iconUrl, holder.icon)
+        Image.loadPhoto(sportType.iconUrl, holder.icon)
         holder.icon.setColorFilter(sportType.color)
 
         holder.itemView.setOnClickListener {

@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#ffffff"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,6 +11,58 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            app:elevation="0dp"
+            android:layout_height="wrap_content">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:contentInsetStart="0dp"
+                    android:contentInsetLeft="0dp"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp"
+                    android:background="#ffffff"
+                    android:minHeight="?attr/actionBarSize">
+                    <FrameLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/action_bar">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:layout_gravity="center"
+                            android:id="@+id/nameText"
+                            android:gravity="center_vertical"
+                            android:typeface="sans"
+                            android:textSize="18sp"
+                            android:textColor="#212121" />
+
+                        <ImageView
+                            android:id="@+id/rightBtn"
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/icon_nav_edit_black"
+                            android:padding="13dp"
+                            android:layout_gravity="end"
+                            />
+                    </FrameLayout>
+                </android.support.v7.widget.Toolbar>
+                <com.miguelcatalan.materialsearchview.MaterialSearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+        </android.support.design.widget.AppBarLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
@@ -23,10 +76,9 @@
                 <com.github.siyamed.shapeimageview.CircularImageView
                     app:siBorderWidth="2dp"
                     app:siBorderColor="#ffffff"
-                    android:id="@+id/profile_image"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="#212121"
+                    android:id="@+id/profileImage"
+                    android:layout_width="62dp"
+                    android:layout_height="62dp"
                     android:layout_gravity="center_vertical|start"
                     android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
@@ -62,10 +114,11 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Лучший игрок"
+                    android:text="@string/best_player"
                     android:layout_gravity="center_horizontal"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp"
+                    android:gravity="center"
                     android:textColor="#727272"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -102,10 +155,11 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Сыграл игр"
+                    android:text="@string/played_games"
                     android:layout_gravity="center_horizontal"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp"
+                    android:gravity="center"
                     android:textColor="#727272"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -139,7 +193,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Нарушений"
+                    android:text="@string/yellows"
                     android:layout_gravity="center_horizontal"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp"
@@ -174,7 +228,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:text="Баланс счета"
+                android:text="@string/balance"
                 android:textColor="#212121"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
@@ -201,8 +255,9 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:text="Купить билеты"
+            android:text="@string/buy_tickets"
             android:paddingStart="12dp"
+            android:background="#f7f9fa"
             android:paddingLeft="12dp"
             android:textColor="#212121"
             android:layout_height="wrap_content" />
@@ -240,9 +295,8 @@
 
             <Button
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:theme="@style/PromoButtonStyle"
                 android:layout_width="wrap_content"
-                android:text="30 р"
+                android:text="@string/_30"
                 android:gravity="center"
                 android:layout_gravity="end|center_vertical"
                 android:textColor="#ffffff"
@@ -281,9 +335,8 @@
 
             <Button
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:theme="@style/PromoButtonStyle"
                 android:layout_width="wrap_content"
-                android:text="100 р"
+                android:text="@string/_100"
                 android:gravity="center"
                 android:layout_gravity="end|center_vertical"
                 android:textColor="#ffffff"
@@ -322,9 +375,8 @@
 
             <Button
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:theme="@style/PromoButtonStyle"
                 android:layout_width="wrap_content"
-                android:text="150 р"
+                android:text="@string/_150"
                 android:gravity="center"
                 android:layout_gravity="end|center_vertical"
                 android:textColor="#ffffff"
@@ -354,8 +406,9 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:text="Заработать билеты"
+            android:text="@string/earn_tickets"
             android:paddingStart="12dp"
+            android:background="#f7f9fa"
             android:paddingLeft="12dp"
             android:textColor="#212121"
             android:layout_height="wrap_content" />
@@ -398,7 +451,7 @@
         android:layout_height="match_parent">
         <TextView
         android:layout_width="0dp"
-        android:text="Оставить отзыв"
+        android:text="@string/reply"
         android:textColor="#727272"
         android:gravity="center_vertical"
         android:textSize="14sp"
@@ -446,7 +499,7 @@
         android:layout_height="match_parent">
         <TextView
         android:layout_width="0dp"
-        android:text="Пригласить друга"
+        android:text="@string/invite_friend"
         android:textColor="#727272"
         android:gravity="center_vertical"
         android:textSize="14sp"
@@ -494,7 +547,7 @@
         android:layout_height="match_parent">
         <TextView
         android:layout_width="0dp"
-        android:text="Поделиться"
+        android:text="@string/share_app"
         android:textColor="#727272"
         android:gravity="center_vertical"
         android:textSize="14sp"
@@ -532,7 +585,7 @@
                 android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Ввести промокод"
+                android:text="@string/type_promocode"
                 android:textColor="#ffffff"
                 android:textSize="14sp" />
         </FrameLayout>

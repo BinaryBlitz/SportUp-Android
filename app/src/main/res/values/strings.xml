@@ -32,6 +32,19 @@
     <string name="created_events">Созданные игры</string>
     <string name="current_games">Текущие игры</string>
     <string name="closed_events">Завершённые игры</string>
+    <string name="best_player">Лучший игрок</string>
+    <string name="played_games">Сыграл игр</string>
+    <string name="yellows">Нарушений</string>
+    <string name="balance">Баланс счета</string>
+    <string name="buy_tickets">Купить билеты</string>
+    <string name="earn_tickets">Заработать билеты</string>
+    <string name="_150">150 ₽</string>
+    <string name="_100">100 ₽</string>
+    <string name="_30">30 ₽</string>
+    <string name="invite_friend">Пригласить друга</string>
+    <string name="share_app">Поделиться</string>
+    <string name="type_promocode">Ввести промокод</string>
+    <string name="reply">Оставить отзыв</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
