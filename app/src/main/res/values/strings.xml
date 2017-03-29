@@ -25,6 +25,9 @@
     <string name="teams_code">" команды )"</string>
     <string name="completed">Завершено</string>
     <string name="leave">Отказаться</string>
+    <string name="games_screen">Мои игры</string>
+    <string name="delete">Удалить</string>
+    <string name="accept">Принять</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
