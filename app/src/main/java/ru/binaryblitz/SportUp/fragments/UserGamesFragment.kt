@@ -7,7 +7,7 @@ import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.activity_select_city.*
+import kotlinx.android.synthetic.main.activity_user_games.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.adapters.MyEventsAdapter
 import ru.binaryblitz.SportUp.base.BaseFragment
@@ -22,7 +22,7 @@ class UserGamesFragment : BaseFragment() {
     lateinit var api: EndpointsService
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_sports_list, container, false)
+        return inflater!!.inflate(R.layout.activity_user_games, container, false)
     }
 
     override fun onStart() {
@@ -40,8 +40,6 @@ class UserGamesFragment : BaseFragment() {
 
         adapter = MyEventsAdapter(activity)
         recyclerView.adapter = adapter
-
-        refresh.setColorSchemeResources(R.color.colorAccent)
     }
 
     fun onLoaded(collection: ArrayList<Pair<String, Any>>) {

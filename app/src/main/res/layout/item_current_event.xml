@@ -38,9 +38,9 @@
             android:layout_marginTop="8dp"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="18dp"
+                android:layout_width="16dp"
                 android:src="@drawable/icon_calendar_gray"
-                android:layout_height="18dp" />
+                android:layout_height="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,14 +50,14 @@
                 android:layout_marginRight="8dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:layout_height="wrap_content" />
 
             <ImageView
-                android:layout_width="18dp"
+                android:layout_width="16dp"
                 android:layout_marginStart="4dp"
                 android:src="@drawable/icon_timesmoll_gray"
-                android:layout_height="18dp" />
+                android:layout_height="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,27 +67,25 @@
                 android:id="@+id/startsAt"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginLeft="12dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/delete"
-        android:paddingLeft="12dp"
-        android:paddingEnd="12dp"
-        android:paddingStart="12dp"
-        android:paddingRight="12dp"
+        android:paddingLeft="10dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingRight="10dp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:background="@drawable/leave_background"
-        android:layout_marginRight="12dp"
+        android:layout_marginRight="8dp"
         android:id="@+id/leave"
         android:layout_gravity="center_vertical|end"
-        android:layout_marginStart="12dp"
         android:textSize="12sp"
         android:layout_height="wrap_content" />
 

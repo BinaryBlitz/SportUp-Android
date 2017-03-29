@@ -91,7 +91,7 @@ class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recy
     }
 
     private inner class BasicViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.findViewById(R.id.header) as TextView
+        val name = itemView.findViewById(R.id.name) as TextView
         val date = itemView.findViewById(R.id.date) as TextView
         val time = itemView.findViewById(R.id.startsAt) as TextView
         val icon = itemView.findViewById(R.id.category_icon) as ImageView
