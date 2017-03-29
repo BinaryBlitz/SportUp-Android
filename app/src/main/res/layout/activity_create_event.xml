@@ -146,6 +146,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:background="?attr/selectableItemBackground"
                 android:layout_height="60dp">
                 <ImageView
                     android:layout_width="28dp"
@@ -155,15 +156,16 @@
                     android:src="@drawable/icon_calendar_gray" />
 
                 <TextView
+                    android:id="@+id/textView"
                     android:layout_width="0dp"
-                    android:text="@string/date_and_time"
-                    android:textColor="#212121"
-                    android:gravity="center_vertical"
-                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1.0"
-                    android:layout_height="wrap_content" />
+                    android:gravity="center_vertical"
+                    android:text="@string/date_and_time"
+                    android:textColor="#212121"
+                    android:textSize="16sp" />
 
 
                 <TextView
@@ -172,6 +174,7 @@
                     android:textColor="#727272"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
+                    android:id="@+id/dateStart"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1.0"
@@ -182,6 +185,7 @@
                     android:layout_width="wrap_content"
                     android:text="20:00"
                     android:textColor="#727272"
+                    android:id="@+id/timeStart"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
                     android:layout_gravity="center_vertical"
@@ -201,6 +205,7 @@
                 android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:orientation="horizontal"
+                android:background="?attr/selectableItemBackground"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="58dp"
                 android:layout_height="60dp">
@@ -217,6 +222,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="20:00"
+                    android:id="@+id/endTime"
                     android:textColor="#727272"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
@@ -246,6 +252,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/selectTypeButton"
+                android:background="?attr/selectableItemBackground"
                 android:layout_height="60dp">
                 <ImageView
                     android:layout_width="28dp"
@@ -271,6 +279,7 @@
                     android:textColor="#727272"
                     android:gravity="center_vertical|end"
                     android:textSize="18sp"
+                    android:id="@+id/typeText"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1.0"
@@ -305,6 +314,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:id="@+id/userLimitButton"
                 android:layout_height="60dp">
                 <ImageView
                     android:layout_width="28dp"
@@ -327,6 +338,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="0"
+                    android:id="@+id/userLimitValue"
                     android:textColor="#727272"
                     android:gravity="center_vertical|end"
                     android:textSize="18sp"
@@ -349,6 +361,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/teamLimitButton"
+                android:background="?attr/selectableItemBackground"
                 android:layout_height="60dp">
                 <ImageView
                     android:layout_width="28dp"
@@ -371,6 +385,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="0"
+                    android:id="@+id/teamLimitValue"
                     android:textColor="#727272"
                     android:gravity="center_vertical|end"
                     android:textSize="18sp"
@@ -407,6 +422,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:background="?attr/selectableItemBackground"
                 android:layout_height="60dp">
                 <ImageView
                     android:layout_width="28dp"
