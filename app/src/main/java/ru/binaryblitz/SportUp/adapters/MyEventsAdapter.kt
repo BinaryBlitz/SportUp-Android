@@ -66,6 +66,7 @@ class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recy
         holder.date.text = DateUtils.getDateStringRepresentationWithoutTime(event.startsAt)
         holder.time.text = DateUtils.getTimeStringRepresentation(event.startsAt)
         Image.loadPhoto(context, event.icon, holder.icon)
+        holder.icon.setColorFilter(event.color)
     }
 
     override fun getItemViewType(position: Int): Int {

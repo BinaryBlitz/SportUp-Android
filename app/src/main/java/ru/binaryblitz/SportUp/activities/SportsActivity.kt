@@ -5,7 +5,7 @@ import ru.binaryblitz.SportUp.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.fragments.SportsListFragment
-import ru.binaryblitz.SportUp.fragments.UserGamesFragment
+import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 
 class SportsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,7 @@ class SportsActivity : BaseActivity() {
                     supportFragmentManager.beginTransaction().replace(R.id.container, SportsListFragment()).commit()
                 }
                 R.id.tab_friends -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.container, UserGamesFragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.container, UserEventsFragment()).commit()
                 }
             }
         }

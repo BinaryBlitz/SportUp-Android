@@ -8,7 +8,7 @@ import ru.binaryblitz.SportUp.activities.EventsMapActivity;
 import ru.binaryblitz.SportUp.activities.SelectCityActivity;
 import ru.binaryblitz.SportUp.activities.SportEventsActivity;
 import ru.binaryblitz.SportUp.fragments.SportsListFragment;
-import ru.binaryblitz.SportUp.fragments.UserGamesFragment;
+import ru.binaryblitz.SportUp.fragments.UserEventsFragment;
 import ru.binaryblitz.SportUp.server.ServerApi;
 
 @Singleton
@@ -24,5 +24,5 @@ public interface Dependencies {
 
     void inject(EventActivity eventActivity);
 
-    void inject(UserGamesFragment userGamesFragment);
+    void inject(UserEventsFragment userEventsFragment);
 }

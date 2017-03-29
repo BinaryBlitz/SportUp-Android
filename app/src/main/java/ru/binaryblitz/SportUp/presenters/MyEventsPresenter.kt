@@ -1,9 +1,10 @@
 package ru.binaryblitz.SportUp.presenters
 
+import android.graphics.Color
 import android.util.Pair
 import com.google.gson.JsonArray
 import ru.binaryblitz.SportUp.R
-import ru.binaryblitz.SportUp.fragments.UserGamesFragment
+import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 import ru.binaryblitz.SportUp.models.MyEvent
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
@@ -12,7 +13,7 @@ import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
 
-class MyEventsPresenter(private val service: EndpointsService, private val view: UserGamesFragment) {
+class MyEventsPresenter(private val service: EndpointsService, private val view: UserEventsFragment) {
 
     fun getEvents(token: String) {
         service.getMyEvents(token, object : JsonArrayResponseListener {
@@ -61,7 +62,8 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
                                 AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("name")),
                                 DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
                                 DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("ends_at"))),
-                                AndroidUtilities.getStringFieldFromJson(it.get("sport_type").asJsonObject.get("icon_url"))
+                                AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
+                                Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
                         ))
                     }
         }
@@ -70,7 +72,7 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
     private fun parseCreatedEvents(array: JsonArray, collection: ArrayList<Pair<String, Any>>) {
         val startIndex = collection.size
 
-        (0..array.size())
+        (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
                 .filter {
                     AndroidUtilities.getIntFieldFromJson(it.get("event").asJsonObject.get("creator").asJsonObject.get("id")) ==
@@ -82,11 +84,12 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
                             AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("name")),
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("ends_at"))),
-                            AndroidUtilities.getStringFieldFromJson(it.get("sport_type").asJsonObject.get("icon_url"))
+                            AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
+                            Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
                     ))
                 }
 
-        if (collection.size > startIndex + 1) {
+        if (collection.size > startIndex) {
             collection.add(startIndex, Pair("H", view.context.getString(R.string.created_events)))
         }
     }
@@ -94,9 +97,11 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
     private fun parseUpcomingEvents(array: JsonArray, collection: ArrayList<Pair<String, Any>>) {
         val startIndex = collection.size
 
-        (0..array.size())
+        (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
                 .filter {
+                    AndroidUtilities.getIntFieldFromJson(it.get("event").asJsonObject.get("creator").asJsonObject.get("id")) !=
+                            DeviceInfoStore.getUserObject(view.context)?.id &&
                     DateUtils.isAfter(
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
                             Date()
@@ -108,11 +113,12 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
                             AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("name")),
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("ends_at"))),
-                            AndroidUtilities.getStringFieldFromJson(it.get("sport_type").asJsonObject.get("icon_url"))
+                            AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
+                            Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
                     ))
                 }
 
-        if (collection.size > startIndex + 1) {
+        if (collection.size > startIndex) {
             collection.add(startIndex, Pair("H", view.context.getString(R.string.current_games)))
         }
     }
@@ -120,9 +126,11 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
     private fun parseClosedEvents(array: JsonArray, collection: ArrayList<Pair<String, Any>>) {
         val startIndex = collection.size
 
-        (0..array.size())
+        (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
                 .filter {
+                    AndroidUtilities.getIntFieldFromJson(it.get("event").asJsonObject.get("creator").asJsonObject.get("id")) !=
+                            DeviceInfoStore.getUserObject(view.context)?.id &&
                     DateUtils.isAfter(
                             Date(),
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at")))
@@ -134,11 +142,12 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
                             AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("name")),
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
                             DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("ends_at"))),
-                            AndroidUtilities.getStringFieldFromJson(it.get("sport_type").asJsonObject.get("icon_url"))
+                            AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
+                            Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
                     ))
                 }
 
-        if (collection.size > startIndex + 1) {
+        if (collection.size > startIndex) {
             collection.add(startIndex, Pair("H", view.context.getString(R.string.closed_events)))
         }
     }

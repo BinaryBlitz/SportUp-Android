@@ -7,7 +7,7 @@ import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.activity_user_games.*
+import kotlinx.android.synthetic.main.activity_user_events.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.adapters.MyEventsAdapter
 import ru.binaryblitz.SportUp.base.BaseFragment
@@ -15,14 +15,14 @@ import ru.binaryblitz.SportUp.presenters.MyEventsPresenter
 import ru.binaryblitz.SportUp.server.EndpointsService
 import javax.inject.Inject
 
-class UserGamesFragment : BaseFragment() {
+class UserEventsFragment : BaseFragment() {
     private lateinit var adapter: MyEventsAdapter
 
     @Inject
     lateinit var api: EndpointsService
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.activity_user_games, container, false)
+        return inflater!!.inflate(R.layout.activity_user_events, container, false)
     }
 
     override fun onStart() {
