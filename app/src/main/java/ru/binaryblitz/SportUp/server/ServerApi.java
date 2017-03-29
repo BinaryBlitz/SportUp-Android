@@ -2,6 +2,7 @@ package ru.binaryblitz.SportUp.server;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -19,6 +20,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 @Module
 public class ServerApi {
     private File cacheFile;
+    private static final int TIME_OUT = 10;
 
     public ServerApi(File cacheFile) {
         this.cacheFile = cacheFile;
@@ -52,6 +54,8 @@ public class ServerApi {
                         return response;
                     }
                 })
+                .readTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .cache(cache)
                 .build();
 
