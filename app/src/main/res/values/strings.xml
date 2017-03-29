@@ -14,6 +14,17 @@
     <string name="profile">Профиль</string>
     <string name="ruble_sign">" ₽"</string>
     <string name="events_on_map">Игры на карте</string>
+    <string name="event_price">Стоимость участия</string>
+    <string name="share_game">Поделиться игрой</string>
+    <string name="description">Описание</string>
+    <string name="players">Игроки</string>
+    <string name="join">Принять участие</string>
+    <string name="before_start">"До начала "</string>
+    <string name="minute_code">" минут"</string>
+    <string name="hours_code">" ч "</string>
+    <string name="teams_code">" команды )"</string>
+    <string name="completed">Завершено</string>
+    <string name="leave">Отказаться</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
@@ -31,5 +42,14 @@
         <item quantity="few">%1$d игры</item>
         <item quantity="many">%1$d игр</item>
         <item quantity="other">%1$d игр</item>
+    </plurals>
+
+    <plurals name="days">
+        <item quantity="zero">0 дней</item>
+        <item quantity="one">%1$d день</item>
+        <item quantity="two">%1$d дня</item>
+        <item quantity="few">%1$d дня</item>
+        <item quantity="many">%1$d дней</item>
+        <item quantity="other">%1$d дней</item>
     </plurals>
 </resources>

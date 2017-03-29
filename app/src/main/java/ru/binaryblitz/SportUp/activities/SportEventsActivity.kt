@@ -25,7 +25,6 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
     var typeId = 0
-    var color = 0
 
     @Inject
     lateinit var api: EndpointsService
@@ -104,5 +103,6 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
     companion object {
         var eventsCollection = ArrayList<Event>()
+        var color = 0
     }
 }

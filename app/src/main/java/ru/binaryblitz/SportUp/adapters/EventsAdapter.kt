@@ -1,6 +1,7 @@
 package ru.binaryblitz.SportUp.adapters
 
 import android.app.Activity
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +9,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.SportUp.R
+import ru.binaryblitz.SportUp.activities.EventActivity
+import ru.binaryblitz.SportUp.activities.SportEventsActivity
 import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
 
 class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    val EXTRA_ID = "id"
+    val EXTRA_COLOR = "color"
 
     private var events: ArrayList<Event>
 
@@ -42,6 +47,13 @@ class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
         holder.price.text = event.price.toString() + context.getString(R.string.ruble_sign)
 
         holder.isPublic.visibility = if (event.isPublic) View.VISIBLE else View.GONE
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, EventActivity::class.java)
+            intent.putExtra(EXTRA_ID, event.id)
+            intent.putExtra(EXTRA_COLOR, SportEventsActivity.color)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {
