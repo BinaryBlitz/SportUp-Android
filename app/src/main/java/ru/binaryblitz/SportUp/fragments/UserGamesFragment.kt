@@ -11,8 +11,7 @@ import kotlinx.android.synthetic.main.activity_select_city.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.adapters.MyEventsAdapter
 import ru.binaryblitz.SportUp.base.BaseFragment
-import ru.binaryblitz.SportUp.models.SportType
-import ru.binaryblitz.SportUp.presenters.SportTypesPresenter
+import ru.binaryblitz.SportUp.presenters.MyEventsPresenter
 import ru.binaryblitz.SportUp.server.EndpointsService
 import javax.inject.Inject
 
@@ -51,7 +50,7 @@ class UserGamesFragment : BaseFragment() {
     }
 
     private fun load() {
-        val presenter = SportTypesPresenter(api, this)
-        presenter.getSportTypes()
+        val presenter = MyEventsPresenter(api, this)
+        presenter.getEvents("foobar")
     }
 }
