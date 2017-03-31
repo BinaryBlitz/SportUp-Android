@@ -11,6 +11,7 @@ import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.utils.DateUtils
+import ru.binaryblitz.SportUp.utils.LogUtil
 import ru.binaryblitz.SportUp.utils.SportTypesUtil
 import java.util.*
 
@@ -24,7 +25,13 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_event)
-        SportTypesUtil.load(this)
+
+        try {
+            SportTypesUtil.load(this)
+        } catch (e: Exception) {
+            LogUtil.logException(e)
+        }
+        
         setOnClickListeners()
     }
 
