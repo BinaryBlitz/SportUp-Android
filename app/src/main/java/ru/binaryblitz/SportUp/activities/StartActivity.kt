@@ -13,8 +13,7 @@ class StartActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
-        Fabric.with(this, Crashlytics())
+        setContentView(R.layout.activity_start)
 
         findViewById(R.id.start_btn).setOnClickListener {
             startActivity(Intent(this@StartActivity, SelectCityActivity::class.java))
