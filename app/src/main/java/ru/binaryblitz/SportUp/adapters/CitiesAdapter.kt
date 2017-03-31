@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.SportUp.R
-import ru.binaryblitz.SportUp.activities.SportsActivity
+import ru.binaryblitz.SportUp.activities.MainActivity
 import ru.binaryblitz.SportUp.models.User
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import java.util.*
@@ -43,7 +43,7 @@ class CitiesAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
         }
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, SportsActivity::class.java)
+            val intent = Intent(context, MainActivity::class.java)
             DeviceInfoStore.saveCity(context, city)
             if (DeviceInfoStore.getToken(context) == "null") {
                 saveUser(city)

@@ -42,7 +42,7 @@
         </activity>
 
         <activity
-            android:name="ru.binaryblitz.SportUp.activities.SportsActivity"
+            android:name="ru.binaryblitz.SportUp.activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
