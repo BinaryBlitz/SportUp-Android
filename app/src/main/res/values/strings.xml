@@ -31,7 +31,7 @@
     <string name="invite_code">Приглашения на события</string>
     <string name="created_events">Созданные игры</string>
     <string name="current_games">Текущие игры</string>
-    <string name="closed_events">Завершенные игры</string>
+    <string name="closed_events">Завершённые игры</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>

@@ -22,26 +22,29 @@ class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recy
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (viewType) {
-            HEADER -> {
-                return HeaderViewHolder(createView(parent, R.layout.item_my_events_header))
-            }
-            CREATED -> {
-                return BasicViewHolder(createView(parent, R.layout.item_created_event))
-            }
-            CURRENT -> {
-                return BasicViewHolder(createView(parent, R.layout.item_current_event))
-            }
-            CLOSED -> {
-                return BasicViewHolder(createView(parent, R.layout.item_closed_event))
-            }
-            INVITE -> {
-                return BasicViewHolder(createView(parent, R.layout.item_invite))
-            }
-            else -> {
-                return HeaderViewHolder(createView(parent, R.layout.item_my_events_header))
-            }
+        if (viewType == HEADER) {
+            return createHeaderViewHolder(parent)
+        } else {
+            return createBasicViewHolder(parent, getLayoutId(viewType))
         }
+    }
+
+    private fun getLayoutId(viewType: Int): Int {
+        when (viewType) {
+            CREATED -> return R.layout.item_created_event
+            CURRENT -> return R.layout.item_current_event
+            CLOSED -> return R.layout.item_closed_event
+            INVITE -> return R.layout.item_invite
+            else -> return R.layout.item_created_event
+        }
+    }
+
+    private fun createBasicViewHolder(parent: ViewGroup, layout: Int): BasicViewHolder {
+        return BasicViewHolder(createView(parent, layout))
+    }
+
+    private fun createHeaderViewHolder(parent: ViewGroup): HeaderViewHolder {
+        return HeaderViewHolder(createView(parent, R.layout.item_my_events_header))
     }
 
     private fun createView(parent: ViewGroup, layout: Int): View {
@@ -70,16 +73,12 @@ class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recy
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (collection[position].first == "H") {
-            return HEADER
-        } else if (collection[position].first == "CR") {
-            return CREATED
-        } else if (collection[position].first == "CU") {
-            return CURRENT
-        } else if (collection[position].first == "CL") {
-            return CLOSED
-        } else {
-            return INVITE
+        when (collection[position].first) {
+            HEADER_CODE -> return HEADER
+            CREATED_CODE -> return CREATED
+            CURRENT_CODE -> return CURRENT
+            CLOSED_CODE -> return CLOSED
+            else -> return INVITE
         }
     }
 
@@ -104,5 +103,11 @@ class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recy
         private val CURRENT = 3
         private val CLOSED = 4
         private val INVITE = 5
+
+        val HEADER_CODE = "H"
+        val CREATED_CODE = "CR"
+        val CURRENT_CODE = "CU"
+        val CLOSED_CODE = "CL"
+        val INVITE_CODE = "I"
     }
 }

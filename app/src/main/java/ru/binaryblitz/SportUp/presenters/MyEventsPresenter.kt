@@ -3,7 +3,9 @@ package ru.binaryblitz.SportUp.presenters
 import android.graphics.Color
 import android.util.Pair
 import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import ru.binaryblitz.SportUp.R
+import ru.binaryblitz.SportUp.adapters.MyEventsAdapter
 import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 import ru.binaryblitz.SportUp.models.MyEvent
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
@@ -50,22 +52,24 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
         view.onLoaded(collection = collection)
     }
 
+    private fun getEventFromJson(obj: JsonObject): MyEvent {
+        return MyEvent(
+                AndroidUtilities.getIntFieldFromJson(obj.get("id")),
+                AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("name")),
+                DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("starts_at"))),
+                DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("ends_at"))),
+                AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
+                Color.parseColor(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
+        )
+    }
+
     private fun parseInvites(array: JsonArray, collection: ArrayList<Pair<String, Any>>) {
         if (array.size() != 0) {
-            collection.add(Pair("H", view.context.getString(R.string.invite_code)))
+            collection.add(Pair(MyEventsAdapter.HEADER_CODE, view.context.getString(R.string.invite_code)))
 
             (0..array.size())
                     .map { array.get(it).asJsonObject }
-                    .mapTo(collection) {
-                        Pair("I", MyEvent(
-                                AndroidUtilities.getIntFieldFromJson(it.get("id")),
-                                AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("name")),
-                                DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
-                                DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("ends_at"))),
-                                AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
-                                Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
-                        ))
-                    }
+                    .mapTo(collection) { Pair(MyEventsAdapter.INVITE_CODE, getEventFromJson(it)) }
         }
     }
 
@@ -74,24 +78,21 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
-                .filter {
-                    AndroidUtilities.getIntFieldFromJson(it.get("event").asJsonObject.get("creator").asJsonObject.get("id")) ==
-                            DeviceInfoStore.getUserObject(view.context)?.id
-                }
-                .mapTo(collection) {
-                    Pair("CR", MyEvent(
-                            AndroidUtilities.getIntFieldFromJson(it.get("id")),
-                            AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("name")),
-                            DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
-                            DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("ends_at"))),
-                            AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
-                            Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
-                    ))
-                }
+                .filter { isEventCreatedByUser(it) }
+                .mapTo(collection) { Pair(MyEventsAdapter.CREATED_CODE, getEventFromJson(it)) }
 
+        addHeader(collection, startIndex, R.string.created_events)
+    }
+
+    private fun addHeader(collection: ArrayList<Pair<String, Any>>, startIndex: Int, stringId: Int) {
         if (collection.size > startIndex) {
-            collection.add(startIndex, Pair("H", view.context.getString(R.string.created_events)))
+            collection.add(startIndex, Pair(MyEventsAdapter.HEADER_CODE, view.context.getString(stringId)))
         }
+    }
+
+    private fun isEventCreatedByUser(obj: JsonObject): Boolean {
+        return AndroidUtilities.getIntFieldFromJson(obj.get("event").asJsonObject.get("creator").asJsonObject.get("id")) ==
+                DeviceInfoStore.getUserObject(view.context)?.id
     }
 
     private fun parseUpcomingEvents(array: JsonArray, collection: ArrayList<Pair<String, Any>>) {
@@ -99,28 +100,17 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
-                .filter {
-                    AndroidUtilities.getIntFieldFromJson(it.get("event").asJsonObject.get("creator").asJsonObject.get("id")) !=
-                            DeviceInfoStore.getUserObject(view.context)?.id &&
-                    DateUtils.isAfter(
-                            DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
-                            Date()
-                    )
-                }
-                .mapTo(collection) {
-                    Pair("CU", MyEvent(
-                            AndroidUtilities.getIntFieldFromJson(it.get("id")),
-                            AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("name")),
-                            DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
-                            DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("ends_at"))),
-                            AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
-                            Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
-                    ))
-                }
+                .filter { !isEventCreatedByUser(it) && isAfterToday(it) }
+                .mapTo(collection) { Pair(MyEventsAdapter.CURRENT_CODE, getEventFromJson(it)) }
 
-        if (collection.size > startIndex) {
-            collection.add(startIndex, Pair("H", view.context.getString(R.string.current_games)))
-        }
+        addHeader(collection, startIndex, R.string.current_games)
+    }
+
+    private fun isAfterToday(obj: JsonObject): Boolean {
+        return DateUtils.isAfter(
+                    DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("starts_at"))),
+                    Date()
+               )
     }
 
     private fun parseClosedEvents(array: JsonArray, collection: ArrayList<Pair<String, Any>>) {
@@ -128,27 +118,9 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
-                .filter {
-                    AndroidUtilities.getIntFieldFromJson(it.get("event").asJsonObject.get("creator").asJsonObject.get("id")) !=
-                            DeviceInfoStore.getUserObject(view.context)?.id &&
-                    DateUtils.isAfter(
-                            Date(),
-                            DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at")))
-                    )
-                }
-                .mapTo(collection) {
-                    Pair("CL", MyEvent(
-                            AndroidUtilities.getIntFieldFromJson(it.get("id")),
-                            AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("name")),
-                            DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("starts_at"))),
-                            DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("ends_at"))),
-                            AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
-                            Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
-                    ))
-                }
+                .filter { !isEventCreatedByUser(it) && !isAfterToday(it) }
+                .mapTo(collection) { Pair(MyEventsAdapter.CLOSED_CODE, getEventFromJson(it)) }
 
-        if (collection.size > startIndex) {
-            collection.add(startIndex, Pair("H", view.context.getString(R.string.closed_events)))
-        }
+        addHeader(collection, startIndex, R.string.closed_events)
     }
 }

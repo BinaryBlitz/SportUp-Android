@@ -1,6 +1,7 @@
 package ru.binaryblitz.SportUp.activities
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import ru.binaryblitz.SportUp.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.binaryblitz.SportUp.R
@@ -17,12 +18,16 @@ class SportsActivity : BaseActivity() {
         bottomBar.setOnTabSelectListener { tabId ->
             when (tabId) {
                 R.id.tab_sports -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.container, SportsListFragment()).commit()
+                    switchFragment(SportsListFragment())
                 }
                 R.id.tab_friends -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.container, UserEventsFragment()).commit()
+                    switchFragment(UserEventsFragment())
                 }
             }
         }
+    }
+
+    private fun switchFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
     }
 }
