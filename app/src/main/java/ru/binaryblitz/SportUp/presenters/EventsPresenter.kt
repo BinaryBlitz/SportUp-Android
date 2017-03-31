@@ -7,6 +7,7 @@ import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.DateUtils
+import ru.binaryblitz.SportUp.utils.LogUtil
 
 class EventsPresenter(private val service: EndpointsService, private val view: SportEventsActivity) {
 
