@@ -20,6 +20,10 @@ object DateUtils {
         return format.format(date)
     }
 
+    fun isAfter(first: Date, second: Date): Boolean {
+        return !first.before(second)
+    }
+
     fun parse(input: String): Date {
         try {
             return DateTime(input, DateTimeZone.getDefault()).toDate()

@@ -18,6 +18,12 @@ public interface ApiEndpoints {
     @GET("sport_types/{id}/events")
     Observable<JsonArray> getEvents(@Path("id") int id, @Query("date") String date);
 
+    @GET("invites")
+    Observable<JsonArray> getInvites(@Query("api_token") String token);
+
+    @GET("memberships")
+    Observable<JsonArray> getMemberships(@Query("api_token") String token);
+
     @GET("events/{id}")
     Observable<JsonObject> getEvent(@Path("id") int id, @Query("api_token") String token);
 }
