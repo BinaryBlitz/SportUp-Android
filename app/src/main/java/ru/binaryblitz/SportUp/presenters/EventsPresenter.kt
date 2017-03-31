@@ -10,8 +10,8 @@ import ru.binaryblitz.SportUp.utils.DateUtils
 
 class EventsPresenter(private val service: EndpointsService, private val view: SportEventsActivity) {
 
-    fun getEvents(id: Int, date: String) {
-        service.getEvents(id, date, object : JsonArrayResponseListener {
+    fun getEvents(id: Int, sportTypeId: Int, date: String) {
+        service.getEvents(id, sportTypeId, date, object : JsonArrayResponseListener {
             override fun onSuccess(array: JsonArray) {
                 parseAnswer(array)
             }

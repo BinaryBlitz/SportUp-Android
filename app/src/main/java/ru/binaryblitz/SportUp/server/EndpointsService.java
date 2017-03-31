@@ -49,8 +49,8 @@ public class EndpointsService {
                 });
     }
 
-    public void getSportTypes(final JsonArrayResponseListener callback) {
-        networkService.getSportTypes()
+    public void getSportTypes(int id, final JsonArrayResponseListener callback) {
+        networkService.getSportTypes(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonArray>>() {
@@ -80,8 +80,8 @@ public class EndpointsService {
                 });
     }
 
-    public void getEvents(int id, String date, final JsonArrayResponseListener callback) {
-        networkService.getEvents(id, date)
+    public void getEvents(int id, int sportTypeId, String date, final JsonArrayResponseListener callback) {
+        networkService.getEvents(id, sportTypeId, date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonArray>>() {

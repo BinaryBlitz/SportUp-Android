@@ -68,7 +68,7 @@ class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recy
         holder.name.text = event.name
         holder.date.text = DateUtils.getDateStringRepresentationWithoutTime(event.startsAt)
         holder.time.text = DateUtils.getTimeStringRepresentation(event.startsAt)
-        Image.loadPhoto(context, event.icon, holder.icon)
+        Image.loadPhoto(event.icon, holder.icon)
         holder.icon.setColorFilter(event.color)
     }
 

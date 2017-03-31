@@ -6,19 +6,20 @@ import ru.binaryblitz.SportUp.fragments.SportsListFragment
 import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
-import ru.binaryblitz.SportUp.server.ServerConfig
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
+import ru.binaryblitz.SportUp.utils.LogUtil
 
 class SportTypesPresenter(private val service: EndpointsService, private val view: SportsListFragment) {
 
-    fun getSportTypes() {
-        service.getSportTypes(object : JsonArrayResponseListener {
+    fun getSportTypes(id: Int) {
+        service.getSportTypes(id, object : JsonArrayResponseListener {
             override fun onSuccess(array: JsonArray) {
                 parseAnswer(array)
             }
 
             override fun onError(networkError: String) {
                 view.onInternetConnectionError()
+                LogUtil.logError(networkError)
             }
         })
     }

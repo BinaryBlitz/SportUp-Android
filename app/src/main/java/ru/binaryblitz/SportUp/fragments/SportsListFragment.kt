@@ -12,6 +12,7 @@ import ru.binaryblitz.SportUp.adapters.SportTypesAdapter
 import ru.binaryblitz.SportUp.base.BaseFragment
 import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.presenters.SportTypesPresenter
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import javax.inject.Inject
 
@@ -50,7 +51,11 @@ class SportsListFragment : BaseFragment() {
     }
 
     private fun load() {
+        if (DeviceInfoStore.getCityObject(context) == null) {
+            return
+        }
+
         val presenter = SportTypesPresenter(api, this)
-        presenter.getSportTypes()
+        presenter.getSportTypes(DeviceInfoStore.getCityObject(context)!!.id)
     }
 }

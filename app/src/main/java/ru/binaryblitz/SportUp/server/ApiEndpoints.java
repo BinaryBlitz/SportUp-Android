@@ -12,11 +12,11 @@ public interface ApiEndpoints {
     @GET("cities")
     Observable<JsonArray> getCitiesList();
 
-    @GET("sport_types")
-    Observable<JsonArray> getSportTypes();
+    @GET("cities/{id}/sport_types")
+    Observable<JsonArray> getSportTypes(@Path("id") int id);
 
-    @GET("sport_types/{id}/events")
-    Observable<JsonArray> getEvents(@Path("id") int id, @Query("date") String date);
+    @GET("cities/{id}/sport_types/{sport_type_id}/events")
+    Observable<JsonArray> getEvents(@Path("id") int id, @Path("sport_type_id") int sportTypeId, @Query("date") String date);
 
     @GET("invites")
     Observable<JsonArray> getInvites(@Query("api_token") String token);

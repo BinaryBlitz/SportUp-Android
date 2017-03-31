@@ -13,6 +13,7 @@ import ru.binaryblitz.SportUp.adapters.EventsAdapter
 import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.presenters.EventsPresenter
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import javax.inject.Inject
 
@@ -94,7 +95,7 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
     private fun load() {
         val presenter = EventsPresenter(api, this)
         typeId = intent.getIntExtra(EXTRA_ID, 0)
-        presenter.getEvents(typeId, "21-04-2017")
+        presenter.getEvents(DeviceInfoStore.getCityObject(this)!!.id, typeId, "21-04-2017")
     }
 
     override fun onRefresh() {
