@@ -55,7 +55,7 @@
             <AutoCompleteTextView
                     android:layout_width="match_parent"
                     android:ellipsize="start"
-                    android:id="@+id/search_box"
+                    android:id="@+id/searchBox"
                     android:gravity="center"
                     android:hint="@string/search"
                     android:maxLines="1"
@@ -78,7 +78,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_marginTop="112dp"
-              android:name="ru.binaryblitz.SportUp.custom.CustomMapFragment$MySupportMapFragment"/>
+              android:name="com.google.android.gms.maps.SupportMapFragment"/>
     <Button
             style="@style/Widget.AppCompat.Button.Colored"
             android:theme="@style/BrandButtonStyle"

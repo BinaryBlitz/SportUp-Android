@@ -161,6 +161,11 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
 
         priceButton.setOnClickListener { showPriceDialog() }
 
+        locationButton.setOnClickListener {
+            val intent = Intent(this@CreateEventActivity, MapActivity::class.java)
+            startActivity(intent)
+        }
+
         timeStart.setOnClickListener {
             isStartTimePicked = true
             showTimePicker()

@@ -1,32 +1,26 @@
 package ru.binaryblitz.SportUp.activities
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.android.synthetic.main.activity_map.*
 import org.json.JSONException
 import org.json.JSONObject
 import ru.binaryblitz.SportUp.R
-import ru.binaryblitz.SportUp.base.BaseActivity
-import ru.binaryblitz.SportUp.custom.CustomMapFragment
+import ru.binaryblitz.SportUp.base.LocationDependentActivity
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.LogUtil
 import java.io.IOException
@@ -37,23 +31,29 @@ import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 
-class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMapAfterUserInteraction, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
+
+    override fun onLocationUpdated(latitude: Double?, longitude: Double?) {
+        selectedLocation = LatLng(latitude!!, longitude!!)
+        moveCamera()
+    }
+
+    override fun onLocationPermissionGranted() {
+        googleMap.isMyLocationEnabled = false
+        googleMap.uiSettings.isMyLocationButtonEnabled = true
+    }
+
     private lateinit var googleMap: GoogleMap
 
-    private var mGoogleApiClient: GoogleApiClient? = null
-    private var mLastLocation: Location? = null
-
-    private lateinit var searchBox: AutoCompleteTextView
-
     internal inner class GooglePlacesAutocompleteAdapter(context: Context, textViewResourceId: Int) : ArrayAdapter<Any>(context, textViewResourceId), Filterable {
-        private var resultList: ArrayList<String>? = null
+        private var resultList: ArrayList<String> = ArrayList()
 
         override fun getCount(): Int {
-            return resultList!!.size
+            return resultList.size
         }
 
         override fun getItem(index: Int): String? {
-            return resultList!![index]
+            return resultList[index]
         }
 
         override fun getFilter(): Filter {
@@ -63,12 +63,12 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
                     if (constraint != null) {
                         resultList = autocomplete(constraint.toString())
                         filterResults.values = resultList
-                        filterResults.count = if (resultList == null) 0 else resultList!!.size
+                        filterResults.count = resultList.size
                     }
                     return filterResults
                 }
 
-                override fun publishResults(constraint: CharSequence, results: Filter.FilterResults?) {
+                override fun publishResults(constraint: CharSequence?, results: Filter.FilterResults?) {
                     if (results != null && results.count > 0) {
                         notifyDataSetChanged()
                     } else {
@@ -83,15 +83,13 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
+        initGoogleApiClient()
         initAutocomplete()
         initMap()
-        initGoogleApiClient()
         setOnClickListeners()
     }
 
     private fun initAutocomplete() {
-        searchBox = findViewById(R.id.search_box) as AutoCompleteTextView
-
         searchBox.setAdapter(GooglePlacesAutocompleteAdapter(this, R.layout.list_item))
         searchBox.onItemClickListener = AdapterView.OnItemClickListener { _, _, i, _ ->
             val geocoder = Geocoder(this@MapActivity)
@@ -114,13 +112,13 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
 
         selectedLocation = LatLng(latitude, longitude)
         selected = address
-        moveCamera(false)
+        moveCamera()
 
         val inputManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
-    private fun autocomplete(input: String): ArrayList<String>? {
+    private fun autocomplete(input: String): ArrayList<String> {
         var conn: HttpURLConnection? = null
         val jsonResults = StringBuilder()
         try {
@@ -130,16 +128,17 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
             conn = URL(sb).openConnection() as HttpURLConnection
             val stream = InputStreamReader(conn.inputStream)
 
-            var read: Int = 0
             val buff = CharArray(1024)
+            var read: Int = stream.read(buff)
+
             while (read != -1) {
-                read = stream.read(buff)
                 jsonResults.append(buff, 0, read)
+                read = stream.read(buff)
             }
         } catch (e: MalformedURLException) {
-            return null
+            return ArrayList()
         } catch (e: IOException) {
-            return null
+            return ArrayList()
         } finally {
             if (conn != null) {
                 conn.disconnect()
@@ -149,8 +148,9 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
         return parseAnswer(jsonResults)
     }
 
-    private fun parseAnswer(jsonResults: StringBuilder): ArrayList<String>? {
-        var resultList: ArrayList<String>? = null
+    private fun parseAnswer(jsonResults: StringBuilder): ArrayList<String> {
+        LogUtil.logError(jsonResults.toString())
+        var resultList: ArrayList<String> = ArrayList()
         try {
             val jsonObj = JSONObject(jsonResults.toString())
             val prevJsonArray = jsonObj.getJSONArray("predictions")
@@ -168,18 +168,6 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
         val mMap = supportFragmentManager.findFragmentById(R.id.scroll) as SupportMapFragment
 
         Handler().post { mMap.getMapAsync(this@MapActivity) }
-    }
-
-    private fun initGoogleApiClient() {
-        if (mGoogleApiClient != null) {
-            return
-        }
-
-        mGoogleApiClient = GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build()
     }
 
     private fun setOnClickListeners() {
@@ -206,29 +194,15 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
 
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkPermission()) {
-                ActivityCompat.requestPermissions(this@MapActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION)
-            } else {
-                setUpMap()
-            }
-        } catch (e: Exception) {
-            LogUtil.logException(e)
-        }
-
-    }
-
-    @SuppressLint("NewApi")
-    private fun checkPermission(): Boolean {
-        return checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        setUpMap()
+        checkPermissions()
     }
 
     private fun setUpMap() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return
         }
-        googleMap.isMyLocationEnabled = false
-        googleMap.uiSettings.isMyLocationButtonEnabled = true
+
         googleMap.setPadding(0, AndroidUtilities.convertDpToPixel(66f, this).toInt(), 0, 0)
     }
 
@@ -251,54 +225,7 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
         return strAdd
     }
 
-    override fun onUpdateMapAfterUserInteraction() {
-    }
-
-    public override fun onResume() {
-        super.onResume()
-        Handler().post({
-            if (mGoogleApiClient!!.isConnected) {
-                getLocation()
-            } else {
-                mGoogleApiClient!!.connect()
-            }
-        })
-    }
-
-    override fun onConnected(bundle: Bundle?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            try {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION)
-                } else {
-                    getLocation()
-                }
-            } catch (e: Exception) {
-                LogUtil.logException(e)
-            }
-
-        } else {
-            getLocation()
-        }
-    }
-
-    private fun getLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            onLocationError()
-            return
-        }
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
-
-        if (mLastLocation != null) {
-            selectedLocation = LatLng(mLastLocation!!.latitude, mLastLocation!!.longitude)
-            moveCamera(true)
-        } else {
-            onLocationError()
-        }
-    }
-
-    private fun moveCamera(setText: Boolean) {
+    private fun moveCamera() {
         val cameraPosition = CameraPosition.Builder()
                 .target(selectedLocation)
                 .zoom(17f)
@@ -309,11 +236,7 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), object : GoogleMap.CancelableCallback {
             override fun onFinish() {
                 Handler().postDelayed({
-                    if (setText) {
-                        getCompleteAddressString(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
-                        searchBox.setText(selected)
-                    }
-                    searchBox.dismissDropDown()
+                    getCompleteAddressString(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
                 }, 50)
             }
 
@@ -321,35 +244,13 @@ class MapActivity : BaseActivity(), CustomMapFragment.TouchableWrapper.UpdateMap
         })
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            LOCATION_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLocation()
-                } else {
-                    onLocationError()
-                }
-            }
-        }
-    }
-
-    override fun onConnectionSuspended(i: Int) {
-        mGoogleApiClient!!.connect()
-    }
-
-    override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        onLocationError()
-    }
-
     companion object {
-        private val LOCATION_PERMISSION = 1
-
         lateinit var selectedLocation: LatLng
         var selected = ""
 
         private val PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place"
         private val TYPE_AUTOCOMPLETE = "/autocomplete"
         private val OUT_JSON = "/json"
-        private val API_KEY = "AIzaSyC48bjEMes05K8RgTG6PrwVSKicZqXZ7WY"
+        private val API_KEY = "AIzaSyAleTZalgq4WoXgb1aAaiAD2-GK3WSGoSY"
     }
 }
