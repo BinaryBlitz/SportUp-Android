@@ -69,15 +69,9 @@
                 app:textColorSelected="#FFFF"/>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/refresh"
+    <ru.binaryblitz.SportUp.custom.RecyclerListView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ru.binaryblitz.SportUp.custom.RecyclerListView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ru.binaryblitz.SportUp.custom.RecyclerListView>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </ru.binaryblitz.SportUp.custom.RecyclerListView>
 </LinearLayout>

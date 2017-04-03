@@ -3,10 +3,10 @@ package ru.binaryblitz.SportUp.activities
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import devs.mulham.horizontalcalendar.HorizontalCalendar
+import devs.mulham.horizontalcalendar.HorizontalCalendarListener
 import kotlinx.android.synthetic.main.activity_events_feed.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.adapters.EventsAdapter
@@ -15,9 +15,11 @@ import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.presenters.EventsPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
-class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
+class SportEventsActivity : BaseActivity() {
     private lateinit var adapter: EventsAdapter
 
     val EXTRA_COLOR = "color"
@@ -40,7 +42,7 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
         initToolbar()
         setOnClickListeners()
 
-        load()
+        load(dateToString(Date()))
     }
 
     private fun initToolbar() {
@@ -72,6 +74,18 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
                 .selectedDateBackground(Color.WHITE)
                 .selectorColor(Color.TRANSPARENT)
                 .build()
+
+        horizontalCalendar.calendarListener = object : HorizontalCalendarListener() {
+            override fun onDateSelected(date: Date, position: Int) {
+                load(dateToString(date))
+            }
+        }
+    }
+
+    private fun dateToString(date: Date): String {
+        val format = SimpleDateFormat("yyyy-MM-dd")
+        format.timeZone = TimeZone.getTimeZone("UTC")
+        return format.format(date)
     }
 
     private fun initList() {
@@ -81,9 +95,6 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
 
         adapter = EventsAdapter(this)
         recyclerView.adapter = adapter
-
-        refresh.setOnRefreshListener(this)
-        refresh.setColorSchemeResources(R.color.colorAccent)
     }
 
     fun onLoaded(collection: ArrayList<Event>) {
@@ -92,14 +103,10 @@ class SportEventsActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener
         adapter.notifyDataSetChanged()
     }
 
-    private fun load() {
+    private fun load(date: String) {
         val presenter = EventsPresenter(api, this)
         typeId = intent.getIntExtra(EXTRA_ID, 0)
-        presenter.getEvents(DeviceInfoStore.getCityObject(this)!!.id, typeId, "21-04-2017")
-    }
-
-    override fun onRefresh() {
-        load()
+        presenter.getEvents(DeviceInfoStore.getCityObject(this)!!.id, typeId, date)
     }
 
     companion object {
