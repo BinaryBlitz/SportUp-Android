@@ -1,19 +1,27 @@
 package ru.binaryblitz.SportUp.activities
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import biz.kasual.materialnumberpicker.MaterialNumberPicker
+import com.google.gson.JsonObject
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_create_event.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.models.SportType
+import ru.binaryblitz.SportUp.presenters.CreateEventPresenter
+import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.DateUtils
 import ru.binaryblitz.SportUp.utils.LogUtil
 import ru.binaryblitz.SportUp.utils.SportTypesUtil
+import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     var isStartTimePicked = true
@@ -22,20 +30,86 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     val SPORT_TYPE = 2
     val TEAM_LIMIT = 3
 
+    val EXTRA_ID = "id"
+    val EXTRA_COLOR = "color"
+
+    lateinit var startDate: Date
+    lateinit var endDate: Date
+    val calendar: Calendar = Calendar.getInstance()
+    var sportTypeId = 0
+
+    lateinit var dialog: ProgressDialog
+
+    @Inject
+    lateinit var api: EndpointsService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_event)
+        dependencies()!!.inject(this)
 
         try {
             SportTypesUtil.load(this)
         } catch (e: Exception) {
             LogUtil.logException(e)
         }
-        
+
         setOnClickListeners()
     }
 
+    private fun initFormat(): SimpleDateFormat {
+        @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        format.timeZone = TimeZone.getTimeZone("UTC")
+
+        return format
+    }
+
+    fun onLoaded(id: Int, color: Int) {
+        dialog.dismiss()
+        val intent = Intent(this, EventActivity::class.java)
+        intent.putExtra(EXTRA_ID, id)
+        intent.putExtra(EXTRA_COLOR, color)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun generateJson(): JsonObject {
+        val event = JsonObject()
+        val obj = JsonObject()
+
+        val format = initFormat()
+
+        event.addProperty("name", nameEdit.text.toString())
+        event.addProperty("starts_at", format.format(startDate))
+        event.addProperty("ends_at", format.format(endDate))
+        event.addProperty("address", locationText.text.toString())
+        event.addProperty("latitude", 0.0)
+        event.addProperty("longitude", 0.0)
+        event.addProperty("user_limit", userLimitValue.text.toString())
+        event.addProperty("team_limit", teamLimitValue.text.toString())
+        event.addProperty("description", descriptionEdit.text.toString())
+        event.addProperty("price", priceText.text.toString().split(" ")[0])
+        event.addProperty("sport_type_id", sportTypeId)
+        event.addProperty("public", isPublicSwitch.isChecked)
+
+        obj.add("event", event)
+
+        return obj
+    }
+
+    private fun sendEvent() {
+        dialog = ProgressDialog(this)
+        dialog.show()
+
+        val presenter = CreateEventPresenter(api, this)
+        presenter.createEvent(generateJson(), "foobar")
+    }
+
     private fun setOnClickListeners() {
+        rightBtn.setOnClickListener { sendEvent() }
+
+        backBtn.setOnClickListener { finish() }
+
         dateStart.setOnClickListener { showDatePicker() }
 
         timeStart.setOnClickListener {
@@ -99,6 +173,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
 
     private fun parseNumberPickerResult(numberPicker: MaterialNumberPicker, field: Int) {
         if (field == SPORT_TYPE) {
+            sportTypeId = SportType.fromString(SportTypesUtil.types[numberPicker.value - 1].second).id
             setText(field, SportType.fromString(SportTypesUtil.types[numberPicker.value - 1].second).name!!)
         } else {
             setText(field, numberPicker.value.toString())
@@ -137,15 +212,10 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        if (view == null) {
-            return
-        }
-
         dateStart.text = DateUtils.getDateStringRepresentationWithoutTime(getDate(year, monthOfYear, dayOfMonth))
     }
 
     private fun getDate(year: Int, monthOfYear: Int, dayOfMonth: Int): Date {
-        val calendar = Calendar.getInstance()
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         calendar.set(Calendar.MONTH, monthOfYear)
         calendar.set(Calendar.YEAR, year)
@@ -154,7 +224,6 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     }
 
     private fun getTime(hourOfDay: Int, minute: Int): Date {
-        val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
         calendar.set(Calendar.MINUTE, minute)
         calendar.timeZone = TimeZone.getTimeZone("UTC")
@@ -163,9 +232,11 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
 
     override fun onTimeSet(view: TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {
         if (isStartTimePicked) {
-            timeStart.text = DateUtils.getTimeStringRepresentation(getTime(hourOfDay, minute))
+            startDate = getTime(hourOfDay, minute)
+            timeStart.text = DateUtils.getTimeStringRepresentation(startDate)
         } else {
-            endTime.text = DateUtils.getTimeStringRepresentation(getTime(hourOfDay, minute))
+            endDate = getTime(hourOfDay, minute)
+            endTime.text = DateUtils.getTimeStringRepresentation(endDate)
         }
     }
 }

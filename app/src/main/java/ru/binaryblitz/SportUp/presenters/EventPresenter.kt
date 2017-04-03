@@ -21,7 +21,6 @@ class EventPresenter(private val service: EndpointsService, private val view: Ev
     }
 
     private fun parseAnswer(obj: JsonObject) {
-        LogUtil.logError(obj.toString())
         view.onLoaded(obj)
     }
 }
