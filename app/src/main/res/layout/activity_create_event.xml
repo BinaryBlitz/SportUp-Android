@@ -117,9 +117,11 @@
                     android:textColor="#727272"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
+                    android:layout_marginEnd="50dp"
+                    android:maxLines="1"
                     android:id="@+id/locationText"
                     android:layout_gravity="center"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="50dp"
                     android:layout_height="wrap_content" />
 
 

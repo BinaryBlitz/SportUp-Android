@@ -14,8 +14,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_map.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -35,7 +37,7 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
 
     override fun onLocationUpdated(latitude: Double?, longitude: Double?) {
         selectedLocation = LatLng(latitude!!, longitude!!)
-        moveCamera()
+        moveCamera(false)
     }
 
     override fun onLocationPermissionGranted() {
@@ -112,7 +114,7 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
 
         selectedLocation = LatLng(latitude, longitude)
         selected = address
-        moveCamera()
+        moveCamera(true)
 
         val inputManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
@@ -149,7 +151,6 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
     }
 
     private fun parseAnswer(jsonResults: StringBuilder): ArrayList<String> {
-        LogUtil.logError(jsonResults.toString())
         var resultList: ArrayList<String> = ArrayList()
         try {
             val jsonObj = JSONObject(jsonResults.toString())
@@ -204,6 +205,22 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
         }
 
         googleMap.setPadding(0, AndroidUtilities.convertDpToPixel(66f, this).toInt(), 0, 0)
+
+        googleMap.setOnMapClickListener(GoogleMap.OnMapClickListener { latLng ->
+            if (latLng == null) {
+                return@OnMapClickListener
+            }
+
+            updateMap(latLng)
+        })
+    }
+
+    private fun updateMap(latLng: LatLng) {
+        getCompleteAddressString(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
+        searchBox.setText(selected)
+        searchBox.dismissDropDown()
+        googleMap.clear()
+        addMarker(latLng.latitude, latLng.longitude)
     }
 
     private fun getCompleteAddressString(latitude: Double, lognitude: Double): String {
@@ -225,7 +242,7 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
         return strAdd
     }
 
-    private fun moveCamera() {
+    private fun moveCamera(isMarkerAdded: Boolean) {
         val cameraPosition = CameraPosition.Builder()
                 .target(selectedLocation)
                 .zoom(17f)
@@ -237,11 +254,22 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
             override fun onFinish() {
                 Handler().postDelayed({
                     getCompleteAddressString(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
+                    if (isMarkerAdded) {
+                        addMarker(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
+                    }
                 }, 50)
             }
 
-            override fun onCancel() {}
+            override fun onCancel() { }
         })
+    }
+
+    private fun addMarker(latitude: Double, longitude: Double) {
+        val icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pins_footballmid)
+
+        googleMap.addMarker(MarkerOptions()
+                .position(LatLng (latitude, longitude))
+                .icon(icon))
     }
 
     companion object {
