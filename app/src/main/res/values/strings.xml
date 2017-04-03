@@ -68,6 +68,9 @@
     <string name="ok">OK</string>
     <string name="wrong_event_location">Неверное местоположение события</string>
     <string name="input_hint">Стоимость</string>
+    <string name="save">Продолжить</string>
+    <string name="search">Поиск</string>
+    <string name="address_select">Адрес игры</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>

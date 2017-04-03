@@ -44,8 +44,6 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     var errorString = ""
     var error = false
 
-    var latLng: LatLng? = null
-
     lateinit var dialog: ProgressDialog
 
     @Inject
@@ -289,6 +287,11 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
             endDate = getTime(hourOfDay, minute)
             endTime.text = DateUtils.getTimeStringRepresentation(endDate)
         }
+    }
+
+    companion object {
+        var latLng: LatLng? = null
+        var selectedLocation: String? = null
     }
 }
 
