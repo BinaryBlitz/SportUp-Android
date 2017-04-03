@@ -6,6 +6,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputType
 import biz.kasual.materialnumberpicker.MaterialNumberPicker
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.maps.model.LatLng
@@ -80,6 +81,15 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         finish()
     }
 
+    private fun showPriceDialog() {
+        MaterialDialog.Builder(this)
+            .title(getString(R.string.event_price))
+            .inputType(InputType.TYPE_CLASS_NUMBER)
+            .input(getString(R.string.input_hint), "") { _, input ->
+                priceText.text = input.toString() + getString(R.string.ruble_sign)
+            }.show()
+    }
+
     private fun checkInputs() {
         checkCondition(nameEdit.text.toString().isEmpty(), R.string.event_name_error)
         checkCondition(latLng == null, R.string.wrong_event_location)
@@ -150,6 +160,8 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         backBtn.setOnClickListener { finish() }
 
         dateStart.setOnClickListener { showDatePicker() }
+
+        priceButton.setOnClickListener { showPriceDialog() }
 
         timeStart.setOnClickListener {
             isStartTimePicked = true
