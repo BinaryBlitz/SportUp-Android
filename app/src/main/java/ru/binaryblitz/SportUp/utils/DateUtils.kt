@@ -6,6 +6,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DateUtils {
+    fun isAfterToday(date: Date): Boolean {
+        val today = Calendar.getInstance()
+        return !date.before(today.time)
+    }
+
     fun getDateStringRepresentationWithoutTime(date: Date?): String {
         if (date == null) return ""
         val format = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())

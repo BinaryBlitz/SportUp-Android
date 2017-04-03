@@ -58,6 +58,12 @@
     <string name="add_description">Добавить описание игры</string>
     <string name="public_event">Публичное</string>
     <string name="event_location">Место проведения игры</string>
+    <string name="event_name_error">Название события не может быть пустым</string>
+    <string name="wrong_event_date">Неверная дата начала события</string>
+    <string name="wrong_event_end_date">Неверная дата окончания события</string>
+    <string name="wrong_event_user_limit">Неверный лимит количества участников</string>
+    <string name="wrong_event_team_limit">Неверный лимит количества команд</string>
+    <string name="wrong_event_sport_type">Не выбран вид спорта</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>

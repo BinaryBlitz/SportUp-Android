@@ -6,6 +6,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import biz.kasual.materialnumberpicker.MaterialNumberPicker
 import com.google.gson.JsonObject
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -37,6 +38,9 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     lateinit var endDate: Date
     val calendar: Calendar = Calendar.getInstance()
     var sportTypeId = 0
+
+    var errorString = ""
+    var error = false
 
     lateinit var dialog: ProgressDialog
 
@@ -73,6 +77,22 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         finish()
     }
 
+    private fun checkInputs() {
+        checkCondition(nameEdit.text.toString().isEmpty(), R.string.event_name_error)
+        checkCondition(!DateUtils.isAfterToday(startDate), R.string.wrong_event_date)
+        checkCondition(!DateUtils.isAfter(startDate, endDate), R.string.wrong_event_end_date)
+        checkCondition(userLimitValue.text.toString() == "0", R.string.wrong_event_user_limit)
+        checkCondition(teamLimitValue.text.toString() == "0", R.string.wrong_event_team_limit)
+        checkCondition(sportTypeId == 0, R.string.wrong_event_sport_type)
+    }
+
+    private fun checkCondition(condition: Boolean, errorStringId: Int) {
+        if (condition) {
+            errorString += getString(errorStringId)
+            error = true
+        }
+    }
+
     private fun generateJson(): JsonObject {
         val event = JsonObject()
         val obj = JsonObject()
@@ -98,11 +118,21 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     }
 
     private fun sendEvent() {
+        checkInputs()
+
+        if (error) {
+            showErrorDialog()
+        }
+
         dialog = ProgressDialog(this)
         dialog.show()
 
         val presenter = CreateEventPresenter(api, this)
         presenter.createEvent(generateJson(), "foobar")
+    }
+
+    private fun showErrorDialog() {
+        Snackbar.make(findViewById(R.id.main), errorString, Snackbar.LENGTH_LONG).show()
     }
 
     private fun setOnClickListeners() {
