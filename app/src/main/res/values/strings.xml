@@ -64,6 +64,9 @@
     <string name="wrong_event_user_limit">Неверный лимит количества участников</string>
     <string name="wrong_event_team_limit">Неверный лимит количества команд</string>
     <string name="wrong_event_sport_type">Не выбран вид спорта</string>
+    <string name="error">Ошибка</string>
+    <string name="ok">OK</string>
+    <string name="wrong_event_location">Неверное местоположение события</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>

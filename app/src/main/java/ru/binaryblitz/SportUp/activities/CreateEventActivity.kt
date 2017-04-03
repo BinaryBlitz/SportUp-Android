@@ -6,8 +6,9 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import biz.kasual.materialnumberpicker.MaterialNumberPicker
+import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.JsonObject
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
@@ -34,13 +35,15 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     val EXTRA_ID = "id"
     val EXTRA_COLOR = "color"
 
-    lateinit var startDate: Date
-    lateinit var endDate: Date
+    var startDate: Date? = null
+    var endDate: Date? = null
     val calendar: Calendar = Calendar.getInstance()
     var sportTypeId = 0
 
     var errorString = ""
     var error = false
+
+    var latLng: LatLng? = null
 
     lateinit var dialog: ProgressDialog
 
@@ -79,6 +82,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
 
     private fun checkInputs() {
         checkCondition(nameEdit.text.toString().isEmpty(), R.string.event_name_error)
+        checkCondition(latLng == null, R.string.wrong_event_location)
         checkCondition(!DateUtils.isAfterToday(startDate), R.string.wrong_event_date)
         checkCondition(!DateUtils.isAfter(startDate, endDate), R.string.wrong_event_end_date)
         checkCondition(userLimitValue.text.toString() == "0", R.string.wrong_event_user_limit)
@@ -88,7 +92,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
 
     private fun checkCondition(condition: Boolean, errorStringId: Int) {
         if (condition) {
-            errorString += getString(errorStringId)
+            errorString += getString(errorStringId) + "\n"
             error = true
         }
     }
@@ -122,6 +126,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
 
         if (error) {
             showErrorDialog()
+            return
         }
 
         dialog = ProgressDialog(this)
@@ -132,7 +137,11 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     }
 
     private fun showErrorDialog() {
-        Snackbar.make(findViewById(R.id.main), errorString, Snackbar.LENGTH_LONG).show()
+        MaterialDialog.Builder(this)
+                .title(getString(R.string.error))
+                .content(errorString)
+                .positiveText(getString(R.string.ok))
+                .show()
     }
 
     private fun setOnClickListeners() {
