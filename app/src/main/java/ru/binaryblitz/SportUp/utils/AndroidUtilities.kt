@@ -3,10 +3,12 @@ package ru.binaryblitz.SportUp.utils
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.text.TextUtils
+import android.util.Base64
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -17,6 +19,7 @@ import com.google.gson.JsonElement
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
+import java.io.ByteArrayOutputStream
 
 @SuppressWarnings("unused")
 object AndroidUtilities {
@@ -26,6 +29,13 @@ object AndroidUtilities {
     fun hideKeyboard(v: View) {
         val imm = v.context.applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(v.windowToken, 0)
+    }
+
+    fun encodeToBase64(image: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
     fun nameEqualsTo(item: String?, query: String): Boolean {

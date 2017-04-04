@@ -85,6 +85,8 @@
     <string name="number_code">На номер</string>
     <string name="code_sent">" был отправлен код"</string>
     <string name="code_title">Введите код</string>
+    <string name="lastName">Фамилия</string>
+    <string name="first_name">Имя</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
