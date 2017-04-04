@@ -16,9 +16,12 @@ object DateUtils {
     }
 
     fun getDateStringRepresentationWithoutTime(date: Date?): String {
-        if (date == null) return ""
+        if (date == null) {
+            return ""
+        }
         val format = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         format.timeZone = TimeZone.getDefault()
+        
         return format.format(date)
     }
 

@@ -1,41 +1,33 @@
 package ru.binaryblitz.SportUp.utils
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.support.v4.util.Pair
-
-import java.util.ArrayList
-
+import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.server.ServerConfig
+import java.util.ArrayList
+import kotlin.collections.HashSet
+import kotlin.collections.map
+import kotlin.collections.mapTo
 
 object SportTypesUtil {
     val types = ArrayList<Pair<Int, String>>()
-    private val PREF_TYPES = "types"
+    val sportTypes = HashSet<String>()
+    private val PREFERENCES_TYPES = "types"
 
-    fun add(type: Pair<Int, String>) {
-        types.add(type)
+    fun add(type: String) {
+        sportTypes.add(type)
     }
 
     fun saveTypes(context: Context) {
-        var saveStr = ""
-
-        for (type in types) {
-            saveStr += Integer.toString(type.first) + "/" + type.second + "&"
-        }
-
-        val prefs = context.getSharedPreferences(ServerConfig.prefsName, Context.MODE_PRIVATE)
-        prefs.edit().putString(PREF_TYPES, saveStr).apply()
+        val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
+        preferences.edit().putStringSet(PREFERENCES_TYPES, sportTypes).apply()
     }
 
     fun load(context: Context) {
-        val prefs = context.getSharedPreferences(
-                ServerConfig.prefsName, Context.MODE_PRIVATE)
-        val loadStr = prefs.getString(PREF_TYPES, "null")
-        val arr = loadStr!!.split("&".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
+        val setOfTypes = preferences.getStringSet(PREFERENCES_TYPES, HashSet<String>())
 
-        arr.mapTo(types) { str ->
-            Pair(Integer.parseInt(str.split("/".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[0]),
-                    str.split("/".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[1])
-        }
+        setOfTypes.map { SportType.fromString(it) }
+                .mapTo(types) { Pair(it.id, it.name!!) }
     }
 }

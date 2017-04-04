@@ -39,7 +39,7 @@ class SportTypesPresenter(private val service: EndpointsService, private val vie
                 }
 
         for (type in collection) {
-            SportTypesUtil.add(Pair(type.id, type.asString()))
+            SportTypesUtil.add(type.asString())
         }
 
         SportTypesUtil.saveTypes(view.context)
