@@ -17,7 +17,7 @@
               android:layout_height="wrap_content"/>
 
     <LinearLayout
-            android:id="@+id/l1"
+            android:id="@+id/phoneLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -57,7 +57,7 @@
     </LinearLayout>
 
     <FrameLayout
-            android:id="@+id/l2"
+            android:id="@+id/codeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/textView23"
+            android:id="@+id/helperText"
             android:layout_gravity="center"
             android:visibility="visible"
             android:textSize="18sp"
@@ -175,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/textView2"
+            android:id="@+id/timer_text"
             android:layout_gravity="center"
             android:textColor="#727272"
             android:textSize="16sp"

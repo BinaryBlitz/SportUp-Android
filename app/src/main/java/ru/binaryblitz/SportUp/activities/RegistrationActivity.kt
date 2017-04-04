@@ -13,12 +13,12 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.TextView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.google.gson.JsonObject
 import com.nineoldandroids.animation.Animator
 import com.rengwuxian.materialedittext.MaterialEditText
+import kotlinx.android.synthetic.main.activity_registration.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.presenters.RegistrationPresenter
@@ -67,9 +67,9 @@ class RegistrationActivity : BaseActivity() {
         continueButton = findViewById(R.id.button) as Button
         phoneEditText = findViewById(R.id.phone) as MaterialEditText
         codeEditText = findViewById(R.id.code_field) as MaterialEditText
-        phoneEditText!!.addTextChangedListener(CustomPhoneNumberTextWatcher())
+        phoneEditText?.addTextChangedListener(CustomPhoneNumberTextWatcher())
 
-        codeEditText!!.addTextChangedListener(object : TextWatcher {
+        codeEditText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -87,31 +87,31 @@ class RegistrationActivity : BaseActivity() {
                 .duration(ANIMATION_DURATION.toLong())
                 .withListener(object : AnimationStartListener() {
                     override fun onStart() {
-                        findViewById(R.id.l1).visibility = View.VISIBLE
+                        phoneLayout.visibility = View.VISIBLE
 
                         YoYo.with(Techniques.SlideInLeft)
                                 .duration(ANIMATION_DURATION.toLong())
-                                .playOn(findViewById(R.id.l1))
+                                .playOn(phoneLayout)
 
                         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.showSoftInput(phoneEditText, InputMethodManager.SHOW_IMPLICIT)
                     }
                 })
-                .playOn(findViewById(R.id.l2))
+                .playOn(codeLayout)
     }
 
     private fun resetFields() {
-        codeEditText!!.setText("")
-        continueButton!!.visibility = View.VISIBLE
-        (findViewById(R.id.textView23) as TextView).text = getString(R.string.code_send)
-        (findViewById(R.id.title_text) as TextView).text = getString(R.string.type_phone)
+        codeEditText?.setText("")
+        continueButton?.visibility = View.VISIBLE
+        helperText.text = getString(R.string.code_send)
+        title_text.text = getString(R.string.type_phone)
         code = false
     }
 
     private fun processPhoneInput() {
-        val phoneText = phoneEditText!!.text.toString()
+        val phoneText = phoneEditText?.text.toString()
         if (phoneText.isEmpty()) {
-            phoneEditText!!.error = getString(R.string.empty_field)
+            phoneEditText?.error = getString(R.string.empty_field)
             return
         }
 
@@ -123,24 +123,24 @@ class RegistrationActivity : BaseActivity() {
     }
 
     private fun setOnClickListeners() {
-        continueButton!!.setOnClickListener { v ->
+        continueButton?.setOnClickListener { v ->
             AndroidUtilities.hideKeyboard(v)
             processPhoneInput()
         }
 
-        findViewById(R.id.left_btn).setOnClickListener {
-            if (!code)
-                super.onBackPressed()
-            else {
+        left_btn.setOnClickListener {
+            if (code) {
                 animateBackBtn()
                 resetFields()
+            } else {
+                super.onBackPressed()
             }
         }
     }
 
     private fun checkCodeInput(): Boolean {
-        if (codeEditText!!.text.toString().isEmpty() || codeEditText!!.text.toString().length != 5) {
-            codeEditText!!.error = getString(R.string.wrong_code)
+        if (codeEditText?.text.toString().isEmpty() || codeEditText?.text.toString().length != 5) {
+            codeEditText?.error = getString(R.string.wrong_code)
             return false
         }
 
@@ -156,7 +156,7 @@ class RegistrationActivity : BaseActivity() {
 
     private fun saveInfo(obj: JsonObject) {
         dialog.dismiss()
-        val phone = phoneEditText!!.text.toString()
+        val phone = phoneEditText?.text.toString()
         savePhone(phone)
         saveToken(obj)
         continueToNextScreen(obj.get("api_token") != null && !obj.get("api_token").isJsonNull)
@@ -196,13 +196,13 @@ class RegistrationActivity : BaseActivity() {
         val obj = JsonObject()
 
         obj.addProperty("token", token)
-        obj.addProperty("code", codeEditText!!.text.toString())
+        obj.addProperty("code", codeEditText?.text.toString())
 
         return obj
     }
 
     fun showCodeError() {
-        Snackbar.make(findViewById(R.id.main), R.string.wrong_code, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(main, R.string.wrong_code, Snackbar.LENGTH_SHORT).show()
     }
 
     fun onVerifyAnswer(obj: JsonObject) {
@@ -225,7 +225,7 @@ class RegistrationActivity : BaseActivity() {
 
     fun onAuthResponse(body: JsonObject) {
         parseAuthRequestAnswer(body)
-        playOutAnimation(findViewById(R.id.l1), findViewById(R.id.textView2))
+        playOutAnimation(phoneLayout, timer_text)
     }
 
     private fun parseAuthRequestAnswer(obj: JsonObject) {
@@ -233,11 +233,11 @@ class RegistrationActivity : BaseActivity() {
         code = true
         token = obj.get("token").asString
         phoneFromServer = obj.get("phone_number").asString
-        continueButton!!.visibility = View.GONE
+        continueButton?.visibility = View.GONE
     }
 
     private fun processText(): JsonObject {
-        var phoneNext = phoneEditText!!.text.toString()
+        var phoneNext = phoneEditText?.text.toString()
         phoneNext = phoneNext.replace("(", "")
         phoneNext = phoneNext.replace(")", "")
         phoneNext = phoneNext.replace("-", "")
@@ -249,15 +249,15 @@ class RegistrationActivity : BaseActivity() {
         return obj
     }
 
-    private fun playOutAnimation(v1: View, v2: View) {
+    private fun playOutAnimation(firstView: View, secondView: View) {
         YoYo.with(Techniques.SlideOutLeft)
                 .duration(ANIMATION_DURATION.toLong())
                 .withListener(object : AnimationStartListener() {
                     override fun onStart() {
-                        findViewById(R.id.l2).visibility = View.VISIBLE
+                        findViewById(R.id.codeLayout).visibility = View.VISIBLE
                         YoYo.with(Techniques.SlideInRight)
                                 .duration(ANIMATION_DURATION.toLong())
-                                .playOn(findViewById(R.id.l2))
+                                .playOn(findViewById(R.id.codeLayout))
                     }
 
                     override fun onAnimationEnd(animation: Animator?) {
@@ -266,19 +266,19 @@ class RegistrationActivity : BaseActivity() {
                         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
                     }
                 })
-                .playOn(v1)
+                .playOn(firstView)
 
         YoYo.with(Techniques.SlideOutLeft)
                 .duration(ANIMATION_DURATION.toLong())
                 .withListener(object : AnimationStartListener() {
                     override fun onStart() {
-                        (findViewById(R.id.textView23) as TextView).text =
-                                getString(R.string.number_code) + " " + phoneEditText!!.text.toString() + getString(R.string.code_sent)
+                        helperText.text =
+                                getString(R.string.number_code) + " " + phoneEditText?.text.toString() + getString(R.string.code_sent)
 
-                        (findViewById(R.id.title_text) as TextView).text = getString(R.string.code_title)
+                        title_text.text = getString(R.string.code_title)
                     }
                 })
-                .playOn(v2)
+                .playOn(secondView)
     }
 
     companion object {
