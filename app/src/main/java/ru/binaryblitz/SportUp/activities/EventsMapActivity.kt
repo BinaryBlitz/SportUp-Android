@@ -147,10 +147,10 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
     fun onLoaded() {
         val icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pins_footballmid)
 
-        for ((id, _, _, _, _, _, _, _, _, latitude, longitude) in SportEventsActivity.eventsCollection) {
-            markers.put(LatLng (latitude, longitude), id)
+        for (event in SportEventsActivity.eventsCollection) {
+            markers.put(LatLng (event.latitude, event.longitude), event.id)
             googleMap?.addMarker(MarkerOptions()
-                    .position(LatLng (latitude, longitude))
+                    .position(LatLng (event.latitude, event.longitude))
                     .icon(icon))
         }
     }

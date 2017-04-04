@@ -9,7 +9,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Filter
+import android.widget.Filterable
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -28,7 +31,6 @@ import ru.binaryblitz.SportUp.utils.LogUtil
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
-import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLEncoder
 import java.util.*
@@ -121,33 +123,35 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
     }
 
     private fun autocomplete(input: String): ArrayList<String> {
-        var conn: HttpURLConnection? = null
-        val jsonResults = StringBuilder()
+        var connection: HttpURLConnection? = null
+        val jsonResults: StringBuilder
+
         try {
-            val sb = PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON + "?key=" + API_KEY + "&components=country:ru" +
-                    "&input=" + URLEncoder.encode(input, "utf8")
-
-            conn = URL(sb).openConnection() as HttpURLConnection
-            val stream = InputStreamReader(conn.inputStream)
-
-            val buff = CharArray(1024)
-            var read: Int = stream.read(buff)
-
-            while (read != -1) {
-                jsonResults.append(buff, 0, read)
-                read = stream.read(buff)
-            }
-        } catch (e: MalformedURLException) {
-            return ArrayList()
-        } catch (e: IOException) {
+            connection = URL("$AUTOCOMPLETE_BASE$OUT_JSON?key=$API_KEY&components=country:ru&input=" + URLEncoder.encode(input, "utf8"))
+                    .openConnection() as HttpURLConnection
+            jsonResults = streamToString(InputStreamReader(connection.inputStream))
+        } catch (e: Exception) {
             return ArrayList()
         } finally {
-            if (conn != null) {
-                conn.disconnect()
+            if (connection != null) {
+                connection.disconnect()
             }
         }
 
         return parseAnswer(jsonResults)
+    }
+
+    private fun streamToString(stream: InputStreamReader): StringBuilder {
+        val jsonResults = StringBuilder()
+        val buff = CharArray(1024)
+        var read: Int = stream.read(buff)
+
+        while (read != -1) {
+            jsonResults.append(buff, 0, read)
+            read = stream.read(buff)
+        }
+
+        return jsonResults
     }
 
     private fun parseAnswer(jsonResults: StringBuilder): ArrayList<String> {
@@ -224,22 +228,21 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
     }
 
     private fun getCompleteAddressString(latitude: Double, lognitude: Double): String {
-        var strAdd = ""
+        var addressString = ""
         val geocoder = Geocoder(this, Locale.getDefault())
         try {
-            val addresses = geocoder.getFromLocation(latitude, lognitude, 1)
-            if (addresses != null) {
-                if (addresses.size > 0) {
-                    strAdd = addresses[0].getAddressLine(0)
-                }
+            val addresses = geocoder.getFromLocation(latitude, lognitude, 1) ?: return ""
+            if (addresses.size > 0) {
+                addressString = addresses[0].getAddressLine(0)
             }
-        } catch (ignored: Exception) {
+        } catch (e: Exception) {
+            selected = ""
         }
 
         selectedLocation = LatLng(latitude, lognitude)
 
-        selected = strAdd
-        return strAdd
+        selected = addressString
+        return addressString
     }
 
     private fun moveCamera(isMarkerAdded: Boolean) {
@@ -250,18 +253,22 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
                 .tilt(0f)
                 .build()
 
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), object : GoogleMap.CancelableCallback {
-            override fun onFinish() {
-                Handler().postDelayed({
-                    getCompleteAddressString(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
-                    if (isMarkerAdded) {
-                        addMarker(googleMap.cameraPosition.target.latitude, googleMap.cameraPosition.target.longitude)
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
+                object : GoogleMap.CancelableCallback {
+                    override fun onFinish() {
+                        Handler().postDelayed({
+                            getCompleteAddressString(googleMap.cameraPosition.target.latitude,
+                                    googleMap.cameraPosition.target.longitude)
+                            if (isMarkerAdded) {
+                                addMarker(googleMap.cameraPosition.target.latitude,
+                                        googleMap.cameraPosition.target.longitude)
+                            }
+                        }, 50)
                     }
-                }, 50)
-            }
 
-            override fun onCancel() { }
-        })
+                    override fun onCancel() { }
+                }
+        )
     }
 
     private fun addMarker(latitude: Double, longitude: Double) {
@@ -276,8 +283,7 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
         lateinit var selectedLocation: LatLng
         var selected = ""
 
-        private val PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place"
-        private val TYPE_AUTOCOMPLETE = "/autocomplete"
+        private val AUTOCOMPLETE_BASE = "https://maps.googleapis.com/maps/api/place/autocomplete"
         private val OUT_JSON = "/json"
         private val API_KEY = "AIzaSyAleTZalgq4WoXgb1aAaiAD2-GK3WSGoSY"
     }
