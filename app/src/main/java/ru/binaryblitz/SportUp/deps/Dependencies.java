@@ -3,7 +3,9 @@ package ru.binaryblitz.SportUp.deps;
 import javax.inject.Singleton;
 
 import dagger.Component;
+
 import ru.binaryblitz.SportUp.activities.CreateEventActivity;
+import ru.binaryblitz.SportUp.activities.CreateAccountActivity;
 import ru.binaryblitz.SportUp.activities.EventActivity;
 import ru.binaryblitz.SportUp.activities.EventsMapActivity;
 import ru.binaryblitz.SportUp.activities.RegistrationActivity;
@@ -31,4 +33,6 @@ public interface Dependencies {
     void inject(CreateEventActivity createEventActivity);
 
     void inject(RegistrationActivity registrationActivity);
+
+    void inject(CreateAccountActivity createAccountActivity);
 }

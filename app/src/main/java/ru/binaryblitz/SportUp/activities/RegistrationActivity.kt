@@ -1,7 +1,9 @@
 package ru.binaryblitz.SportUp.activities
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
@@ -162,7 +164,21 @@ class RegistrationActivity : BaseActivity() {
         val phone = phoneEditText!!.text.toString()
         savePhone(phone)
         saveToken(obj)
-       // finishActivity(phone)
+        continueToNextScreen(obj.get("api_token") != null && !obj.get("api_token").isJsonNull)
+    }
+
+    private fun continueToNextScreen(isAccountCreated: Boolean) {
+        if (isAccountCreated) {
+            openActivity(MainActivity::class.java)
+        } else {
+            openActivity(CreateAccountActivity::class.java)
+        }
+    }
+
+    private fun openActivity(activity: Class<out Activity>) {
+        val intent = Intent(this, activity)
+        startActivity(intent)
+        finish()
     }
 
     private fun saveToken(obj: JsonObject) {

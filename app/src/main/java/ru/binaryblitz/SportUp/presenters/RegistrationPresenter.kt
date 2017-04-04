@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import ru.binaryblitz.SportUp.activities.RegistrationActivity
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonObjectResponseListener
+import ru.binaryblitz.SportUp.utils.LogUtil
 
 class RegistrationPresenter(private val service: EndpointsService, private val view: RegistrationActivity) {
 
@@ -29,6 +30,7 @@ class RegistrationPresenter(private val service: EndpointsService, private val v
             override fun onError(networkError: String) {
                 view.showCodeError()
                 view.dismissProgress()
+                LogUtil.logError(networkError)
             }
         })
     }
