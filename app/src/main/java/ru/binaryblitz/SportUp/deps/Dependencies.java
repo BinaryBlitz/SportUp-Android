@@ -6,6 +6,7 @@ import dagger.Component;
 import ru.binaryblitz.SportUp.activities.CreateEventActivity;
 import ru.binaryblitz.SportUp.activities.EventActivity;
 import ru.binaryblitz.SportUp.activities.EventsMapActivity;
+import ru.binaryblitz.SportUp.activities.RegistrationActivity;
 import ru.binaryblitz.SportUp.activities.SelectCityActivity;
 import ru.binaryblitz.SportUp.activities.SportEventsActivity;
 import ru.binaryblitz.SportUp.fragments.SportsListFragment;
@@ -28,4 +29,6 @@ public interface Dependencies {
     void inject(UserEventsFragment userEventsFragment);
 
     void inject(CreateEventActivity createEventActivity);
+
+    void inject(RegistrationActivity registrationActivity);
 }

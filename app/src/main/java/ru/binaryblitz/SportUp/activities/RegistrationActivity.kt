@@ -2,7 +2,6 @@ package ru.binaryblitz.SportUp.activities
 
 import android.app.ProgressDialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
@@ -20,11 +19,13 @@ import com.nineoldandroids.animation.Animator
 import com.rengwuxian.materialedittext.MaterialEditText
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
+import ru.binaryblitz.SportUp.presenters.RegistrationPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
+import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.AnimationStartListener
-import ru.binaryblitz.SportUp.utils.AppConfig
 import ru.binaryblitz.SportUp.utils.CustomPhoneNumberTextWatcher
+import javax.inject.Inject
 
 class RegistrationActivity : BaseActivity() {
     private var code = false
@@ -32,12 +33,20 @@ class RegistrationActivity : BaseActivity() {
     private var codeEditText: MaterialEditText? = null
     private var continueButton: Button? = null
 
+    @Inject
+    lateinit var api: EndpointsService
+
+    lateinit var dialog: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
+        dependencies()!!.inject(this)
 
         initElements()
         setOnClickListeners()
+
+        dialog = ProgressDialog(this)
 
         Handler().post { phoneEditText!!.requestFocus() }
     }
@@ -103,7 +112,11 @@ class RegistrationActivity : BaseActivity() {
             return
         }
 
-        authRequest(true)
+        auth()
+    }
+
+    fun dismissProgress() {
+        dialog.dismiss()
     }
 
     private fun setOnClickListeners() {
@@ -145,6 +158,7 @@ class RegistrationActivity : BaseActivity() {
     }
 
     private fun saveInfo(obj: JsonObject) {
+        dialog.dismiss()
         val phone = phoneEditText!!.text.toString()
         savePhone(phone)
         saveToken(obj)
@@ -159,26 +173,27 @@ class RegistrationActivity : BaseActivity() {
     }
 
     private fun executeVerifyRequest() {
-        val dialog = ProgressDialog(this@RegistrationActivity)
+        val presenter = RegistrationPresenter(api, this)
+
         dialog.show()
+
+        presenter.verify(generateVerifyJson(), token!!)
     }
 
     private fun generateVerifyJson(): JsonObject {
         val obj = JsonObject()
+
         obj.addProperty("token", token)
         obj.addProperty("code", codeEditText!!.text.toString())
 
-        val toSend = JsonObject()
-        toSend.add("verification_token", obj)
-
-        return toSend
+        return obj
     }
 
-    private fun showCodeError() {
+    fun showCodeError() {
         Snackbar.make(findViewById(R.id.main), R.string.wrong_code, Snackbar.LENGTH_SHORT).show()
     }
 
-    private fun parseVerifyAnswer(obj: JsonObject) {
+    fun onVerifyAnswer(obj: JsonObject) {
         saveInfo(obj)
     }
 
@@ -188,17 +203,21 @@ class RegistrationActivity : BaseActivity() {
         DeviceInfoStore.saveUser(this, user)
     }
 
-    private fun authRequest(animate: Boolean) {
-        if (!AndroidUtilities.validatePhone(phoneEditText!!.text.toString())) {
-            Snackbar.make(findViewById(R.id.main), getString(R.string.wrong_phone), Snackbar.LENGTH_SHORT).show()
-            return
-        }
+    private fun auth() {
+        val presenter = RegistrationPresenter(api, this)
 
-        val dialog = ProgressDialog(this@RegistrationActivity)
         dialog.show()
+
+        presenter.auth(processText())
+    }
+
+    fun onAuthResponse(body: JsonObject) {
+        parseAuthRequestAnswer(body)
+        playOutAnimation(findViewById(R.id.l1), findViewById(R.id.textView2))
     }
 
     private fun parseAuthRequestAnswer(obj: JsonObject) {
+        dialog.dismiss()
         code = true
         token = obj.get("token").asString
         phoneFromServer = obj.get("phone_number").asString
@@ -215,10 +234,7 @@ class RegistrationActivity : BaseActivity() {
         val obj = JsonObject()
         obj.addProperty("phone_number", phoneNext)
 
-        val toSend = JsonObject()
-        toSend.add("verification_token", obj)
-
-        return toSend
+        return obj
     }
 
     private fun playOutAnimation(v1: View, v2: View) {
@@ -256,7 +272,6 @@ class RegistrationActivity : BaseActivity() {
     companion object {
         private val ANIMATION_DURATION = 700
         private var token: String? = ""
-        private val EXTRA_TOKEN = "token"
         private var phoneFromServer: String? = null
     }
 }
