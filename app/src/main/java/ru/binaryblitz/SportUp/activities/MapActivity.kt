@@ -65,7 +65,7 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
                 override fun performFiltering(constraint: CharSequence?): Filter.FilterResults {
                     val filterResults = Filter.FilterResults()
                     if (constraint != null) {
-                        resultList = autocomplete(constraint.toString())
+                        resultList = autocompleteInput(constraint.toString())
                         filterResults.values = resultList
                         filterResults.count = resultList.size
                     }
@@ -102,7 +102,7 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
                 val address = searchBox.adapter.getItem(i) as String
                 addresses = geocoder.getFromLocationName(address, 1)
                 if (addresses.isNotEmpty()) {
-                    autocompleteClick(addresses, address)
+                    autocompleteClick(addresses[0].latitude, addresses[0].longitude, address)
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -110,10 +110,7 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun autocompleteClick(addresses: List<Address>, address: String) {
-        val latitude = addresses[0].latitude
-        val longitude = addresses[0].longitude
-
+    private fun autocompleteClick(latitude: Double, longitude: Double, address: String) {
         selectedLocation = LatLng(latitude, longitude)
         selected = address
         moveCamera(true)
@@ -122,7 +119,7 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
         inputManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
-    private fun autocomplete(input: String): ArrayList<String> {
+    private fun autocompleteInput(input: String): ArrayList<String> {
         var connection: HttpURLConnection? = null
         val jsonResults: StringBuilder
 
