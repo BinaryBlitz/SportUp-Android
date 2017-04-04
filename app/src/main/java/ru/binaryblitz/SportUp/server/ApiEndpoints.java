@@ -39,6 +39,6 @@ public interface ApiEndpoints {
     @POST("verification_tokens")
     Observable<JsonObject> authWithPhoneNumber(@Body JsonObject number);
 
-    @POST("users")
+    @POST("user")
     Observable<JsonObject> createUser(@Body JsonObject user);
 }

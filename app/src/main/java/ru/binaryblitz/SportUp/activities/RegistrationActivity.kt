@@ -34,6 +34,7 @@ class RegistrationActivity : BaseActivity() {
     private var phoneEditText: MaterialEditText? = null
     private var codeEditText: MaterialEditText? = null
     private var continueButton: Button? = null
+    val EXTRA_PHONE = "phone"
 
     @Inject
     lateinit var api: EndpointsService
@@ -127,12 +128,6 @@ class RegistrationActivity : BaseActivity() {
             processPhoneInput()
         }
 
-        findViewById(R.id.browse).setOnClickListener {
-//            val intent = Intent(this@RegistrationActivity, WebActivity::class.java)
-//            intent.putExtra("url", AppConfig.terms)
-//            startActivity(intent)
-        }
-
         findViewById(R.id.left_btn).setOnClickListener {
             if (!code)
                 super.onBackPressed()
@@ -177,6 +172,7 @@ class RegistrationActivity : BaseActivity() {
 
     private fun openActivity(activity: Class<out Activity>) {
         val intent = Intent(this, activity)
+        intent.putExtra(EXTRA_PHONE, phoneFromServer)
         startActivity(intent)
         finish()
     }

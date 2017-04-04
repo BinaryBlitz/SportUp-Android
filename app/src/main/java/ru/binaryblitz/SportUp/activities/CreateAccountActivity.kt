@@ -2,6 +2,7 @@ package ru.binaryblitz.SportUp.activities
 
 import android.Manifest
 import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -23,7 +24,6 @@ import ru.binaryblitz.SportUp.presenters.CreateUserPresenter
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import javax.inject.Inject
-
 
 class CreateAccountActivity : BaseActivity() {
     val EXTRA_PHONE = "phone"
@@ -69,6 +69,10 @@ class CreateAccountActivity : BaseActivity() {
         setOnClickListeners()
     }
 
+    fun dismissProgress() {
+        dialog.dismiss()
+    }
+
     private fun checkPermissions() {
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -109,8 +113,15 @@ class CreateAccountActivity : BaseActivity() {
         tedBottomPicker.show(supportFragmentManager)
     }
 
-    fun onLoaded() {
+    fun onLoaded(success: Boolean) {
         dialog.dismiss()
+        if (success) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+           onInternetConnectionError()
+        }
     }
 
     private fun setOnClickListeners() {
@@ -129,7 +140,7 @@ class CreateAccountActivity : BaseActivity() {
         obj.addProperty("first_name", firstName.text.toString())
         obj.addProperty("last_name",lastName.text.toString() )
         obj.addProperty("phone_number", intent.getStringExtra(EXTRA_PHONE))
-        obj.addProperty("avatar", "")
+        obj.addProperty("avatar", "data:image/png;base64," + base64)
 
         val toSend = JsonObject()
 
