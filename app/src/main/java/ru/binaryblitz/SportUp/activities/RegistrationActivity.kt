@@ -18,15 +18,13 @@ import com.daimajia.androidanimations.library.YoYo
 import com.google.gson.JsonObject
 import com.nineoldandroids.animation.Animator
 import com.rengwuxian.materialedittext.MaterialEditText
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.AnimationStartListener
 import ru.binaryblitz.SportUp.utils.AppConfig
+import ru.binaryblitz.SportUp.utils.CustomPhoneNumberTextWatcher
 
 class RegistrationActivity : BaseActivity() {
     private var code = false
@@ -115,9 +113,9 @@ class RegistrationActivity : BaseActivity() {
         }
 
         findViewById(R.id.browse).setOnClickListener {
-            val intent = Intent(this@RegistrationActivity, WebActivity::class.java)
-            intent.putExtra("url", AppConfig.terms)
-            startActivity(intent)
+//            val intent = Intent(this@RegistrationActivity, WebActivity::class.java)
+//            intent.putExtra("url", AppConfig.terms)
+//            startActivity(intent)
         }
 
         findViewById(R.id.left_btn).setOnClickListener {
@@ -150,7 +148,7 @@ class RegistrationActivity : BaseActivity() {
         val phone = phoneEditText!!.text.toString()
         savePhone(phone)
         saveToken(obj)
-        finishActivity(phone)
+       // finishActivity(phone)
     }
 
     private fun saveToken(obj: JsonObject) {
