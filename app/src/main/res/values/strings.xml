@@ -45,6 +45,7 @@
     <string name="share_app">Поделиться</string>
     <string name="type_promocode">Ввести промокод</string>
     <string name="reply">Оставить отзыв</string>
+
     <string name="event_creation">Создание события</string>
     <string name="event_name">Название игры</string>
     <string name="date_and_time">Дата и время</string>
@@ -71,6 +72,19 @@
     <string name="save">Продолжить</string>
     <string name="search">Поиск</string>
     <string name="address_select">Адрес игры</string>
+
+    <string name="registration_browse">Регистрируясь в приложении, вы принимаете условия <u>Пользовательского соглашения</u></string>
+    <string name="send">Отправить</string>
+    <string name="reg">Регистрация</string>
+    <string name="type_phone">Введите номер вашего телефона</string>
+    <string name="code_send">На этот номер будет отправлен 5-значный код</string>
+    <string name="code">Код подтверждения</string>
+    <string name="empty_field">Поле не может быть пустым</string>
+    <string name="wrong_code">Неверный код</string>
+    <string name="wrong_phone">Неверный номер телефона</string>
+    <string name="number_code">На номер</string>
+    <string name="code_sent">" был отправлен код"</string>
+    <string name="code_title">Введите код</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
