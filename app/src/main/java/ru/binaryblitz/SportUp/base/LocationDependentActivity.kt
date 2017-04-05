@@ -12,7 +12,6 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-import kotlinx.android.synthetic.main.activity_select_city.*
 import ru.binaryblitz.SportUp.utils.LocationManager
 
 abstract class LocationDependentActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -81,7 +80,6 @@ abstract class LocationDependentActivity : BaseActivity(), GoogleApiClient.Conne
     }
 
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        refresh.isRefreshing = false
         onLocationError()
     }
 }

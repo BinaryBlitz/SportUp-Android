@@ -9,7 +9,7 @@ object ServerConfig {
             return baseUrl
         }
 
-    val prefsName = "SportUpPrefs"
+    val preferencesName = "SportUpPrefs"
     val tokenEntity = "auth_token"
     val cityEntity = "city_token"
     val userEntity = "auth_info"

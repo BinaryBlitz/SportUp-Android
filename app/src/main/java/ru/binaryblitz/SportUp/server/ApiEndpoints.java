@@ -4,13 +4,18 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiEndpoints {
     @GET("cities")
     Observable<JsonArray> getCitiesList();
+
+    @POST("events")
+    Observable<JsonObject> createEvent(@Body JsonObject object, @Query("api_token") String token);
 
     @GET("cities/{id}/sport_types")
     Observable<JsonArray> getSportTypes(@Path("id") int id);

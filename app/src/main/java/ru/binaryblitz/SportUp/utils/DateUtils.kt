@@ -6,10 +6,22 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DateUtils {
+    fun isAfterToday(date: Date?): Boolean {
+        if (date == null) {
+            return false
+        }
+
+        val today = Calendar.getInstance()
+        return !date.before(today.time)
+    }
+
     fun getDateStringRepresentationWithoutTime(date: Date?): String {
-        if (date == null) return ""
+        if (date == null) {
+            return ""
+        }
         val format = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         format.timeZone = TimeZone.getDefault()
+        
         return format.format(date)
     }
 
@@ -20,7 +32,11 @@ object DateUtils {
         return format.format(date)
     }
 
-    fun isAfter(first: Date, second: Date): Boolean {
+    fun isAfter(first: Date?, second: Date?): Boolean {
+        if (first == null || second == null) {
+            return false
+        }
+
         return !first.before(second)
     }
 
