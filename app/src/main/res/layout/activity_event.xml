@@ -47,8 +47,7 @@
                         android:layout_height="match_parent"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:scaleType="centerInside"
-                        android:src="@drawable/icon_nav_comment_white"
-                        android:padding="13dp"
+                        android:padding="16dp"
                         android:layout_gravity="end"
                         />
 

@@ -79,32 +79,36 @@
             android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/headerView"
                 android:background="@color/colorPrimary"
                 android:orientation="vertical"
                 android:layout_height="wrap_content">
-                <android.support.design.widget.TextInputLayout
+                <com.rengwuxian.materialedittext.MaterialEditText
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffffff"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:imeOptions="actionDone"
+                    android:textSize="16sp"
+                    android:lines="1"
+                    android:textCursorDrawable="@null"
+                    android:id="@+id/nameEdit"
+                    android:gravity="center"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="20dp"
-                    android:layout_height="wrap_content">
-
-                    <EditText android:layout_width="match_parent"
-                        android:textSize="18sp"
-                        android:hint="@string/event_name"
-                        android:maxLength="20"
-                        android:imeOptions="actionDone"
-                        android:textColorHint="#ffffff"
-                        android:textColorHighlight="#ffffff"
-                        android:textColor="#ffffff"
-                        android:inputType="text"
-                        android:id="@+id/nameEdit"
-                        android:gravity="center"
-                        android:layout_height="wrap_content"/>
-
-                </android.support.design.widget.TextInputLayout>
+                    app:met_underlineColor="#ffffff"
+                    app:met_baseColor="#ffffff"
+                    app:met_textColor="#ffffff"
+                    app:met_errorColor="#ffffff"
+                    app:met_floatingLabel="normal"
+                    app:met_helperTextColor="#ffffff"
+                    app:met_primaryColor="#ffffff"
+                    android:textColorHint="#ffffff"
+                    android:layout_gravity="bottom" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -352,7 +356,7 @@
                         android:text="@string/players_quantity"
                         android:textColor="#212121"
                         android:gravity="center_vertical"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1.0"
@@ -363,7 +367,7 @@
                         android:text="@string/players_quantity"
                         android:textColor="#727272"
                         android:gravity="center_vertical"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:layout_marginTop="4dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="12dp"

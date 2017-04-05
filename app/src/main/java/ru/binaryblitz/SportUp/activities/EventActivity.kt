@@ -1,5 +1,6 @@
 package ru.binaryblitz.SportUp.activities
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -22,15 +23,12 @@ import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.presenters.EventPresenter
 import ru.binaryblitz.SportUp.server.EndpointsService
-import ru.binaryblitz.SportUp.utils.AndroidUtilities
-import ru.binaryblitz.SportUp.utils.DateUtils
-import ru.binaryblitz.SportUp.utils.TimeSpan
 import javax.inject.Inject
 import com.google.android.gms.maps.model.MapStyleOptions
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
-import ru.binaryblitz.SportUp.utils.LogUtil
+import ru.binaryblitz.SportUp.utils.*
 import java.util.*
 
 class EventActivity : BaseActivity(), OnMapReadyCallback {
@@ -39,6 +37,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
     var color = 0
+
+    var isUserEvent = false
 
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
@@ -96,6 +96,14 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun setOnClickListeners() {
         backBtn.setOnClickListener { finish() }
+
+        rightBtn.setOnClickListener {
+            if (isUserEvent) {
+                val intent = Intent(this, EditEventActivity::class.java)
+                intent.putExtra(EXTRA_COLOR, color)
+                startActivity(intent)
+            }
+        }
     }
 
     fun onLoaded(obj: JsonObject) {
@@ -148,15 +156,14 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun parseMembersInfo(obj: JsonObject) {
-        LogUtil.logError(obj.toString())
         membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
 
-        initButton(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
+        initButtons(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
                 obj.get("membership") != null && !obj.get("membership").isJsonNull)
     }
 
-    private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
+    private fun initMainButton(isCreatedByUser: Boolean, isJoined: Boolean) {
         try {
             joinBtn.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
                 else ColorStateList.valueOf(color)
@@ -164,6 +171,16 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         } catch (e: Exception) {
             LogUtil.logException(e)
         }
+    }
+
+    private fun initButtons(isCreatedByUser: Boolean, isJoined: Boolean) {
+        isUserEvent = isCreatedByUser
+        initMainButton(isCreatedByUser, isJoined)
+        initToolbarButton()
+    }
+
+    private fun initToolbarButton() {
+        rightBtn.setImageResource(if (isUserEvent) R.drawable.ic_edit else R.drawable.icon_nav_comment_white)
     }
 
     fun getTimeString(date: String): SpannableStringBuilder {
