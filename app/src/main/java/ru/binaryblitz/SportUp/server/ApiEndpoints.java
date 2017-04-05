@@ -16,6 +16,9 @@ public interface ApiEndpoints {
     @GET("cities")
     Observable<JsonArray> getCitiesList();
 
+    @GET("user")
+    Observable<JsonObject> getUser(@Query("api_token") String token);
+
     @POST("events/{id}/memberships")
     Observable<JsonObject> joinEvent(@Path("id") int id, @Query("api_token") String token);
 

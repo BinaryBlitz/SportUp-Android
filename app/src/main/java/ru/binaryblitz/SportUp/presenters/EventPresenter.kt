@@ -4,7 +4,6 @@ import com.google.gson.JsonObject
 import ru.binaryblitz.SportUp.activities.EventActivity
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonObjectResponseListener
-import ru.binaryblitz.SportUp.utils.LogUtil
 
 class EventPresenter(private val service: EndpointsService, private val view: EventActivity) {
 

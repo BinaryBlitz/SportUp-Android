@@ -25,7 +25,7 @@ class CreateEventPresenter(private val service: EndpointsService, private val vi
     }
 
     private fun parseAnswer(obj: JsonObject) {
-        view.onLoaded(AndroidUtilities.getIntFieldFromJson(obj.get("id")),
-                Color.parseColor(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("color"))))
+        LogUtil.logError(obj.toString())
+        view.onLoaded(AndroidUtilities.getIntFieldFromJson(obj.get("id")))
     }
 }

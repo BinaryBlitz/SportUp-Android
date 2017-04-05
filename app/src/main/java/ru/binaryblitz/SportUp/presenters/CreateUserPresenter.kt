@@ -26,12 +26,20 @@ class CreateUserPresenter(private val service: EndpointsService, private val vie
     }
 
     private fun parseAnswer(obj: JsonObject) {
-        LogUtil.logError(obj.toString())
         if (obj.get("api_token") == null || obj.get("api_token").isJsonNull || obj.get("api_token").asString.isEmpty()) {
             view.onLoaded(false)
         }
 
         DeviceInfoStore.saveToken(view, obj.get("api_token").asString)
+
+        try {
+            val user = DeviceInfoStore.getUserObject(view)
+            user?.id = obj.get("id").asInt
+            DeviceInfoStore.saveUser(view, user!!)
+        } catch (e: Exception) {
+            view.onLoaded(false)
+        }
+
         view.onLoaded(true)
     }
 }

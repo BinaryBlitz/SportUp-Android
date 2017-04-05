@@ -16,7 +16,6 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_create_event.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
-import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.presenters.CreateEventPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
@@ -78,11 +77,11 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         return format
     }
 
-    fun onLoaded(id: Int, color: Int) {
+    fun onLoaded(id: Int) {
         dialog.dismiss()
         val intent = Intent(this, EventActivity::class.java)
         intent.putExtra(EXTRA_ID, id)
-        intent.putExtra(EXTRA_COLOR, color)
+        intent.putExtra(EXTRA_COLOR, SportTypesUtil.findColor(this, sportTypeId))
         startActivity(intent)
         finish()
     }
@@ -133,6 +132,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         event.addProperty("description", descriptionEdit.text.toString())
         event.addProperty("price", priceText.text.toString().split(" ")[0].toInt())
         event.addProperty("sport_type_id", sportTypeId)
+        event.addProperty("city_id", DeviceInfoStore.getCityObject(this)?.id)
         event.addProperty("public", isPublicSwitch.isChecked)
 
         obj.add("event", event)

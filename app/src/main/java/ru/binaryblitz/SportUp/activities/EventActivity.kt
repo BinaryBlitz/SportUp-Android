@@ -152,7 +152,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
 
-        initButton(obj.get("membership").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
+        initButton(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
                 obj.get("membership") != null && !obj.get("membership").isJsonNull)
     }
 

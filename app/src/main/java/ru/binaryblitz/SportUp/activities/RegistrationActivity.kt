@@ -27,6 +27,7 @@ import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.AnimationStartListener
 import ru.binaryblitz.SportUp.utils.CustomPhoneNumberTextWatcher
+import ru.binaryblitz.SportUp.utils.LogUtil
 import javax.inject.Inject
 
 class RegistrationActivity : BaseActivity() {
