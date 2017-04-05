@@ -7,6 +7,7 @@ import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonObjectResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
+import ru.binaryblitz.SportUp.utils.LogUtil
 
 class UserPresenter(private val service: EndpointsService, private val view: MainActivity) {
 
@@ -22,6 +23,7 @@ class UserPresenter(private val service: EndpointsService, private val view: Mai
     }
 
     private fun parseAnswer(obj: JsonObject) {
+        LogUtil.logError(obj.toString())
         var user = DeviceInfoStore.getUserObject(view)
 
         if (user == null) {
@@ -32,6 +34,11 @@ class UserPresenter(private val service: EndpointsService, private val view: Mai
         user.firstName = AndroidUtilities.getStringFieldFromJson(obj.get("first_name"))
         user.lastName = AndroidUtilities.getStringFieldFromJson(obj.get("last_name"))
         user.avatarUrl = AndroidUtilities.getUrlFieldFromJson(obj.get("avatar_url"))
+
+        user.votesCount = AndroidUtilities.getIntFieldFromJson(obj.get("votes_count"))
+        user.eventsCount = 0
+        user.violationsCount = AndroidUtilities.getIntFieldFromJson(obj.get("violations_count"))
+
         DeviceInfoStore.saveUser(view, user)
     }
 }

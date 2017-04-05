@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.activity_profile.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseFragment
 import ru.binaryblitz.SportUp.models.User
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.utils.Image
 
 class ProfileFragment : BaseFragment() {
@@ -21,8 +22,12 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun initUser() {
-        val user = User.createDefault()
-        Image.loadAvatar(context, user, "", profileImage)
-        nameText.text = user.firstName + " " + user.lastName
+        val user = DeviceInfoStore.getUserObject(context)
+        Image.loadAvatar(context, user, user?.avatarUrl, profileImage)
+        nameText.text = user?.firstName + " " + user?.lastName
+
+        eventsCount.text = user?.eventsCount.toString()
+        votesCount.text = user?.votesCount.toString()
+        violationsCount.text = user?.violationsCount.toString()
     }
 }

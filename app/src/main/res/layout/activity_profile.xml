@@ -103,7 +103,7 @@
                         android:layout_height="22dp" />
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="2"
+                        android:id="@+id/votesCount"
                         android:layout_gravity="center_vertical"
                         android:textSize="24sp"
                         android:layout_marginLeft="8dp"
@@ -144,7 +144,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="2"
+                        android:id="@+id/eventsCount"
                         android:layout_gravity="center_vertical"
                         android:textSize="24sp"
                         android:layout_marginLeft="8dp"
@@ -182,7 +182,7 @@
                         android:layout_height="22dp" />
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="2"
+                        android:id="@+id/violationsCount"
                         android:layout_gravity="center_vertical"
                         android:textSize="24sp"
                         android:layout_marginLeft="8dp"
