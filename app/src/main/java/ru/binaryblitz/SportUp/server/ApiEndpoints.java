@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -14,6 +15,15 @@ import retrofit2.http.Query;
 public interface ApiEndpoints {
     @GET("cities")
     Observable<JsonArray> getCitiesList();
+
+    @POST("events/{id}/memberships")
+    Observable<JsonObject> joinEvent(@Path("id") int id, @Query("api_token") String token);
+
+    @DELETE("memberships/{id}")
+    Observable<JsonObject> leaveEvent(@Path("id") int id, @Query("api_token") String token);
+
+    @DELETE("events/{id}")
+    Observable<JsonObject> deleteEvent(@Path("id") int id, @Query("api_token") String token);
 
     @POST("events")
     Observable<JsonObject> createEvent(@Body JsonObject object, @Query("api_token") String token);

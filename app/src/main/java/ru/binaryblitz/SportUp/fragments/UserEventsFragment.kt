@@ -14,6 +14,7 @@ import ru.binaryblitz.SportUp.activities.CreateEventActivity
 import ru.binaryblitz.SportUp.adapters.MyEventsAdapter
 import ru.binaryblitz.SportUp.base.BaseFragment
 import ru.binaryblitz.SportUp.presenters.MyEventsPresenter
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import javax.inject.Inject
 
@@ -56,6 +57,6 @@ class UserEventsFragment : BaseFragment() {
 
     private fun load() {
         val presenter = MyEventsPresenter(api, this)
-        presenter.getEvents("foobar")
+        presenter.getEvents(DeviceInfoStore.getToken(activity))
     }
 }

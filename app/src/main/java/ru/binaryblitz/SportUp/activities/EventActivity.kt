@@ -41,6 +41,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     var color = 0
 
     private var googleMap: GoogleMap? = null
+    private lateinit var presenter: EventPresenter
 
     @Inject
     lateinit var api: EndpointsService
@@ -53,6 +54,18 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         initToolbar()
         setOnClickListeners()
         initMap()
+    }
+
+    fun onEventJoined(id: Int) {
+
+    }
+
+    fun onEventLeft() {
+
+    }
+
+    fun onEventDeleted() {
+
     }
 
     private fun initToolbar() {
@@ -116,7 +129,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun parseEventStartDate(date: Date) {
-        val calendar = getTimeBeforEventStarts(date)
+        val calendar = getTimeBeforeEventStarts(date)
 
         if (calendar == null) {
             timeUntilEventStarts.text = getString(R.string.completed)
@@ -138,7 +151,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
 
-        initButton(obj.get("membership").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this).id,
+        initButton(obj.get("membership").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
                 obj.get("membership") != null && !obj.get("membership").isJsonNull)
     }
 
@@ -175,7 +188,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
-    private fun getTimeBeforEventStarts(date: Date): Calendar? {
+    private fun getTimeBeforeEventStarts(date: Date): Calendar? {
         val millisUntilEventStarts = date.time - System.currentTimeMillis()
         val calendar = Calendar.getInstance()
 
@@ -198,7 +211,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun load() {
-        val presenter = EventPresenter(api, this)
-        presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), "foobar")
+        presenter = EventPresenter(api, this)
+        presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this))
     }
 }

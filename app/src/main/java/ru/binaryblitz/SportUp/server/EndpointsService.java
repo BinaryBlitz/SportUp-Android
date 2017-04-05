@@ -327,4 +327,97 @@ public class EndpointsService {
                     }
                 });
     }
+
+    public void joinEvent(int id, String token, final JsonObjectResponseListener callback) {
+        networkService.joinEvent(id, token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonObject>>() {
+                    @Override
+                    public ObservableSource<? extends JsonObject> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    public void leaveEvent(int id, String token, final JsonObjectResponseListener callback) {
+        networkService.leaveEvent(id, token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonObject>>() {
+                    @Override
+                    public ObservableSource<? extends JsonObject> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    public void deleteEvent(int id, String token, final JsonObjectResponseListener callback) {
+        networkService.deleteEvent(id, token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonObject>>() {
+                    @Override
+                    public ObservableSource<? extends JsonObject> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
 }

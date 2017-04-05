@@ -18,6 +18,7 @@ import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.presenters.CreateEventPresenter
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.DateUtils
 import ru.binaryblitz.SportUp.utils.LogUtil
@@ -148,7 +149,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         dialog.show()
 
         val presenter = CreateEventPresenter(api, this)
-        presenter.createEvent(generateJson(), "foobar")
+        presenter.createEvent(generateJson(), DeviceInfoStore.getToken(this))
     }
 
     private fun showErrorDialog() {
