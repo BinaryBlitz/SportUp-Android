@@ -381,7 +381,7 @@ public class EndpointsService {
 
                     @Override
                     public void onError(Throwable e) {
-                        callback.onError(e.getLocalizedMessage());
+                        callback.onSuccess(new JsonObject());
                     }
 
                     @Override

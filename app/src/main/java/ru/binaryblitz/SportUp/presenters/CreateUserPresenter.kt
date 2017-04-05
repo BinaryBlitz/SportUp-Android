@@ -25,13 +25,12 @@ class CreateUserPresenter(private val service: EndpointsService, private val vie
     fun updateUser(body: JsonObject, token: String) {
         service.updateUser(body, token, object : JsonObjectResponseListener {
             override fun onSuccess(obj: JsonObject) {
-                parseAnswer(obj)
+                view.onLoaded(true)
             }
 
             override fun onError(networkError: String) {
                 view.onInternetConnectionError()
                 view.dismissProgress()
-                LogUtil.logError(networkError)
             }
         })
     }
