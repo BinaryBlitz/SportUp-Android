@@ -104,11 +104,8 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-<<<<<<< HEAD
                 android:background="?attr/selectableItemBackground"
-=======
                 android:id="@+id/locationButton"
->>>>>>> Add places API
                 android:layout_height="72dp">
 
                 <TextView
