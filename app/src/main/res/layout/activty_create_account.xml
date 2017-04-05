@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:contentInsetStart="0dp"
+            android:contentInsetLeft="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize">
+            <FrameLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/action_bar">
+
+                <ImageView
+                    android:id="@+id/left_btn"
+                    android:layout_width="56dp"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_back"
+                    android:padding="13dp"
+                    android:layout_gravity="start"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/reg"
+                    android:layout_gravity="center"
+                    android:id="@+id/date_text_view"
+                    android:gravity="center_vertical"
+                    android:typeface="sans"
+                    android:textSize="22sp"
+                    android:textColor="#ffffff" />
+
+            </FrameLayout>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="92dp"
+                android:padding="30dp"
+                android:background="@drawable/avatar_background"
+                android:src="@drawable/icon_user_white"
+                android:layout_height="92dp" />
+
+            <com.github.siyamed.shapeimageview.CircularImageView
+                app:siBorderColor="#ffffff"
+                app:siBorderWidth="2dp"
+                android:layout_width="92dp"
+                android:clickable="true"
+                android:id="@+id/avatar"
+                android:layout_height="92dp" />
+
+            <ImageView
+                android:layout_width="22dp"
+                android:src="@drawable/ic_camera_black"
+                android:layout_gravity="end|bottom"
+                android:layout_height="22dp" />
+        </FrameLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_height="wrap_content">
+
+            <EditText android:layout_width="match_parent"
+                android:textSize="18sp"
+                android:hint="@string/first_name"
+                android:inputType="textCapSentences"
+                android:id="@+id/firstName"
+                android:gravity="center"
+                android:layout_height="wrap_content"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_height="wrap_content">
+
+            <EditText android:layout_width="match_parent"
+                android:textSize="18sp"
+                android:hint="@string/lastName"
+                android:inputType="textCapSentences"
+                android:id="@+id/lastName"
+                android:gravity="center"
+                android:layout_height="wrap_content"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send"
+            android:id="@+id/send"
+            android:layout_gravity="center"
+            android:background="@color/colorAccent"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_marginLeft="56dp"
+            android:layout_marginRight="56dp"
+            android:layout_marginTop="48dp" />
+    </LinearLayout>
+
+</FrameLayout>

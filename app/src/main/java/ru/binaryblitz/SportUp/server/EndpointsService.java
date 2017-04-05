@@ -3,10 +3,6 @@ package ru.binaryblitz.SportUp.server;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.util.Date;
-
-import devs.mulham.horizontalcalendar.HorizontalCalendar;
-import devs.mulham.horizontalcalendar.HorizontalCalendarListener;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
@@ -210,6 +206,99 @@ public class EndpointsService {
 
     public void sendEvent(JsonObject event, String token, final JsonObjectResponseListener callback) {
         networkService.createEvent(event, token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonObject>>() {
+                    @Override
+                    public ObservableSource<? extends JsonObject> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    public void auth(JsonObject body, final JsonObjectResponseListener callback) {
+        networkService.authWithPhoneNumber(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonObject>>() {
+                    @Override
+                    public ObservableSource<? extends JsonObject> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    public void verify(JsonObject body, String token, final JsonObjectResponseListener callback) {
+        networkService.verifyPhoneNumber(body, token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonObject>>() {
+                    @Override
+                    public ObservableSource<? extends JsonObject> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    public void createUser(JsonObject body, final JsonObjectResponseListener callback) {
+        networkService.createUser(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonObject>>() {

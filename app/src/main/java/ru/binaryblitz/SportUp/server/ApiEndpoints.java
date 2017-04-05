@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -31,4 +32,13 @@ public interface ApiEndpoints {
 
     @GET("events/{id}")
     Observable<JsonObject> getEvent(@Path("id") int id, @Query("api_token") String token);
+
+    @PATCH("verification_tokens/{token}")
+    Observable<JsonObject> verifyPhoneNumber(@Body JsonObject body, @Path("token") String token);
+
+    @POST("verification_tokens")
+    Observable<JsonObject> authWithPhoneNumber(@Body JsonObject number);
+
+    @POST("user")
+    Observable<JsonObject> createUser(@Body JsonObject user);
 }
