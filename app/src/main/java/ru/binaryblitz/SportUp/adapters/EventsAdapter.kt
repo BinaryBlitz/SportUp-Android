@@ -12,6 +12,7 @@ import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.EventActivity
 import ru.binaryblitz.SportUp.activities.SportEventsActivity
 import ru.binaryblitz.SportUp.models.Event
+import ru.binaryblitz.SportUp.utils.AppConfig
 import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
 
@@ -49,6 +50,9 @@ class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
         holder.isPublic.visibility = if (event.isPublic) View.VISIBLE else View.GONE
 
         holder.itemView.setOnClickListener {
+            if (!AppConfig.checkIfUserLoggedIn(context)) {
+                return@setOnClickListener
+            }
             val intent = Intent(context, EventActivity::class.java)
             intent.putExtra(EXTRA_ID, event.id)
             intent.putExtra(EXTRA_COLOR, SportEventsActivity.color)
