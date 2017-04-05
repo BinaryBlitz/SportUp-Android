@@ -29,6 +29,7 @@ import javax.inject.Inject
 import com.google.android.gms.maps.model.MapStyleOptions
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.utils.LogUtil
 import java.util.*
 
@@ -133,17 +134,19 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun parseMembersInfo(obj: JsonObject) {
+        LogUtil.logError(obj.toString())
         membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
 
-        initButton(obj.get("membership") != null && !obj.get("membership").isJsonNull)
+        initButton(obj.get("membership").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this).id,
+                obj.get("membership") != null && !obj.get("membership").isJsonNull)
     }
 
-    private fun initButton(isJoined: Boolean) {
+    private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
         try {
             joinBtn.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
                 else ColorStateList.valueOf(color)
-            joinBtn.text = if (isJoined) getString(R.string.leave) else getString(R.string.join)
+            joinBtn.text = if (isCreatedByUser) getString(R.string.delete) else if (isJoined) getString(R.string.leave) else getString(R.string.join)
         } catch (e: Exception) {
             LogUtil.logException(e)
         }
