@@ -7,6 +7,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -177,21 +178,24 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
 
         findViewById(R.id.add_btn).setOnClickListener {
             val geocoder: Geocoder = Geocoder(this@MapActivity, Locale.getDefault())
-            save(geocoder)
-            finish()
+            if (save(geocoder)) {
+                finish()
+            }
         }
     }
 
-    private fun save(geocoder: Geocoder) {
+    private fun save(geocoder: Geocoder): Boolean {
         val addresses: List<Address>
         try {
             addresses = geocoder.getFromLocation(selectedLocation.latitude, selectedLocation.longitude, 1)
             CreateEventActivity.selectedLocation = addresses[0].getAddressLine(0)
             CreateEventActivity.latLng = selectedLocation
-        } catch (e: IOException) {
-            LogUtil.logException(e)
+        } catch (e: Exception) {
+            Snackbar.make(main, getString(R.string.wrong_location), Snackbar.LENGTH_SHORT).show()
+            return false
         }
 
+        return true
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

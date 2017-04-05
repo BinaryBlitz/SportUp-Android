@@ -18,6 +18,7 @@ class CreateEventPresenter(private val service: EndpointsService, private val vi
             }
 
             override fun onError(networkError: String) {
+                LogUtil.logError(networkError)
                 view.onInternetConnectionError()
             }
         })

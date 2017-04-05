@@ -71,6 +71,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     private fun initToolbar() {
         color = intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR)
         appBarView.setBackgroundColor(color)
+        AndroidUtilities.colorAndroidBar(this, color)
     }
 
     private fun initMap() {

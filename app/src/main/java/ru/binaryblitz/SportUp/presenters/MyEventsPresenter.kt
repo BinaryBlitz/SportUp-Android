@@ -24,7 +24,6 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
             }
 
             override fun onError(networkError: String) {
-                view.onInternetConnectionError()
             }
         })
     }
@@ -36,7 +35,6 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
             }
 
             override fun onError(networkError: String) {
-                view.onInternetConnectionError()
             }
         })
     }

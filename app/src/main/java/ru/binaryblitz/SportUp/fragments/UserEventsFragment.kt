@@ -16,6 +16,7 @@ import ru.binaryblitz.SportUp.base.BaseFragment
 import ru.binaryblitz.SportUp.presenters.MyEventsPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
+import ru.binaryblitz.SportUp.utils.AppConfig
 import javax.inject.Inject
 
 class UserEventsFragment : BaseFragment() {
@@ -36,6 +37,9 @@ class UserEventsFragment : BaseFragment() {
         load()
 
         rightBtn.setOnClickListener {
+            if (!AppConfig.checkIfUserLoggedIn(context)) {
+                return@setOnClickListener
+            }
             val intent = Intent(activity, CreateEventActivity::class.java)
             startActivity(intent)
         }

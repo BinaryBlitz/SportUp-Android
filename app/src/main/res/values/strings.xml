@@ -87,6 +87,7 @@
     <string name="code_title">Введите код</string>
     <string name="lastName">Фамилия</string>
     <string name="first_name">Имя</string>
+    <string name="wrong_location">Неверное местоположение</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
