@@ -44,8 +44,6 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     var errorString = ""
     var error = false
 
-    var latLng: LatLng? = null
-
     lateinit var dialog: ProgressDialog
 
     @Inject
@@ -63,6 +61,13 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         }
 
         setOnClickListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (selectedLocation != null) {
+            locationText.text = selectedLocation
+        }
     }
 
     private fun initFormat(): SimpleDateFormat {
@@ -117,8 +122,8 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         event.addProperty("starts_at", format.format(startDate))
         event.addProperty("ends_at", format.format(endDate))
         event.addProperty("address", locationText.text.toString())
-        event.addProperty("latitude", 0.0)
-        event.addProperty("longitude", 0.0)
+        event.addProperty("latitude", latLng!!.latitude)
+        event.addProperty("longitude", latLng!!.longitude)
         event.addProperty("user_limit", userLimitValue.text.toString())
         event.addProperty("team_limit", teamLimitValue.text.toString())
         event.addProperty("description", descriptionEdit.text.toString())
@@ -162,6 +167,11 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         dateStart.setOnClickListener { showDatePicker() }
 
         priceButton.setOnClickListener { showPriceDialog() }
+
+        locationButton.setOnClickListener {
+            val intent = Intent(this@CreateEventActivity, MapActivity::class.java)
+            startActivity(intent)
+        }
 
         timeStart.setOnClickListener {
             isStartTimePicked = true
@@ -289,6 +299,11 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
             endDate = getTime(hourOfDay, minute)
             endTime.text = DateUtils.getTimeStringRepresentation(endDate)
         }
+    }
+
+    companion object {
+        var latLng: LatLng? = null
+        var selectedLocation: String? = null
     }
 }
 
