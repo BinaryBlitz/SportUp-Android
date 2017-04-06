@@ -24,7 +24,6 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
             }
 
             override fun onError(networkError: String) {
-                view.onInternetConnectionError()
             }
         })
     }
@@ -36,7 +35,6 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
             }
 
             override fun onError(networkError: String) {
-                view.onInternetConnectionError()
             }
         })
     }
@@ -55,10 +53,11 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
     private fun getEventFromJson(obj: JsonObject): MyEvent {
         return MyEvent(
                 AndroidUtilities.getIntFieldFromJson(obj.get("id")),
+                AndroidUtilities.getIntFieldFromJson(obj.get("event").asJsonObject.get("id")),
                 AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("name")),
                 DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("starts_at"))),
                 DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("ends_at"))),
-                AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
+                AndroidUtilities.getUrlFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
                 Color.parseColor(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
         )
     }

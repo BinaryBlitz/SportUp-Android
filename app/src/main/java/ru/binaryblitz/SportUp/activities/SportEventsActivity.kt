@@ -15,6 +15,7 @@ import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.presenters.EventsPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
+import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -49,6 +50,7 @@ class SportEventsActivity : BaseActivity() {
         titleTextView.text = intent.getStringExtra(EXTRA_NAME)
         color = intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR)
         appBarView.setBackgroundColor(color)
+        AndroidUtilities.colorAndroidBar(this, color)
     }
 
     private fun setOnClickListeners() {

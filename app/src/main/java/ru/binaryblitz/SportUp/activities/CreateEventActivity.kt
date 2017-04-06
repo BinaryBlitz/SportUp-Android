@@ -16,8 +16,8 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_create_event.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
-import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.presenters.CreateEventPresenter
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.DateUtils
 import ru.binaryblitz.SportUp.utils.LogUtil
@@ -77,11 +77,11 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         return format
     }
 
-    fun onLoaded(id: Int, color: Int) {
+    fun onLoaded(id: Int) {
         dialog.dismiss()
         val intent = Intent(this, EventActivity::class.java)
         intent.putExtra(EXTRA_ID, id)
-        intent.putExtra(EXTRA_COLOR, color)
+        intent.putExtra(EXTRA_COLOR, SportTypesUtil.findColor(this, sportTypeId))
         startActivity(intent)
         finish()
     }
@@ -96,6 +96,9 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     }
 
     private fun checkInputs() {
+        error = false
+        errorString = ""
+
         checkCondition(nameEdit.text.toString().isEmpty(), R.string.event_name_error)
         checkCondition(latLng == null, R.string.wrong_event_location)
         checkCondition(!DateUtils.isAfterToday(startDate), R.string.wrong_event_date)
@@ -127,11 +130,14 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         event.addProperty("user_limit", userLimitValue.text.toString())
         event.addProperty("team_limit", teamLimitValue.text.toString())
         event.addProperty("description", descriptionEdit.text.toString())
-        event.addProperty("price", priceText.text.toString().split(" ")[0])
+        event.addProperty("price", priceText.text.toString().split(" ")[0].toInt())
         event.addProperty("sport_type_id", sportTypeId)
+        event.addProperty("city_id", DeviceInfoStore.getCityObject(this)?.id)
         event.addProperty("public", isPublicSwitch.isChecked)
 
         obj.add("event", event)
+
+        LogUtil.logError(obj.toString())
 
         return obj
     }
@@ -148,7 +154,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         dialog.show()
 
         val presenter = CreateEventPresenter(api, this)
-        presenter.createEvent(generateJson(), "foobar")
+        presenter.createEvent(generateJson(), DeviceInfoStore.getToken(this))
     }
 
     private fun showErrorDialog() {
@@ -204,7 +210,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     private fun buildNumberPickerDialog(field: Int): MaterialNumberPicker {
         val numberPicker = MaterialNumberPicker.Builder(this)
                 .minValue(1)
-                .maxValue(SportTypesUtil.types.size)
+                .maxValue(1000)
                 .defaultValue(1)
                 .backgroundColor(Color.WHITE)
                 .separatorColor(Color.TRANSPARENT)
@@ -215,9 +221,8 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
                 .build()
 
         if (field == SPORT_TYPE) {
-            numberPicker.setFormatter {
-                value -> SportType.fromString(SportTypesUtil.types[value - 1].second).name
-            }
+            numberPicker.maxValue = SportTypesUtil.types.size
+            numberPicker.setFormatter { value -> SportTypesUtil.types[value - 1].second }
         }
 
         return numberPicker
@@ -234,8 +239,8 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
 
     private fun parseNumberPickerResult(numberPicker: MaterialNumberPicker, field: Int) {
         if (field == SPORT_TYPE) {
-            sportTypeId = SportType.fromString(SportTypesUtil.types[numberPicker.value - 1].second).id
-            setText(field, SportType.fromString(SportTypesUtil.types[numberPicker.value - 1].second).name!!)
+            sportTypeId = SportTypesUtil.types[numberPicker.value - 1].first
+            setText(field, SportTypesUtil.types[numberPicker.value - 1].second)
         } else {
             setText(field, numberPicker.value.toString())
         }

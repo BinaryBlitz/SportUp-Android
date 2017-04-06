@@ -1,5 +1,6 @@
 package ru.binaryblitz.SportUp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -9,10 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_user_events.*
 import ru.binaryblitz.SportUp.R
+import ru.binaryblitz.SportUp.activities.CreateEventActivity
 import ru.binaryblitz.SportUp.adapters.MyEventsAdapter
 import ru.binaryblitz.SportUp.base.BaseFragment
 import ru.binaryblitz.SportUp.presenters.MyEventsPresenter
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
+import ru.binaryblitz.SportUp.utils.AppConfig
 import javax.inject.Inject
 
 class UserEventsFragment : BaseFragment() {
@@ -31,6 +35,14 @@ class UserEventsFragment : BaseFragment() {
 
         initList()
         load()
+
+        rightBtn.setOnClickListener {
+            if (!AppConfig.checkIfUserLoggedIn(context)) {
+                return@setOnClickListener
+            }
+            val intent = Intent(activity, CreateEventActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     fun initList() {
@@ -49,6 +61,6 @@ class UserEventsFragment : BaseFragment() {
 
     private fun load() {
         val presenter = MyEventsPresenter(api, this)
-        presenter.getEvents("foobar")
+        presenter.getEvents(DeviceInfoStore.getToken(activity))
     }
 }

@@ -37,7 +37,7 @@ object DateUtils {
             return false
         }
 
-        return !first.before(second)
+        return first.before(second)
     }
 
     fun parse(input: String): Date {
