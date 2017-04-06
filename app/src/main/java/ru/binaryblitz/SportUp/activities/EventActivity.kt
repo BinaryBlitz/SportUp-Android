@@ -126,7 +126,15 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         idText.text = "#" + AndroidUtilities.getStringFieldFromJson(obj.get("id"))
         descriptionText.text = AndroidUtilities.getStringFieldFromJson(obj.get("description"))
         locationText.text = AndroidUtilities.getStringFieldFromJson(obj.get("address"))
-        priceText.text = AndroidUtilities.getStringFieldFromJson(obj.get("price")) + getString(R.string.ruble_sign)
+
+        val price = AndroidUtilities.getIntFieldFromJson(obj.get("price"))
+
+        if (price == 0) {
+            priceText.setTextColor(color)
+            priceText.text = getString(R.string.free)
+        } else {
+            priceText.text = price.toString() + getString(R.string.ruble_sign)
+        }
     }
 
     private fun parseEventStartDate(date: Date) {

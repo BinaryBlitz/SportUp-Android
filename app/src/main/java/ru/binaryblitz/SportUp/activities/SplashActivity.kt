@@ -16,13 +16,11 @@ class SplashActivity : BaseActivity() {
         setContentView(R.layout.activity_splash)
         Fabric.with(this, Crashlytics())
 
-        openActivity(StartActivity::class.java)
-
-//        if (DeviceInfoStore.getCity(this) == "null") {
-//            openActivity(StartActivity::class.java)
-//        } else {
-//            openActivity(MainActivity::class.java)
-//        }
+        if (DeviceInfoStore.getCity(this) == "null") {
+            openActivity(StartActivity::class.java)
+        } else {
+            openActivity(MainActivity::class.java)
+        }
     }
 
     private fun openActivity(activity: Class<out Activity>) {
