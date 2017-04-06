@@ -113,8 +113,8 @@
                     android:layout_height="wrap_content">
                     <ImageView
                         android:layout_width="56dp"
-                        android:padding="30dp"
-                        android:background="@drawable/avatar_background"
+                        android:padding="18dp"
+                        android:background="@drawable/player_background"
                         android:src="@drawable/icon_user_white"
                         android:layout_height="56dp" />
 

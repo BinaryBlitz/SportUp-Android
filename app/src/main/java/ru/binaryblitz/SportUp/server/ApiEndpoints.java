@@ -13,7 +13,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiEndpoints {
-    @GET("events/{id}/teams")
+    @GET("events/{id}/memberships")
     Observable<JsonArray> getTeams(@Path("id") int id, @Query("api_token") String token);
 
     @GET("cities")
