@@ -24,7 +24,6 @@ class PlayersPresenter(private val service: EndpointsService, private val view: 
 
             override fun onError(networkError: String) {
                 view.onInternetConnectionError()
-                LogUtil.logError(networkError)
             }
         })
     }
@@ -71,7 +70,7 @@ class PlayersPresenter(private val service: EndpointsService, private val view: 
         if (teamNumber == 0) {
             return Player(1, view.getString(R.string.no_team), "", 0, 0, 0, "")
         } else {
-            return Player(1, "Команда $teamNumber", "$userCount/$userLimit", 0, 0, 0, "")
+            return Player(1, "Команда $teamNumber", "$userCount / $userLimit", 0, 0, 0, "")
         }
     }
 

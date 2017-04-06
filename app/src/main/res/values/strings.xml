@@ -94,6 +94,7 @@
     <string name="not_selected">Не выбран</string>
     <string name="leave_item">Покинуть</string>
     <string name="no_team">Неопределившиеся игроки</string>
+    <string name="players_list">Список игроков</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>

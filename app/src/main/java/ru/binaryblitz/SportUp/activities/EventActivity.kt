@@ -39,10 +39,12 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     val EXTRA_ID = "id"
     val DEFAULT_COLOR = Color.parseColor("#212121")
     val EXTRA_USER_LIMIT = "user_limit"
+    val EXTRA_USER_COUNT = "user_count"
 
     var color = 0
     var id = 0
     var userLimit = 0
+    var userCount = 0
 
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
@@ -106,6 +108,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
             intent.putExtra(EXTRA_ID, id)
             intent.putExtra(EXTRA_COLOR, color)
             intent.putExtra(EXTRA_USER_LIMIT, userLimit)
+            intent.putExtra(EXTRA_USER_COUNT, userCount)
             startActivity(intent)
         }
     }
@@ -161,6 +164,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun parseMembersInfo(obj: JsonObject) {
         userLimit = AndroidUtilities.getIntFieldFromJson(obj.get("user_limit"))
+        userCount = AndroidUtilities.getIntFieldFromJson(obj.get("user_count"))
 
         membersCountText.text = AndroidUtilities.getStringFieldFromJson(obj.get("user_count"))+
                 " / " + AndroidUtilities.getStringFieldFromJson(obj.get("user_limit"))

@@ -13,13 +13,13 @@ import ru.binaryblitz.SportUp.presenters.PlayersPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
-import ru.binaryblitz.SportUp.utils.LogUtil
 import javax.inject.Inject
 
 class UserListActivity : BaseActivity() {
     val EXTRA_COLOR = "color"
     val EXTRA_ID = "id"
     val EXTRA_USER_LIMIT = "user_limit"
+    val EXTRA_USER_COUNT = "user_count"
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
     private lateinit var adapter: PlayersAdapter
@@ -64,6 +64,9 @@ class UserListActivity : BaseActivity() {
 
     private fun load() {
         val presenter = PlayersPresenter(api, this)
-        presenter.getTeams(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this), intent.getIntExtra(EXTRA_USER_LIMIT, 0))
+        val userLimit = intent.getIntExtra(EXTRA_USER_LIMIT, 0)
+        val userCount = intent.getIntExtra(EXTRA_USER_COUNT, 0)
+        idText.text = "$userCount / $userLimit"
+        presenter.getTeams(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this), userLimit)
     }
 }

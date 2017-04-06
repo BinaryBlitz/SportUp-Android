@@ -5,138 +5,143 @@
     android:layout_width="match_parent"
     android:id="@+id/main"
     android:layout_height="match_parent">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
             android:id="@+id/appBarView"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:contentInsetStart="0dp"
                 android:contentInsetLeft="0dp"
+                android:contentInsetStart="0dp"
+                android:minHeight="?attr/actionBarSize"
                 app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp"
-                android:minHeight="?attr/actionBarSize">
-                <FrameLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                app:contentInsetStart="0dp">
+
+                <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/action_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/action_bar">
+                    android:layout_height="match_parent">
 
                     <ImageView
                         android:id="@+id/backBtn"
-                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_width="56dp"
                         android:layout_height="match_parent"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_back"
-                        android:padding="13dp"
                         android:layout_gravity="start"
-                        />
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="13dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_back" />
 
                     <ImageView
                         android:id="@+id/rightBtn"
                         android:layout_width="56dp"
                         android:layout_height="match_parent"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/icon_nav_comment_white"
-                        android:padding="13dp"
                         android:layout_gravity="end"
-                        />
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="13dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_nav_comment_white" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:layout_gravity="center"
                         android:id="@+id/titleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:gravity="top"
-                        android:typeface="sans"
+                        android:text="@string/players_list"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffff"
                         android:textSize="16sp"
-                        android:textColor="#ffffff" />
+                        android:typeface="sans" />
 
 
                     <TextView
+                        android:id="@+id/idText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:layout_gravity="center_horizontal|bottom"
-                        android:id="@+id/idText"
                         android:gravity="bottom"
-                        android:typeface="sans"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#9effffff"
                         android:textSize="16sp"
-                        android:textColor="#9effffff" />
+                        android:typeface="sans" />
 
                 </FrameLayout>
             </android.support.v7.widget.Toolbar>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:layout_gravity="center"
                     android:gravity="top"
                     android:text="@string/best_player"
-                    android:typeface="sans"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffff"
                     android:textSize="20sp"
-                    android:textColor="#ffffff" />
+                    android:typeface="sans" />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:layout_gravity="center_horizontal|bottom"
-                    android:text="@string/yet_not_ended"
-                    android:gravity="bottom"
-                    android:typeface="sans"
                     android:layout_marginTop="8dp"
+                    android:gravity="bottom"
+                    android:text="@string/yet_not_ended"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#baffffff"
                     android:textSize="14sp"
-                    android:textColor="#baffffff" />
+                    android:typeface="sans" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_height="wrap_content">
+                    android:layout_marginTop="8dp">
+
                     <ImageView
                         android:layout_width="56dp"
-                        android:padding="18dp"
+                        android:layout_height="56dp"
                         android:background="@drawable/player_background"
-                        android:src="@drawable/icon_user_white"
-                        android:layout_height="56dp" />
+                        android:padding="18dp"
+                        android:src="@drawable/icon_user_white" />
 
                     <com.github.siyamed.shapeimageview.CircularImageView
-                        app:siBorderColor="#ffffff"
-                        app:siBorderWidth="2dp"
-                        android:layout_width="56dp"
-                        android:clickable="true"
                         android:id="@+id/avatar"
-                        android:layout_height="56dp" />
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:clickable="true"
+                        app:siBorderColor="#ffffff"
+                        app:siBorderWidth="2dp" />
                 </FrameLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:layout_gravity="center"
-                    android:text="@string/not_selected"
-                    android:gravity="top"
                     android:layout_marginTop="8dp"
-                    android:typeface="sans"
+                    android:gravity="top"
+                    android:text="@string/not_selected"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffff"
                     android:textSize="14sp"
-                    android:textColor="#ffffff" />
+                    android:typeface="sans" />
             </LinearLayout>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
