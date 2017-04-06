@@ -7,7 +7,6 @@ import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.DateUtils
-import ru.binaryblitz.SportUp.utils.LogUtil
 
 class EventsPresenter(private val service: EndpointsService, private val view: SportEventsActivity) {
 
@@ -37,7 +36,8 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
                             AndroidUtilities.getBooleanFieldFromJson(it.get("public")),
                             AndroidUtilities.getIntFieldFromJson(it.get("price")),
                             AndroidUtilities.getDoubleFieldFromJson(it.get("latitude")),
-                            AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")))
+                            AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")),
+                            AndroidUtilities.getPasswordFromJson(it.get("password")))
                 }
 
         view.onLoaded(collection = collection as ArrayList<Event>)

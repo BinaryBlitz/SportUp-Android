@@ -11,7 +11,6 @@ import android.widget.TextView
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.EventActivity
 import ru.binaryblitz.SportUp.activities.SportEventsActivity
-import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.utils.AppConfig
 import ru.binaryblitz.SportUp.utils.DateUtils
@@ -53,6 +52,7 @@ class EventsAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
         holder.itemView.setOnClickListener {
             if (event.password != null) {
                 (context as SportEventsActivity).showPasswordDialog(event.password, event.id)
+                return@setOnClickListener
             }
             if (!AppConfig.checkIfUserLoggedIn(context)) {
                 return@setOnClickListener

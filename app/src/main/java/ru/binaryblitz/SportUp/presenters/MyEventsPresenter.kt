@@ -60,7 +60,8 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
                 DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("starts_at"))),
                 DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("ends_at"))),
                 AndroidUtilities.getUrlFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
-                Color.parseColor(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
+                Color.parseColor(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("color"))),
+                AndroidUtilities.getPasswordFromJson(obj.get("event").asJsonObject.get("password"))
         )
     }
 
