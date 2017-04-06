@@ -37,8 +37,6 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     val EXTRA_ID = "id"
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
-    var color = 0
-
     var isUserEvent = false
     lateinit var dialog: ProgressDialog
 
@@ -88,6 +86,13 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         this.googleMap = map
         setUpMap()
         load()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        load()
+        appBarView.setBackgroundColor(color)
+        AndroidUtilities.colorAndroidBar(this, color)
     }
 
     private fun setUpMap() {
@@ -246,5 +251,6 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     companion object {
         lateinit var eventJson: JsonObject
         var sportTypeId: Int? = null
+        var color = 0
     }
 }

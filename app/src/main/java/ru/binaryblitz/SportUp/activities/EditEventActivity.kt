@@ -313,6 +313,7 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
     private fun chooseSportType(sportTypeId: Int) {
         Image.loadPhoto(SportTypesUtil.findIcon(this, sportTypeId), sportTypeIcon)
         val color = SportTypesUtil.findColor(this, sportTypeId)
+        EventActivity.color = color
         sportTypeIcon.setColorFilter(color)
         sportTypeIndicator.setColorFilter(color)
         typeText.text = SportTypesUtil.findName(this, sportTypeId)
