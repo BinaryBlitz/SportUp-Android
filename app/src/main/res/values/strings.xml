@@ -90,6 +90,8 @@
     <string name="wrong_location">Неверное местоположение</string>
     <string name="edit_profile">Редактировать профиль</string>
     <string name="update">Обновить</string>
+    <string name="yet_not_ended">Игра еще не закончилась</string>
+    <string name="not_selected">Не выбран</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
