@@ -1,6 +1,6 @@
 package ru.binaryblitz.SportUp.adapters
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,12 +11,13 @@ import android.widget.TextView
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.EventActivity
 import ru.binaryblitz.SportUp.activities.SportEventsActivity
+import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.utils.AppConfig
 import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
 
-class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class EventsAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val EXTRA_ID = "id"
     val EXTRA_COLOR = "color"
 
@@ -50,6 +51,9 @@ class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
         holder.isPublic.visibility = if (event.isPublic) View.VISIBLE else View.GONE
 
         holder.itemView.setOnClickListener {
+            if (event.password != null) {
+                (context as SportEventsActivity).showPasswordDialog(event.password, event.id)
+            }
             if (!AppConfig.checkIfUserLoggedIn(context)) {
                 return@setOnClickListener
             }
