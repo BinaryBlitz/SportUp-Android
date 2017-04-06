@@ -30,6 +30,7 @@ import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.utils.*
+import ru.binaryblitz.SportUp.utils.LogUtil
 import java.util.*
 
 class EventActivity : BaseActivity(), OnMapReadyCallback {
@@ -172,12 +173,16 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         LogUtil.logError(obj.toString())
         membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
-
         initButtons(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
                 obj.get("membership") != null && !obj.get("membership").isJsonNull)
     }
 
     private fun initMainButton(isCreatedByUser: Boolean, isJoined: Boolean) {
+        initButton(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
+                obj.get("membership") != null && !obj.get("membership").isJsonNull)
+    }
+
+    private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
         try {
             joinBtn.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
                 else ColorStateList.valueOf(color)
