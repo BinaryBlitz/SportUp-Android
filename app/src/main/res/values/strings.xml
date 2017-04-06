@@ -99,6 +99,8 @@
     <string name="back_code">НАЗАД</string>
     <string name="wrong_phone_code">Неверно введен номер телефона</string>
     <string name="wrong_city_code">Неверно введен город</string>
+    <string name="promo_hint">Промокод</string>
+    <string name="promo_help">Введите промокод</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
