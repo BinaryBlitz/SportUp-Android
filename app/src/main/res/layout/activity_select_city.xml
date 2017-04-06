@@ -74,6 +74,22 @@
     </android.support.design.widget.AppBarLayout>
 
 
+    <Button
+        android:text="@string/city_not_found"
+        android:layout_width="wrap_content"
+        android:paddingRight="22dp"
+        android:paddingLeft="22dp"
+        android:layout_height="40dp"
+        android:elevation="6dp"
+        android:background="@drawable/city_not_found_btn_back"
+        android:id="@+id/city_not_found_button"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="24dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/nearBtn"
         android:layout_width="wrap_content"

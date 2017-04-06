@@ -91,6 +91,14 @@
     <string name="edit_profile">Редактировать профиль</string>
     <string name="update">Обновить</string>
     <string name="free">Бесплатно</string>
+    <string name="city_not_found">Не нашли свой город?</string>
+    <string name="city_not_found_helper">Оставьте контактные данные и мы оповестим вас, когда сервис станет доступен в вашем городе</string>
+    <string name="city">Город</string>
+    <string name="phone">Номер телефона</string>
+    <string name="send_code">ОТПРАВИТЬ</string>
+    <string name="back_code">НАЗАД</string>
+    <string name="wrong_phone_code">Неверно введен номер телефона</string>
+    <string name="wrong_city_code">Неверно введен город</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
