@@ -15,6 +15,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_edit_event.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
+import ru.binaryblitz.SportUp.presenters.EditEventPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.*
@@ -64,7 +65,7 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         backBtn.setOnClickListener { finish() }
 
         rightBtn.setOnClickListener {
-
+            sendEvent()
         }
 
         isPublicSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -188,8 +189,13 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         dialog = ProgressDialog(this)
         dialog.show()
 
-//        val presenter = CreateEventPresenter(api, this)
-//        presenter.createEvent(generateJson(), DeviceInfoStore.getToken(this))
+        val presenter = EditEventPresenter(api, this)
+        presenter.editEvent(event.get("id").asInt, generateJson(), DeviceInfoStore.getToken(this))
+    }
+
+    fun onLoaded(id: Int) {
+        dialog.dismiss()
+        finish()
     }
 
     private fun showErrorDialog() {
