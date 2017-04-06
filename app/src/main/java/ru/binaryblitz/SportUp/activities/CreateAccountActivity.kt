@@ -92,7 +92,7 @@ class CreateAccountActivity : BaseActivity() {
 
     private fun loadUserInformation() {
         val user = DeviceInfoStore.getUserObject(this)
-        Image.loadAvatar(this, user, user?.avatarUrl, avatar)
+        Image.loadAvatar(this, user?.firstName, user?.avatarUrl, avatar)
 
         firstName.setText(user?.firstName)
         lastName.setText(user?.lastName)

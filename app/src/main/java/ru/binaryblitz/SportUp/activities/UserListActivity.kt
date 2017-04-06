@@ -19,6 +19,7 @@ import javax.inject.Inject
 class UserListActivity : BaseActivity() {
     val EXTRA_COLOR = "color"
     val EXTRA_ID = "id"
+    val EXTRA_USER_LIMIT = "user_limit"
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
     private lateinit var adapter: PlayersAdapter
@@ -63,6 +64,6 @@ class UserListActivity : BaseActivity() {
 
     private fun load() {
         val presenter = PlayersPresenter(api, this)
-        presenter.getTeams(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this))
+        presenter.getTeams(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this), intent.getIntExtra(EXTRA_USER_LIMIT, 0))
     }
 }

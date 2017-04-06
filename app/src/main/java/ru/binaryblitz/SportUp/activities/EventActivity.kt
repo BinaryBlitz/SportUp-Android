@@ -38,9 +38,11 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     val EXTRA_COLOR = "color"
     val EXTRA_ID = "id"
     val DEFAULT_COLOR = Color.parseColor("#212121")
+    val EXTRA_USER_LIMIT = "user_limit"
 
     var color = 0
     var id = 0
+    var userLimit = 0
 
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
@@ -103,6 +105,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
             val intent = Intent(this@EventActivity, UserListActivity::class.java)
             intent.putExtra(EXTRA_ID, id)
             intent.putExtra(EXTRA_COLOR, color)
+            intent.putExtra(EXTRA_USER_LIMIT, userLimit)
             startActivity(intent)
         }
     }
@@ -157,8 +160,11 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun parseMembersInfo(obj: JsonObject) {
-        LogUtil.logError(obj.toString())
-        membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
+        userLimit = AndroidUtilities.getIntFieldFromJson(obj.get("user_limit"))
+
+        membersCountText.text = AndroidUtilities.getStringFieldFromJson(obj.get("user_count"))+
+                " / " + AndroidUtilities.getStringFieldFromJson(obj.get("user_limit"))
+
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
 
         initButton(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
