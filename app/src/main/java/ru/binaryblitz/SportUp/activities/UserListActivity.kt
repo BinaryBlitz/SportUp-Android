@@ -13,6 +13,7 @@ import ru.binaryblitz.SportUp.presenters.PlayersPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
+import ru.binaryblitz.SportUp.utils.LogUtil
 import javax.inject.Inject
 
 class UserListActivity : BaseActivity() {
@@ -28,6 +29,7 @@ class UserListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_players_list)
+        dependencies()!!.inject(this)
 
         initToolbar()
         initList()
