@@ -7,14 +7,13 @@ import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.DateUtils
-import ru.binaryblitz.SportUp.utils.LogUtil
 
 class EventsPresenter(private val service: EndpointsService, private val view: SportEventsActivity) {
 
     fun getEvents(id: Int, sportTypeId: Int, date: String) {
         service.getEvents(id, sportTypeId, date, object : JsonArrayResponseListener {
             override fun onSuccess(array: JsonArray) {
-                parseAnswer(array)
+                parseAnswer(sportTypeId, array)
             }
 
             override fun onError(networkError: String) {
@@ -23,7 +22,7 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
         })
     }
 
-    private fun parseAnswer(array: JsonArray) {
+    private fun parseAnswer(sportTypeId: Int, array: JsonArray) {
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
                 .map {
@@ -37,7 +36,8 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
                             AndroidUtilities.getBooleanFieldFromJson(it.get("public")),
                             AndroidUtilities.getIntFieldFromJson(it.get("price")),
                             AndroidUtilities.getDoubleFieldFromJson(it.get("latitude")),
-                            AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")))
+                            AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")),
+                            sportTypeId)
                 }
 
         view.onLoaded(collection = collection as ArrayList<Event>)

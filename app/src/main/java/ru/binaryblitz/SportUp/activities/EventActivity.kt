@@ -1,5 +1,6 @@
 package ru.binaryblitz.SportUp.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -39,6 +40,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     var color = 0
 
     var isUserEvent = false
+    lateinit var dialog: ProgressDialog
 
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
@@ -50,6 +52,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
         dependencies()!!.inject(this)
+
+        dialog = ProgressDialog(this)
 
         initToolbar()
         setOnClickListeners()
@@ -107,6 +111,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     fun onLoaded(obj: JsonObject) {
+        eventJson = obj
+
         parseGeneralInfo(obj)
         parseMembersInfo(obj)
 
@@ -116,6 +122,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
         onLoaded(AndroidUtilities.getDoubleFieldFromJson(obj.get("latitude")),
                 AndroidUtilities.getDoubleFieldFromJson(obj.get("longitude")))
+
+        dialog.dismiss()
     }
 
     private fun parseTime(obj: JsonObject): SpannableStringBuilder {
@@ -156,6 +164,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun parseMembersInfo(obj: JsonObject) {
+        LogUtil.logError(obj.toString())
         membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
 
@@ -229,7 +238,13 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun load() {
+        dialog.show()
         presenter = EventPresenter(api, this)
         presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this))
+    }
+
+    companion object {
+        lateinit var eventJson: JsonObject
+        var sportTypeId: Int? = null
     }
 }

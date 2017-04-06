@@ -83,6 +83,7 @@ class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recy
                 return@setOnClickListener
             }
             val intent = Intent(context, EventActivity::class.java)
+            EventActivity.sportTypeId = event.sportTypeId
             intent.putExtra(EXTRA_ID, event.eventId)
             intent.putExtra(EXTRA_COLOR, event.color)
             context.startActivity(intent)

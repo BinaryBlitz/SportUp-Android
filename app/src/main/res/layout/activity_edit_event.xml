@@ -191,7 +191,6 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:text="@string/date_and_time"
                     android:textColor="#727272"
                     android:gravity="center_vertical"
                     android:textSize="18sp"
@@ -204,7 +203,6 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="20:00"
                     android:textColor="#727272"
                     android:id="@+id/timeStart"
                     android:gravity="center_vertical"
@@ -242,7 +240,6 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="20:00"
                     android:id="@+id/endTime"
                     android:textColor="#727272"
                     android:gravity="center_vertical"
@@ -280,6 +277,7 @@
                     android:layout_width="28dp"
                     android:layout_marginStart="16dp"
                     android:layout_height="28dp"
+                    android:id="@+id/sportTypeIndicator"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/icon_games_gray" />
 
@@ -294,6 +292,13 @@
                     android:layout_weight="1.0"
                     android:layout_height="wrap_content" />
 
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_height="28dp"
+                    android:id="@+id/sportTypeIcon"
+                    android:layout_gravity="center_vertical" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="@string/select"
@@ -303,7 +308,6 @@
                     android:id="@+id/typeText"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="12dp"
-                    android:layout_weight="1.0"
                     android:layout_height="wrap_content" />
 
                 <ImageView
@@ -364,10 +368,10 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:text="@string/players_quantity"
                         android:textColor="#727272"
                         android:gravity="center_vertical"
                         android:textSize="14sp"
+                        android:id="@+id/membersInformation"
                         android:layout_marginTop="4dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="12dp"

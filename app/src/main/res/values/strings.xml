@@ -93,6 +93,8 @@
     <string name="edit_event">Редактирование события</string>
     <string name="cancel_event">Отменить игру</string>
     <string name="set_password">Указать пароль</string>
+    <string name="joined_code">"Учавствуют "</string>
+    <string name="from_code">" из "</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>

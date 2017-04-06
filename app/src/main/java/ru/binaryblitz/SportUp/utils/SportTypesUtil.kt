@@ -44,4 +44,26 @@ object SportTypesUtil {
                 ?.color
                 ?: ContextCompat.getColor(context, R.color.colorPrimary)
     }
+
+    fun findIcon(context: Context, id: Int): String? {
+        val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
+        val setOfTypes = preferences.getStringSet(PREFERENCES_TYPES, HashSet<String>())
+
+        val types = setOfTypes.map { SportType.fromString(it) }
+
+        return types
+                .firstOrNull { it.id == id }
+                ?.iconUrl
+    }
+
+    fun findName(context: Context, id: Int): String? {
+        val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
+        val setOfTypes = preferences.getStringSet(PREFERENCES_TYPES, HashSet<String>())
+
+        val types = setOfTypes.map { SportType.fromString(it) }
+
+        return types
+                .firstOrNull { it.id == id }
+                ?.name
+    }
 }
