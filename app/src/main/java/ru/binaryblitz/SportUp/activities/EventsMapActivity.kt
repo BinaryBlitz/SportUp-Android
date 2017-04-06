@@ -23,10 +23,7 @@ import ru.binaryblitz.SportUp.base.LocationDependentActivity
 import ru.binaryblitz.SportUp.custom.CustomMapFragment
 import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.server.EndpointsService
-import ru.binaryblitz.SportUp.utils.AndroidUtilities
-import ru.binaryblitz.SportUp.utils.Animations
-import ru.binaryblitz.SportUp.utils.AppConfig
-import ru.binaryblitz.SportUp.utils.DateUtils
+import ru.binaryblitz.SportUp.utils.*
 import java.util.*
 import javax.inject.Inject
 
@@ -201,7 +198,7 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         userLimit.text = event.userLimit.toString() + " / " + event.teamLimit.toString()
         price.text = event.price.toString() + getString(R.string.ruble_sign)
 
-        isPublic.visibility = if (event.isPublic) View.VISIBLE else View.GONE
+        isPublic.visibility = if (event.isPublic) View.GONE else View.VISIBLE
 
         cardView.setOnClickListener {
             if (event.password != null) {

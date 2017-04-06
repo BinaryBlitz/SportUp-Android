@@ -47,7 +47,7 @@ class EventsAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
         holder.userLimit.text = event.userLimit.toString() + " / " + event.teamLimit.toString()
         holder.price.text = event.price.toString() + context.getString(R.string.ruble_sign)
 
-        holder.isPublic.visibility = if (event.isPublic) View.VISIBLE else View.GONE
+        holder.isPublic.visibility = if (event.isPublic) View.GONE else View.VISIBLE
 
         holder.itemView.setOnClickListener {
             if (event.password != null) {
