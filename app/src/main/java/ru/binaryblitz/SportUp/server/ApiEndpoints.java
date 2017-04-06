@@ -13,6 +13,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiEndpoints {
+    @GET("events/{id}/teams")
+    Observable<JsonArray> getTeams(@Path("id") int id, @Query("api_token") String token);
+
     @GET("cities")
     Observable<JsonArray> getCitiesList();
 

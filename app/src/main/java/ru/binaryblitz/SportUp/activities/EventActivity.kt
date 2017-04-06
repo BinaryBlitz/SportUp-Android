@@ -1,5 +1,6 @@
 package ru.binaryblitz.SportUp.activities
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -39,6 +40,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
     var color = 0
+    var id = 0
 
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
@@ -96,6 +98,13 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun setOnClickListeners() {
         backBtn.setOnClickListener { finish() }
+
+        playersButton.setOnClickListener {
+            val intent = Intent(this@EventActivity, UserListActivity::class.java)
+            intent.putExtra(EXTRA_ID, id)
+            intent.putExtra(EXTRA_COLOR, color)
+            startActivity(intent)
+        }
     }
 
     fun onLoaded(obj: JsonObject) {
@@ -213,6 +222,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun load() {
         presenter = EventPresenter(api, this)
-        presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this))
+        id = intent.getIntExtra(EXTRA_ID, 0)
+        presenter.getEvent(id, DeviceInfoStore.getToken(this))
     }
 }

@@ -49,6 +49,37 @@ public class EndpointsService {
                 });
     }
 
+    public void getTeams(int id, String token, final JsonArrayResponseListener callback) {
+        networkService.getTeams(id, token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonArray>>() {
+                    @Override
+                    public ObservableSource<? extends JsonArray> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonArray>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonArray value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
     public void getUser(String token, final JsonObjectResponseListener callback) {
         networkService.getUser(token)
                 .subscribeOn(Schedulers.io())
