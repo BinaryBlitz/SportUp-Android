@@ -49,6 +49,9 @@ public interface ApiEndpoints {
     @PATCH("verification_tokens/{token}")
     Observable<JsonObject> verifyPhoneNumber(@Body JsonObject body, @Path("token") String token);
 
+    @PATCH("user")
+    Observable<JsonObject> updateUser(@Body JsonObject body, @Query("api_token") String token);
+
     @POST("verification_tokens")
     Observable<JsonObject> authWithPhoneNumber(@Body JsonObject number);
 
