@@ -68,6 +68,10 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
             (0..array.size())
                     .map { array.get(it).asJsonObject }
+                    .sortedWith(compareByDescending {
+                        DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event")
+                                .asJsonObject.get("starts_at")))
+                    })
                     .mapTo(collection) { Pair(MyEventsAdapter.INVITE_CODE, getEventFromJson(it)) }
         }
     }
@@ -77,6 +81,10 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending {
+                    DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event")
+                            .asJsonObject.get("starts_at")))
+                })
                 .filter { isEventCreatedByUser(it) }
                 .mapTo(collection) { Pair(MyEventsAdapter.CREATED_CODE, getEventFromJson(it)) }
 
@@ -99,8 +107,14 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending {
+                    DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event")
+                            .asJsonObject.get("starts_at")))
+                })
                 .filter { !isEventCreatedByUser(it) && isAfterToday(it) }
                 .mapTo(collection) { Pair(MyEventsAdapter.CURRENT_CODE, getEventFromJson(it)) }
+
+
 
         addHeader(collection, startIndex, R.string.current_games)
     }
@@ -117,6 +131,10 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending {
+                    DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("event")
+                            .asJsonObject.get("starts_at")))
+                })
                 .filter { !isEventCreatedByUser(it) && !isAfterToday(it) }
                 .mapTo(collection) { Pair(MyEventsAdapter.CLOSED_CODE, getEventFromJson(it)) }
 

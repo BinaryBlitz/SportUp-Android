@@ -7,7 +7,6 @@ import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.DateUtils
-import ru.binaryblitz.SportUp.utils.LogUtil
 
 class EventsPresenter(private val service: EndpointsService, private val view: SportEventsActivity) {
 
@@ -26,6 +25,9 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
     private fun parseAnswer(array: JsonArray) {
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending {
+                    DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("starts_at")))
+                })
                 .map {
                     Event(AndroidUtilities.getIntFieldFromJson(it.get("id")),
                             AndroidUtilities.getStringFieldFromJson(it.get("name")),

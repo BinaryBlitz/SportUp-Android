@@ -159,7 +159,9 @@ class SelectCityActivity : LocationDependentActivity(), SwipeRefreshLayout.OnRef
             return
         }
 
-        val foundItems = adapter?.getCities()!!.filter { AndroidUtilities.nameEqualsTo(it.city.name, query) }
+        val foundItems = adapter?.getCities()!!
+                .sortedWith(compareBy { it.city.name })
+                .filter { AndroidUtilities.nameEqualsTo(it.city.name, query) }
         adapter?.setCollection(foundItems)
         adapter?.notifyDataSetChanged()
     }
