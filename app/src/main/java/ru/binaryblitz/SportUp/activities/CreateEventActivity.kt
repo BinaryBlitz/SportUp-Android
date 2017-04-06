@@ -6,6 +6,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.text.InputType
 import biz.kasual.materialnumberpicker.MaterialNumberPicker
 import com.afollestad.materialdialogs.MaterialDialog
@@ -19,9 +20,7 @@ import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.presenters.CreateEventPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
-import ru.binaryblitz.SportUp.utils.DateUtils
-import ru.binaryblitz.SportUp.utils.LogUtil
-import ru.binaryblitz.SportUp.utils.SportTypesUtil
+import ru.binaryblitz.SportUp.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -106,6 +105,10 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         checkCondition(userLimitValue.text.toString() == "0", R.string.wrong_event_user_limit)
         checkCondition(teamLimitValue.text.toString() == "0", R.string.wrong_event_team_limit)
         checkCondition(sportTypeId == 0, R.string.wrong_event_sport_type)
+
+        if (isPublicSwitch.isChecked) {
+            checkCondition(passwordValue.text.toString() == getString(R.string.select_password), R.string.password_error)
+        }
     }
 
     private fun checkCondition(condition: Boolean, errorStringId: Int) {
@@ -133,7 +136,11 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         event.addProperty("price", priceText.text.toString().split(" ")[0].toInt())
         event.addProperty("sport_type_id", sportTypeId)
         event.addProperty("city_id", DeviceInfoStore.getCityObject(this)?.id)
-        event.addProperty("public", isPublicSwitch.isChecked)
+        event.addProperty("public", !isPublicSwitch.isChecked)
+
+        if (isPublicSwitch.isChecked) {
+            event.addProperty("password", passwordValue.text.toString())
+        }
 
         obj.add("event", event)
 
@@ -165,6 +172,27 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
                 .show()
     }
 
+    private fun chooseSportType(sportTypeId: Int) {
+        Image.loadPhoto(SportTypesUtil.findIcon(this, sportTypeId), sportTypeIcon)
+        val color = SportTypesUtil.findColor(this, sportTypeId)
+        sportTypeIcon.setColorFilter(color)
+        sportTypeIndicator.setColorFilter(color)
+        typeText.text = SportTypesUtil.findName(this, sportTypeId)
+        typeText.setTextColor(color)
+
+        AndroidUtilities.colorAndroidBar(this, color)
+    }
+
+    private fun showPasswordDialog() {
+        MaterialDialog.Builder(this)
+                .title(getString(R.string.set_password))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .inputRange(5, 5, ContextCompat.getColor(this, R.color.redColor))
+                .input(getString(R.string.password), "") { _, input ->
+                    passwordValue.text = input.toString()
+                }.show()
+    }
+
     private fun setOnClickListeners() {
         rightBtn.setOnClickListener { sendEvent() }
 
@@ -173,6 +201,8 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         dateStart.setOnClickListener { showDatePicker() }
 
         priceButton.setOnClickListener { showPriceDialog() }
+
+        passwordView.setOnClickListener { showPasswordDialog() }
 
         locationButton.setOnClickListener {
             val intent = Intent(this@CreateEventActivity, MapActivity::class.java)
@@ -240,7 +270,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     private fun parseNumberPickerResult(numberPicker: MaterialNumberPicker, field: Int) {
         if (field == SPORT_TYPE) {
             sportTypeId = SportTypesUtil.types[numberPicker.value - 1].first
-            setText(field, SportTypesUtil.types[numberPicker.value - 1].second)
+            chooseSportType(sportTypeId)
         } else {
             setText(field, numberPicker.value.toString())
         }
@@ -249,7 +279,6 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
     private fun setText(field: Int, value: String) {
         when (field) {
             USER_LIMIT -> userLimitValue.text = value
-            SPORT_TYPE -> typeText.text = value
             TEAM_LIMIT -> teamLimitValue.text = value
         }
     }

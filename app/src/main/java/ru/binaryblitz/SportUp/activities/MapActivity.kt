@@ -37,6 +37,7 @@ import java.net.URLEncoder
 import java.util.*
 
 class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
+    val EXTRA_EDIT = "edit"
 
     override fun onLocationUpdated(latitude: Double?, longitude: Double?) {
         selectedLocation = LatLng(latitude!!, longitude!!)
@@ -188,8 +189,13 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
         val addresses: List<Address>
         try {
             addresses = geocoder.getFromLocation(selectedLocation.latitude, selectedLocation.longitude, 1)
-            CreateEventActivity.selectedLocation = addresses[0].getAddressLine(0)
-            CreateEventActivity.latLng = selectedLocation
+            if (intent.getBooleanExtra(EXTRA_EDIT, false)) {
+                EditEventActivity.selectedLocation = addresses[0].getAddressLine(0)
+                EditEventActivity.latLng = selectedLocation
+            } else {
+                CreateEventActivity.selectedLocation = addresses[0].getAddressLine(0)
+                CreateEventActivity.latLng = selectedLocation
+            }
         } catch (e: Exception) {
             Snackbar.make(main, getString(R.string.wrong_location), Snackbar.LENGTH_SHORT).show()
             return false

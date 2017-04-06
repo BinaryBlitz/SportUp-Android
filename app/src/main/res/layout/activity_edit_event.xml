@@ -137,12 +137,12 @@
                         android:layout_height="wrap_content" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="24dp"
                         android:gravity="center_vertical"
-                        android:src="@drawable/icon_location_gray"
+                        android:src="@drawable/ic_forward"
                         android:layout_gravity="center_vertical|end"
                         android:layout_marginEnd="12dp"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="24dp" />
                 </FrameLayout>
             </LinearLayout>
 
@@ -550,7 +550,7 @@
                 <Switch
                     android:layout_width="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:backgroundTint="@color/colorPrimary"
+                    android:backgroundTint="@color/redColor"
                     android:layout_marginEnd="12dp"
                     android:id="@+id/isPublicSwitch"
                     android:layout_height="wrap_content"
@@ -594,6 +594,7 @@
                         android:textColor="@color/colorPrimary"
                         android:gravity="center_vertical"
                         android:textSize="18sp"
+                        android:id="@+id/passwordValue"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="12dp"
                         android:layout_height="wrap_content" />

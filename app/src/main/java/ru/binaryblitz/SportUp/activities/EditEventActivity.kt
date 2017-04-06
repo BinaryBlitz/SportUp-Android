@@ -6,9 +6,11 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.text.InputType
 import biz.kasual.materialnumberpicker.MaterialNumberPicker
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.JsonObject
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
@@ -25,6 +27,8 @@ import javax.inject.Inject
 
 class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener  {
     val EXTRA_COLOR = "color"
+    val EXTRA_EDIT = "edit"
+
     val DEFAULT_COLOR = Color.parseColor("#212121")
     lateinit var event: JsonObject
     var color = 0
@@ -80,8 +84,11 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
 
         priceButton.setOnClickListener { showPriceDialog() }
 
+        passwordView.setOnClickListener { showPasswordDialog() }
+
         locationButton.setOnClickListener {
             val intent = Intent(this@EditEventActivity, MapActivity::class.java)
+            intent.putExtra(EXTRA_EDIT, true)
             startActivity(intent)
         }
 
@@ -136,12 +143,16 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         errorString = ""
 
         checkCondition(nameEdit.text.toString().isEmpty(), R.string.event_name_error)
-        checkCondition(CreateEventActivity.latLng == null, R.string.wrong_event_location)
+        checkCondition(EditEventActivity.latLng == null, R.string.wrong_event_location)
         checkCondition(!DateUtils.isAfterToday(startDate), R.string.wrong_event_date)
         checkCondition(!DateUtils.isAfter(startDate, endDate), R.string.wrong_event_end_date)
         checkCondition(userLimitValue.text.toString() == "0", R.string.wrong_event_user_limit)
         checkCondition(teamLimitValue.text.toString() == "0", R.string.wrong_event_team_limit)
         checkCondition(sportTypeId == 0, R.string.wrong_event_sport_type)
+
+        if (isPublicSwitch.isChecked) {
+            checkCondition(passwordValue.text.toString() == getString(R.string.select_password), R.string.password_error)
+        }
     }
 
     private fun checkCondition(condition: Boolean, errorStringId: Int) {
@@ -161,19 +172,20 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         event.addProperty("starts_at", format.format(startDate))
         event.addProperty("ends_at", format.format(endDate))
         event.addProperty("address", locationText.text.toString())
-        event.addProperty("latitude", CreateEventActivity.latLng!!.latitude)
-        event.addProperty("longitude", CreateEventActivity.latLng!!.longitude)
+        event.addProperty("latitude", EditEventActivity.latLng!!.latitude)
+        event.addProperty("longitude", EditEventActivity.latLng!!.longitude)
         event.addProperty("user_limit", userLimitValue.text.toString())
         event.addProperty("team_limit", teamLimitValue.text.toString())
         event.addProperty("description", descriptionEdit.text.toString())
         event.addProperty("price", priceText.text.toString().split(" ")[0].toInt())
         event.addProperty("sport_type_id", sportTypeId)
         event.addProperty("city_id", DeviceInfoStore.getCityObject(this)?.id)
-        event.addProperty("public", isPublicSwitch.isChecked)
+        event.addProperty("public", !isPublicSwitch.isChecked)
+        if (isPublicSwitch.isChecked) {
+            event.addProperty("password", passwordValue.text.toString())
+        }
 
         obj.add("event", event)
-
-        LogUtil.logError(obj.toString())
 
         return obj
     }
@@ -193,7 +205,7 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         presenter.editEvent(event.get("id").asInt, generateJson(), DeviceInfoStore.getToken(this))
     }
 
-    fun onLoaded(id: Int) {
+    fun onLoaded() {
         dialog.dismiss()
         finish()
     }
@@ -211,6 +223,9 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         descriptionEdit.setText(AndroidUtilities.getStringFieldFromJson(event.get("description")))
         locationText.text = AndroidUtilities.getStringFieldFromJson(event.get("address"))
         priceText.text = AndroidUtilities.getStringFieldFromJson(event.get("price")) + getString(R.string.ruble_sign)
+
+        latLng = LatLng(AndroidUtilities.getDoubleFieldFromJson(event.get("latitude")),
+                AndroidUtilities.getDoubleFieldFromJson(event.get("longitude")))
 
         parseMembersInfo(event)
         parseTime(event)
@@ -236,11 +251,12 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
             return
         }
 
-        Image.loadPhoto(SportTypesUtil.findIcon(this, EventActivity.sportTypeId!!), sportTypeIcon)
-        sportTypeIcon.setColorFilter(SportTypesUtil.findColor(this, EventActivity.sportTypeId!!))
-        sportTypeIndicator.setColorFilter(SportTypesUtil.findColor(this, EventActivity.sportTypeId!!))
-        typeText.text = SportTypesUtil.findName(this, EventActivity.sportTypeId!!)
-        typeText.setTextColor(SportTypesUtil.findColor(this, EventActivity.sportTypeId!!))
+        this.sportTypeId = EventActivity.sportTypeId!!
+        Image.loadPhoto(SportTypesUtil.findIcon(this, sportTypeId), sportTypeIcon)
+        sportTypeIcon.setColorFilter(SportTypesUtil.findColor(this, sportTypeId))
+        sportTypeIndicator.setColorFilter(SportTypesUtil.findColor(this, sportTypeId))
+        typeText.text = SportTypesUtil.findName(this, sportTypeId)
+        typeText.setTextColor(SportTypesUtil.findColor(this, sportTypeId))
     }
 
     private fun showNumberPicker(title: String, field: Int) {
@@ -281,7 +297,7 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
     private fun parseNumberPickerResult(numberPicker: MaterialNumberPicker, field: Int) {
         if (field == SPORT_TYPE) {
             sportTypeId = SportTypesUtil.types[numberPicker.value - 1].first
-            setText(field, SportTypesUtil.types[numberPicker.value - 1].second)
+            chooseSportType(sportTypeId)
         } else {
             setText(field, numberPicker.value.toString())
         }
@@ -290,9 +306,31 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
     private fun setText(field: Int, value: String) {
         when (field) {
             USER_LIMIT -> userLimitValue.text = value
-            SPORT_TYPE -> typeText.text = value
             TEAM_LIMIT -> teamLimitValue.text = value
         }
+    }
+
+    private fun chooseSportType(sportTypeId: Int) {
+        Image.loadPhoto(SportTypesUtil.findIcon(this, sportTypeId), sportTypeIcon)
+        val color = SportTypesUtil.findColor(this, sportTypeId)
+        sportTypeIcon.setColorFilter(color)
+        sportTypeIndicator.setColorFilter(color)
+        typeText.text = SportTypesUtil.findName(this, sportTypeId)
+        typeText.setTextColor(color)
+
+        appBarView.setBackgroundColor(color)
+        headerView.setBackgroundColor(color)
+        AndroidUtilities.colorAndroidBar(this, color)
+    }
+
+    private fun showPasswordDialog() {
+        MaterialDialog.Builder(this)
+                .title(getString(R.string.set_password))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .inputRange(5, 5, ContextCompat.getColor(this, R.color.redColor))
+                .input(getString(R.string.password), "") { _, input ->
+                    passwordValue.text = input.toString()
+                }.show()
     }
 
     private fun showDatePicker() {
@@ -348,12 +386,31 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
     }
 
     private fun parseTime(obj: JsonObject) {
-        dateStart.text = DateUtils.getDateStringRepresentationWithoutTime(
-                DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("starts_at"))))
-        timeStart.text = DateUtils.getTimeStringRepresentation(
-                DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("starts_at"))))
-        endTime.text = DateUtils.getTimeStringRepresentation(
-                DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("ends_at"))))
+        startDate = DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("starts_at")))
+        dateStart.text = DateUtils.getDateStringRepresentationWithoutTime(startDate)
+        timeStart.text = DateUtils.getTimeStringRepresentation(startDate)
 
+        parseEndDate(obj)
+        endTime.text = DateUtils.getTimeStringRepresentation(endDate)
+    }
+
+    private fun parseEndDate(obj: JsonObject) {
+        val calendar = Calendar.getInstance()
+        calendar.time = startDate
+
+        endDate = DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("ends_at")))
+
+        val endCalendar = Calendar.getInstance()
+        endCalendar.time = endDate
+
+        calendar.set(Calendar.HOUR_OF_DAY, endCalendar.get(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, endCalendar.get(Calendar.MINUTE))
+
+        endDate = calendar.time
+    }
+
+    companion object {
+        var latLng: LatLng? = null
+        var selectedLocation: String? = null
     }
 }
