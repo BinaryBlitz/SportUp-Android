@@ -39,6 +39,16 @@
                         android:textSize="22sp"
                         android:textColor="#ffffff" />
 
+                    <ImageView
+                        android:id="@+id/rightBtn"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_plus"
+                        android:padding="13dp"
+                        android:layout_gravity="end"
+                        />
                 </FrameLayout>
             </android.support.v7.widget.Toolbar>
         </FrameLayout>

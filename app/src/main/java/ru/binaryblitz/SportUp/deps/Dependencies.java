@@ -8,6 +8,7 @@ import ru.binaryblitz.SportUp.activities.CreateEventActivity;
 import ru.binaryblitz.SportUp.activities.CreateAccountActivity;
 import ru.binaryblitz.SportUp.activities.EventActivity;
 import ru.binaryblitz.SportUp.activities.EventsMapActivity;
+import ru.binaryblitz.SportUp.activities.MainActivity;
 import ru.binaryblitz.SportUp.activities.RegistrationActivity;
 import ru.binaryblitz.SportUp.activities.SelectCityActivity;
 import ru.binaryblitz.SportUp.activities.SportEventsActivity;
@@ -35,4 +36,6 @@ public interface Dependencies {
     void inject(RegistrationActivity registrationActivity);
 
     void inject(CreateAccountActivity createAccountActivity);
+
+    void inject(MainActivity mainActivity);
 }

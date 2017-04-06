@@ -96,23 +96,43 @@ object AndroidUtilities {
     }
 
     fun getStringFieldFromJson(element: JsonElement?): String {
-        if (element == null || element.isJsonNull) return ""
-        else return element.asString
+        if (element == null || element.isJsonNull) {
+            return ""
+        } else {
+            return element.asString
+        }
+    }
+
+    fun getUrlFieldFromJson(element: JsonElement?): String {
+        if (element == null || element.isJsonNull) {
+            return "null"
+        } else {
+            return element.asString
+        }
     }
 
     fun getIntFieldFromJson(element: JsonElement?): Int {
-        if (element == null || element.isJsonNull) return 0
-        else return element.asInt
+        if (element == null || element.isJsonNull) {
+            return 0
+        } else {
+            return element.asInt
+        }
     }
 
     fun getDoubleFieldFromJson(element: JsonElement?): Double {
-        if (element == null || element.isJsonNull) return 0.0
-        else return element.asDouble
+        if (element == null || element.isJsonNull) {
+            return 0.0
+        } else {
+            return element.asDouble
+        }
     }
 
     fun getBooleanFieldFromJson(element: JsonElement?): Boolean {
-        if (element == null || element.isJsonNull) return false
-        else return element.asBoolean
+        if (element == null || element.isJsonNull) {
+            return false
+        } else {
+            return element.asBoolean
+        }
     }
 
     fun checkPlayServices(context: Activity): Boolean {

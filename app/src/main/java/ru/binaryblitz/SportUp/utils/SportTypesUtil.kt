@@ -1,7 +1,9 @@
 package ru.binaryblitz.SportUp.utils
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v4.util.Pair
+import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.server.ServerConfig
 import java.util.ArrayList
@@ -29,5 +31,17 @@ object SportTypesUtil {
 
         setOfTypes.map { SportType.fromString(it) }
                 .mapTo(types) { Pair(it.id, it.name!!) }
+    }
+
+    fun findColor(context: Context, id: Int): Int {
+        val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
+        val setOfTypes = preferences.getStringSet(PREFERENCES_TYPES, HashSet<String>())
+
+        val types = setOfTypes.map { SportType.fromString(it) }
+
+        return types
+                .firstOrNull { it.id == id }
+                ?.color
+                ?: ContextCompat.getColor(context, R.color.colorPrimary)
     }
 }

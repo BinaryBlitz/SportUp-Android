@@ -29,6 +29,7 @@ import javax.inject.Inject
 import com.google.android.gms.maps.model.MapStyleOptions
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.utils.LogUtil
 import java.util.*
 
@@ -40,6 +41,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     var color = 0
 
     private var googleMap: GoogleMap? = null
+    private lateinit var presenter: EventPresenter
 
     @Inject
     lateinit var api: EndpointsService
@@ -54,9 +56,22 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         initMap()
     }
 
+    fun onEventJoined(id: Int) {
+
+    }
+
+    fun onEventLeft() {
+
+    }
+
+    fun onEventDeleted() {
+
+    }
+
     private fun initToolbar() {
         color = intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR)
         appBarView.setBackgroundColor(color)
+        AndroidUtilities.colorAndroidBar(this, color)
     }
 
     private fun initMap() {
@@ -115,7 +130,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun parseEventStartDate(date: Date) {
-        val calendar = getTimeBeforEventStarts(date)
+        val calendar = getTimeBeforeEventStarts(date)
 
         if (calendar == null) {
             timeUntilEventStarts.text = getString(R.string.completed)
@@ -133,17 +148,19 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun parseMembersInfo(obj: JsonObject) {
+        LogUtil.logError(obj.toString())
         membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
 
-        initButton(obj.get("membership") != null && !obj.get("membership").isJsonNull)
+        initButton(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
+                obj.get("membership") != null && !obj.get("membership").isJsonNull)
     }
 
-    private fun initButton(isJoined: Boolean) {
+    private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
         try {
             joinBtn.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
                 else ColorStateList.valueOf(color)
-            joinBtn.text = if (isJoined) getString(R.string.leave) else getString(R.string.join)
+            joinBtn.text = if (isCreatedByUser) getString(R.string.delete) else if (isJoined) getString(R.string.leave) else getString(R.string.join)
         } catch (e: Exception) {
             LogUtil.logException(e)
         }
@@ -172,7 +189,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
-    private fun getTimeBeforEventStarts(date: Date): Calendar? {
+    private fun getTimeBeforeEventStarts(date: Date): Calendar? {
         val millisUntilEventStarts = date.time - System.currentTimeMillis()
         val calendar = Calendar.getInstance()
 
@@ -195,7 +212,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun load() {
-        val presenter = EventPresenter(api, this)
-        presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), "foobar")
+        presenter = EventPresenter(api, this)
+        presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this))
     }
 }

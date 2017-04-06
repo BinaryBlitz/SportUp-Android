@@ -21,7 +21,6 @@ class SportTypesPresenter(private val service: EndpointsService, private val vie
 
             override fun onError(networkError: String) {
                 view.onInternetConnectionError()
-                LogUtil.logError(networkError)
             }
         })
     }
@@ -34,7 +33,7 @@ class SportTypesPresenter(private val service: EndpointsService, private val vie
                             AndroidUtilities.getStringFieldFromJson(it.get("name")),
                             AndroidUtilities.getIntFieldFromJson(it.get("events_count")),
                             3,
-                            AndroidUtilities.getStringFieldFromJson(it.get("icon_url")),
+                            AndroidUtilities.getUrlFieldFromJson(it.get("icon_url")),
                             Color.parseColor(AndroidUtilities.getStringFieldFromJson(it.get("color"))))
                 }
 

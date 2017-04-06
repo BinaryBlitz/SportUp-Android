@@ -21,6 +21,7 @@ import ru.binaryblitz.SportUp.base.LocationDependentActivity
 import ru.binaryblitz.SportUp.custom.CustomMapFragment
 import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.server.EndpointsService
+import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.Animations
 import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
@@ -57,7 +58,9 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
     }
 
     private fun initToolbar() {
-        appBarView.setBackgroundColor(intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR))
+        val color = intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR)
+        appBarView.setBackgroundColor(color)
+        AndroidUtilities.colorAndroidBar(this, color)
     }
 
     override fun onLocationUpdated(latitude: Double?, longitude: Double?) {

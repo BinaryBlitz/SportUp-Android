@@ -91,6 +91,9 @@
     <string name="password_help">Введите пароль для входа в закрытую игру</string>
     <string name="password">Пароль</string>
     <string name="wrong_password">Неверный пароль</string>
+    <string name="wrong_location">Неверное местоположение</string>
+    <string name="edit_profile">Редактировать профиль</string>
+    <string name="update">Обновить</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>

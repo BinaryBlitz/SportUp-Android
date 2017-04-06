@@ -13,6 +13,7 @@ import ru.binaryblitz.SportUp.activities.EventActivity
 import ru.binaryblitz.SportUp.activities.SportEventsActivity
 import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 import ru.binaryblitz.SportUp.models.Event
+import ru.binaryblitz.SportUp.utils.AppConfig
 import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
 
@@ -52,6 +53,9 @@ class EventsAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
         holder.itemView.setOnClickListener {
             if (event.password != null) {
                 (context as SportEventsActivity).showPasswordDialog(event.password, event.id)
+            }
+            if (!AppConfig.checkIfUserLoggedIn(context)) {
+                return@setOnClickListener
             }
             val intent = Intent(context, EventActivity::class.java)
             intent.putExtra(EXTRA_ID, event.id)

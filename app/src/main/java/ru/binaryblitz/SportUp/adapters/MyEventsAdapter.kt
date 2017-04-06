@@ -1,6 +1,7 @@
 package ru.binaryblitz.SportUp.adapters
 
 import android.app.Activity
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.util.Pair
 import android.view.LayoutInflater
@@ -10,12 +11,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.fragments.UserEventsFragment
+import ru.binaryblitz.SportUp.activities.EventActivity
+import ru.binaryblitz.SportUp.activities.SportEventsActivity
 import ru.binaryblitz.SportUp.models.MyEvent
+import ru.binaryblitz.SportUp.utils.AppConfig
 import ru.binaryblitz.SportUp.utils.DateUtils
 import ru.binaryblitz.SportUp.utils.Image
 import java.util.*
 
 class MyEventsAdapter(private val context: UserEventsFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    val EXTRA_ID = "id"
+    val EXTRA_COLOR = "color"
+  
     private var collection = ArrayList<Pair<String, Any>>()
 
     fun setCollection(collection: ArrayList<Pair<String, Any>>) {
@@ -71,6 +78,16 @@ class MyEventsAdapter(private val context: UserEventsFragment) : RecyclerView.Ad
         holder.time.text = DateUtils.getTimeStringRepresentation(event.startsAt)
         Image.loadPhoto(event.icon, holder.icon)
         holder.icon.setColorFilter(event.color)
+
+        holder.itemView.setOnClickListener {
+            if (!AppConfig.checkIfUserLoggedIn(context)) {
+                return@setOnClickListener
+            }
+            val intent = Intent(context, EventActivity::class.java)
+            intent.putExtra(EXTRA_ID, event.eventId)
+            intent.putExtra(EXTRA_COLOR, event.color)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -14,11 +14,14 @@ import kotlinx.android.synthetic.main.dialog_password.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.EventActivity
 import ru.binaryblitz.SportUp.activities.SportEventsActivity
+import ru.binaryblitz.SportUp.activities.CreateEventActivity
 import ru.binaryblitz.SportUp.adapters.MyEventsAdapter
 import ru.binaryblitz.SportUp.base.BaseFragment
 import ru.binaryblitz.SportUp.presenters.MyEventsPresenter
+import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.Animations
+import ru.binaryblitz.SportUp.utils.AppConfig
 import javax.inject.Inject
 
 class UserEventsFragment : BaseFragment() {
@@ -41,6 +44,14 @@ class UserEventsFragment : BaseFragment() {
 
         initList()
         load()
+
+        rightBtn.setOnClickListener {
+            if (!AppConfig.checkIfUserLoggedIn(context)) {
+                return@setOnClickListener
+            }
+            val intent = Intent(activity, CreateEventActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     fun showPasswordDialog(password: String, eventId: Int) {
@@ -80,6 +91,6 @@ class UserEventsFragment : BaseFragment() {
 
     private fun load() {
         val presenter = MyEventsPresenter(api, this)
-        presenter.getEvents("foobar")
+        presenter.getEvents(DeviceInfoStore.getToken(activity))
     }
 }
