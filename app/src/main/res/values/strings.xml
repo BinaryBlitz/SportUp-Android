@@ -90,6 +90,7 @@
     <string name="wrong_location">Неверное местоположение</string>
     <string name="edit_profile">Редактировать профиль</string>
     <string name="update">Обновить</string>
+    <string name="free">Бесплатно</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
