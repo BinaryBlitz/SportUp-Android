@@ -178,8 +178,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initMainButton(isCreatedByUser: Boolean, isJoined: Boolean) {
-        initButton(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
-                obj.get("membership") != null && !obj.get("membership").isJsonNull)
+        initButton(isCreatedByUser, isJoined)
     }
 
     private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
