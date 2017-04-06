@@ -94,7 +94,7 @@
                     android:textColorHint="#727272"
                     android:textColorHighlight="@color/colorPrimary"
                     android:textColor="#212121"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:id="@+id/nameEdit"
                     android:gravity="center"
                     android:layout_height="wrap_content"/>
@@ -580,7 +580,7 @@
                     android:textColorHint="#727272"
                     android:textColorHighlight="@color/colorPrimary"
                     android:textColor="#212121"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:id="@+id/descriptionEdit"
                     android:layout_height="wrap_content"/>
 
