@@ -9,12 +9,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.SportUp.R
+import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 import ru.binaryblitz.SportUp.models.MyEvent
 import ru.binaryblitz.SportUp.utils.DateUtils
 import ru.binaryblitz.SportUp.utils.Image
 import java.util.*
 
-class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyEventsAdapter(private val context: UserEventsFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var collection = ArrayList<Pair<String, Any>>()
 
     fun setCollection(collection: ArrayList<Pair<String, Any>>) {

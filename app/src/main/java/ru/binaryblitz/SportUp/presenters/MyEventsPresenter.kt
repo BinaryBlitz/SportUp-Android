@@ -13,6 +13,7 @@ import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.DateUtils
+import ru.binaryblitz.SportUp.utils.LogUtil
 import java.util.*
 
 class MyEventsPresenter(private val service: EndpointsService, private val view: UserEventsFragment) {
@@ -20,6 +21,7 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
     fun getEvents(token: String) {
         service.getMyEvents(token, object : JsonArrayResponseListener {
             override fun onSuccess(array: JsonArray) {
+                LogUtil.logError(array.toString())
                 getInvites(token, array)
             }
 
