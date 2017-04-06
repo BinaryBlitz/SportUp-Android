@@ -20,12 +20,18 @@ object SportTypesUtil {
         sportTypes.add(type)
     }
 
-    fun saveTypes(context: Context) {
+    fun saveTypes(context: Context?) {
+        if (context == null) {
+            return
+        }
         val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
         preferences.edit().putStringSet(PREFERENCES_TYPES, sportTypes).apply()
     }
 
-    fun load(context: Context) {
+    fun load(context: Context?) {
+        if (context == null) {
+            return
+        }
         val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
         val setOfTypes = preferences.getStringSet(PREFERENCES_TYPES, HashSet<String>())
 
@@ -33,7 +39,11 @@ object SportTypesUtil {
                 .mapTo(types) { Pair(it.id, it.name!!) }
     }
 
-    fun findColor(context: Context, id: Int): Int {
+    fun findColor(context: Context?, id: Int): Int {
+        if (context == null) {
+            return 0
+        }
+
         val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
         val setOfTypes = preferences.getStringSet(PREFERENCES_TYPES, HashSet<String>())
 
@@ -45,7 +55,11 @@ object SportTypesUtil {
                 ?: ContextCompat.getColor(context, R.color.colorPrimary)
     }
 
-    fun findIcon(context: Context, id: Int): String? {
+    fun findIcon(context: Context?, id: Int): String? {
+        if (context == null) {
+            return null
+        }
+
         val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
         val setOfTypes = preferences.getStringSet(PREFERENCES_TYPES, HashSet<String>())
 
@@ -56,7 +70,11 @@ object SportTypesUtil {
                 ?.iconUrl
     }
 
-    fun findName(context: Context, id: Int): String? {
+    fun findName(context: Context?, id: Int): String? {
+        if (context == null) {
+            return null
+        }
+
         val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
         val setOfTypes = preferences.getStringSet(PREFERENCES_TYPES, HashSet<String>())
 
