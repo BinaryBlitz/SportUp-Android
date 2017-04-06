@@ -32,6 +32,13 @@ object DateUtils {
         return format.format(date)
     }
 
+    fun getTimeStringRepresentationForStart(date: Date?): String {
+        if (date == null) return ""
+        val format = SimpleDateFormat("HH:mm", Locale.getDefault())
+        format.timeZone = TimeZone.getDefault()
+        return format.format(date)
+    }
+
     fun isAfter(first: Date?, second: Date?): Boolean {
         if (first == null || second == null) {
             return false
