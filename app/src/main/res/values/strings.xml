@@ -90,6 +90,9 @@
     <string name="wrong_location">Неверное местоположение</string>
     <string name="edit_profile">Редактировать профиль</string>
     <string name="update">Обновить</string>
+    <string name="congratulations">Поздравляем</string>
+    <string name="you_are_best_player">Вы признаны лучшим игроком</string>
+    <string name="your_price">Вы получаете в подарок</string>
 
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
