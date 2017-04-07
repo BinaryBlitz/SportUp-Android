@@ -32,7 +32,6 @@ class EventsAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false)
-
         return ViewHolder(itemView)
     }
 
@@ -64,6 +63,7 @@ class EventsAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
                 return@setOnClickListener
             }
             val intent = Intent(context, EventActivity::class.java)
+            EventActivity.sportTypeId = event.sportTypeId
             intent.putExtra(EXTRA_ID, event.id)
             intent.putExtra(EXTRA_COLOR, SportEventsActivity.color)
             context.startActivity(intent)

@@ -13,7 +13,7 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
     fun getEvents(id: Int, sportTypeId: Int, date: String) {
         service.getEvents(id, sportTypeId, date, object : JsonArrayResponseListener {
             override fun onSuccess(array: JsonArray) {
-                parseAnswer(array)
+                parseAnswer(sportTypeId, array)
             }
 
             override fun onError(networkError: String) {
@@ -22,7 +22,7 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
         })
     }
 
-    private fun parseAnswer(array: JsonArray) {
+    private fun parseAnswer(sportTypeId: Int, array: JsonArray) {
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
                 .sortedWith(compareByDescending {
@@ -40,6 +40,7 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
                             AndroidUtilities.getIntFieldFromJson(it.get("price")),
                             AndroidUtilities.getDoubleFieldFromJson(it.get("latitude")),
                             AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")),
+                            sportTypeId)
                             AndroidUtilities.getPasswordFromJson(it.get("password")))
                 }
 

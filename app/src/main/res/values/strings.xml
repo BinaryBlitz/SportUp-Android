@@ -94,6 +94,14 @@
     <string name="wrong_location">Неверное местоположение</string>
     <string name="edit_profile">Редактировать профиль</string>
     <string name="update">Обновить</string>
+    <string name="edit_event">Редактирование события</string>
+    <string name="cancel_event">Отменить игру</string>
+    <string name="set_password">Указать пароль</string>
+    <string name="joined_code">"Учавствуют %1$s из %2$s"</string>
+    <string name="select_password">Указать</string>
+    <string name="private_event">Приватное</string>
+    <string name="password">Пароль</string>
+    <string name="password_error">Пароль не указан</string>
     <string name="free">Бесплатно</string>
     <string name="city_not_found">Не нашли свой город?</string>
     <string name="city_not_found_helper">Оставьте контактные данные и мы оповестим вас, когда сервис станет доступен в вашем городе</string>
@@ -108,7 +116,7 @@
     <string name="congratulations">Поздравляем</string>
     <string name="you_are_best_player">Вы признаны лучшим игроком</string>
     <string name="your_price">Вы получаете в подарок</string>
-
+  
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
         <item quantity="one">%1$d площадка</item>

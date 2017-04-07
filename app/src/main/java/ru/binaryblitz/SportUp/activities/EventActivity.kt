@@ -1,5 +1,7 @@
 package ru.binaryblitz.SportUp.activities
 
+import android.app.ProgressDialog
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -22,14 +24,12 @@ import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.presenters.EventPresenter
 import ru.binaryblitz.SportUp.server.EndpointsService
-import ru.binaryblitz.SportUp.utils.AndroidUtilities
-import ru.binaryblitz.SportUp.utils.DateUtils
-import ru.binaryblitz.SportUp.utils.TimeSpan
 import javax.inject.Inject
 import com.google.android.gms.maps.model.MapStyleOptions
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
+import ru.binaryblitz.SportUp.utils.*
 import ru.binaryblitz.SportUp.utils.LogUtil
 import java.util.*
 
@@ -38,7 +38,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     val EXTRA_ID = "id"
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
-    var color = 0
+    var isUserEvent = false
+    lateinit var dialog: ProgressDialog
 
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
@@ -50,6 +51,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
         dependencies()!!.inject(this)
+
+        dialog = ProgressDialog(this)
 
         initToolbar()
         setOnClickListeners()
@@ -86,6 +89,13 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         load()
     }
 
+    override fun onResume() {
+        super.onResume()
+        load()
+        appBarView.setBackgroundColor(color)
+        AndroidUtilities.colorAndroidBar(this, color)
+    }
+
     private fun setUpMap() {
         googleMap?.uiSettings?.isMyLocationButtonEnabled = false
         googleMap?.uiSettings?.isMapToolbarEnabled = false
@@ -95,10 +105,22 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun setOnClickListeners() {
-        backBtn.setOnClickListener { finish() }
+        backButton.setOnClickListener { finish() }
+
+        rightButton.setOnClickListener {
+            if (!isUserEvent) {
+                return@setOnClickListener
+            }
+
+            val intent = Intent(this, EditEventActivity::class.java)
+            intent.putExtra(EXTRA_COLOR, color)
+            startActivity(intent)
+        }
     }
 
     fun onLoaded(obj: JsonObject) {
+        eventJson = obj
+
         parseGeneralInfo(obj)
         parseMembersInfo(obj)
 
@@ -108,6 +130,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
         onLoaded(AndroidUtilities.getDoubleFieldFromJson(obj.get("latitude")),
                 AndroidUtilities.getDoubleFieldFromJson(obj.get("longitude")))
+
+        dialog.dismiss()
     }
 
     private fun parseTime(obj: JsonObject): SpannableStringBuilder {
@@ -159,9 +183,12 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         LogUtil.logError(obj.toString())
         membersCountText.text = obj.get("user_count").asString + " / " + obj.get("user_limit").asString
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
-
-        initButton(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
+        initButtons(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
                 obj.get("membership") != null && !obj.get("membership").isJsonNull)
+    }
+
+    private fun initMainButton(isCreatedByUser: Boolean, isJoined: Boolean) {
+        initButton(isCreatedByUser, isJoined)
     }
 
     private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
@@ -172,6 +199,16 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         } catch (e: Exception) {
             LogUtil.logException(e)
         }
+    }
+
+    private fun initButtons(isCreatedByUser: Boolean, isJoined: Boolean) {
+        isUserEvent = isCreatedByUser
+        initMainButton(isCreatedByUser, isJoined)
+        initToolbarButton()
+    }
+
+    private fun initToolbarButton() {
+        rightButton.setImageResource(if (isUserEvent) R.drawable.ic_edit else R.drawable.icon_nav_comment_white)
     }
 
     fun getTimeString(date: String): SpannableStringBuilder {
@@ -220,7 +257,14 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun load() {
+        dialog.show()
         presenter = EventPresenter(api, this)
         presenter.getEvent(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this))
+    }
+
+    companion object {
+        lateinit var eventJson: JsonObject
+        var sportTypeId: Int? = null
+        var color = 0
     }
 }
