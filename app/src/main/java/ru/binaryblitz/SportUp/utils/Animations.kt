@@ -10,14 +10,18 @@ import io.codetail.animation.ViewAnimationUtils
 object Animations {
     private val ANIMATION_DURATION = 200
 
-    fun animateRevealShow(v: View, activity: Activity) {
-        val animator = ViewAnimationUtils.createCircularReveal(v, 0, 0, 0f, getRadius(activity).toFloat())
+    fun animateRevealShow(view: View?, activity: Activity) {
+        if (view == null) {
+            return
+        }
+
+        val animator = ViewAnimationUtils.createCircularReveal(view, 0, 0, 0f, getRadius(activity).toFloat())
         animator.interpolator = AccelerateDecelerateInterpolator()
         animator.duration = ANIMATION_DURATION.toLong()
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animator: Animator) {
-                v.visibility = View.VISIBLE
-                v.bringToFront()
+                view.visibility = View.VISIBLE
+                view.bringToFront()
             }
 
             override fun onAnimationEnd(animator: Animator) {}
@@ -39,15 +43,19 @@ object Animations {
         return Math.max(width, height)
     }
 
-    fun animateRevealHide(v: View) {
-        val animator = ViewAnimationUtils.createCircularReveal(v, 0, 0, v.width.toFloat(), 0f)
+    fun animateRevealHide(view: View?) {
+        if (view == null) {
+            return
+        }
+
+        val animator = ViewAnimationUtils.createCircularReveal(view, 0, 0, view.width.toFloat(), 0f)
         animator.interpolator = AccelerateDecelerateInterpolator()
         animator.duration = ANIMATION_DURATION.toLong()
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animator: Animator) {}
 
             override fun onAnimationEnd(animator: Animator) {
-                v.visibility = View.GONE
+                view.visibility = View.GONE
             }
 
             override fun onAnimationCancel(animator: Animator) {}

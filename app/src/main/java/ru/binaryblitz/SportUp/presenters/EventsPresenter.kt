@@ -25,6 +25,9 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
     private fun parseAnswer(sportTypeId: Int, array: JsonArray) {
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending {
+                    DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("starts_at")))
+                })
                 .map {
                     Event(AndroidUtilities.getIntFieldFromJson(it.get("id")),
                             AndroidUtilities.getStringFieldFromJson(it.get("name")),
@@ -38,6 +41,7 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
                             AndroidUtilities.getDoubleFieldFromJson(it.get("latitude")),
                             AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")),
                             sportTypeId)
+                            AndroidUtilities.getPasswordFromJson(it.get("password")))
                 }
 
         view.onLoaded(collection = collection as ArrayList<Event>)

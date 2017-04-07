@@ -1,14 +1,12 @@
 package ru.binaryblitz.SportUp.presenters
 
 import android.graphics.Color
-import android.support.v4.util.Pair
 import com.google.gson.JsonArray
 import ru.binaryblitz.SportUp.fragments.SportsListFragment
 import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
-import ru.binaryblitz.SportUp.utils.LogUtil
 import ru.binaryblitz.SportUp.utils.SportTypesUtil
 
 class SportTypesPresenter(private val service: EndpointsService, private val view: SportsListFragment) {
@@ -28,6 +26,7 @@ class SportTypesPresenter(private val service: EndpointsService, private val vie
     private fun parseAnswer(array: JsonArray) {
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareBy { AndroidUtilities.getStringFieldFromJson(it.get("name")) })
                 .map {
                     SportType(AndroidUtilities.getIntFieldFromJson(it.get("id")),
                             AndroidUtilities.getStringFieldFromJson(it.get("name")),

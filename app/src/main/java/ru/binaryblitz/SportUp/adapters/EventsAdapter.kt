@@ -1,6 +1,6 @@
 package ru.binaryblitz.SportUp.adapters
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -16,7 +16,7 @@ import ru.binaryblitz.SportUp.utils.AppConfig
 import ru.binaryblitz.SportUp.utils.DateUtils
 import java.util.*
 
-class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class EventsAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val EXTRA_ID = "id"
     val EXTRA_COLOR = "color"
 
@@ -44,11 +44,21 @@ class EventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recycl
         holder.address.text = event.address
         holder.startsAt.text = DateUtils.getTimeStringRepresentation(event.startsAt)
         holder.userLimit.text = event.userLimit.toString() + " / " + event.teamLimit.toString()
-        holder.price.text = event.price.toString() + context.getString(R.string.ruble_sign)
 
-        holder.isPublic.visibility = if (event.isPublic) View.VISIBLE else View.GONE
+        if (event.price == 0) {
+            holder.price.setTextColor(SportEventsActivity.color)
+            holder.price.text = context.getString(R.string.free)
+        } else {
+            holder.price.text = event.price.toString() + context.getString(R.string.ruble_sign)
+        }
+
+        holder.isPublic.visibility = if (event.isPublic) View.GONE else View.VISIBLE
 
         holder.itemView.setOnClickListener {
+            if (event.password != null) {
+                (context as SportEventsActivity).showPasswordDialog(event.password, event.id)
+                return@setOnClickListener
+            }
             if (!AppConfig.checkIfUserLoggedIn(context)) {
                 return@setOnClickListener
             }

@@ -1,6 +1,5 @@
 package ru.binaryblitz.SportUp.adapters
 
-import android.app.Activity
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.util.Pair
@@ -12,16 +11,17 @@ import android.widget.TextView
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.EventActivity
 import ru.binaryblitz.SportUp.activities.SportEventsActivity
+import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 import ru.binaryblitz.SportUp.models.MyEvent
 import ru.binaryblitz.SportUp.utils.AppConfig
 import ru.binaryblitz.SportUp.utils.DateUtils
 import ru.binaryblitz.SportUp.utils.Image
 import java.util.*
 
-class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyEventsAdapter(private val context: UserEventsFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val EXTRA_ID = "id"
     val EXTRA_COLOR = "color"
-
+  
     private var collection = ArrayList<Pair<String, Any>>()
 
     fun setCollection(collection: ArrayList<Pair<String, Any>>) {
@@ -79,7 +79,11 @@ class MyEventsAdapter(private val context: Activity) : RecyclerView.Adapter<Recy
         holder.icon.setColorFilter(event.color)
 
         holder.itemView.setOnClickListener {
-            if (!AppConfig.checkIfUserLoggedIn(context)) {
+            if (event.password != null) {
+                context.showPasswordDialog(event.password, event.eventId)
+                return@setOnClickListener
+            }
+            if (!AppConfig.checkIfUserLoggedIn(context.activity)) {
                 return@setOnClickListener
             }
             val intent = Intent(context, EventActivity::class.java)
