@@ -39,7 +39,8 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
                             AndroidUtilities.getBooleanFieldFromJson(it.get("public")),
                             AndroidUtilities.getIntFieldFromJson(it.get("price")),
                             AndroidUtilities.getDoubleFieldFromJson(it.get("latitude")),
-                            AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")))
+                            AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")),
+                            AndroidUtilities.getPasswordFromJson(it.get("password")))
                 }
 
         view.onLoaded(collection = collection as ArrayList<Event>)
