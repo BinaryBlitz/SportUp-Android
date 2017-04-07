@@ -11,7 +11,7 @@ import com.google.firebase.messaging.RemoteMessage
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.SplashActivity
 
-class MyGcmListenerService : FirebaseMessagingService() {
+class FirebasePushListenerService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         processPush(remoteMessage)
     }
