@@ -35,8 +35,7 @@ object SportTypesUtil {
         val preferences = context.getSharedPreferences(ServerConfig.preferencesName, Context.MODE_PRIVATE)
         val setOfTypes = preferences.getStringSet(PREFERENCES_TYPES, HashSet<String>())
 
-        setOfTypes.map { SportType.fromString(it) }
-                .mapTo(types) { Pair(it.id, it.name!!) }
+        setOfTypes.map { SportType.fromString(it) }.mapTo(types) { Pair(it.id, it.name!!) }
     }
 
     fun findColor(context: Context?, id: Int): Int {
@@ -49,9 +48,7 @@ object SportTypesUtil {
 
         val types = setOfTypes.map { SportType.fromString(it) }
 
-        return types
-                .firstOrNull { it.id == id }
-                ?.color
+        return types.firstOrNull { it.id == id }?.color
                 ?: ContextCompat.getColor(context, R.color.colorPrimary)
     }
 
@@ -65,9 +62,7 @@ object SportTypesUtil {
 
         val types = setOfTypes.map { SportType.fromString(it) }
 
-        return types
-                .firstOrNull { it.id == id }
-                ?.iconUrl
+        return types.firstOrNull { it.id == id }?.iconUrl
     }
 
     fun findName(context: Context?, id: Int): String? {
@@ -80,8 +75,6 @@ object SportTypesUtil {
 
         val types = setOfTypes.map { SportType.fromString(it) }
 
-        return types
-                .firstOrNull { it.id == id }
-                ?.name
+        return types.firstOrNull { it.id == id }?.name
     }
 }

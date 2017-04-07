@@ -189,13 +189,8 @@ class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
         val addresses: List<Address>
         try {
             addresses = geocoder.getFromLocation(selectedLocation.latitude, selectedLocation.longitude, 1)
-            if (intent.getBooleanExtra(EXTRA_EDIT, false)) {
-                EditEventActivity.selectedLocation = addresses[0].getAddressLine(0)
-                EditEventActivity.latLng = selectedLocation
-            } else {
-                CreateEventActivity.selectedLocation = addresses[0].getAddressLine(0)
-                CreateEventActivity.latLng = selectedLocation
-            }
+            CreateEventActivity.selectedLocation = addresses[0].getAddressLine(0)
+            CreateEventActivity.latLng = selectedLocation
         } catch (e: Exception) {
             Snackbar.make(main, getString(R.string.wrong_location), Snackbar.LENGTH_SHORT).show()
             return false

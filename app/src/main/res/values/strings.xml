@@ -93,8 +93,7 @@
     <string name="edit_event">Редактирование события</string>
     <string name="cancel_event">Отменить игру</string>
     <string name="set_password">Указать пароль</string>
-    <string name="joined_code">"Учавствуют "</string>
-    <string name="from_code">" из "</string>
+    <string name="joined_code">"Учавствуют %1$s из %2$s"</string>
     <string name="select_password">Указать</string>
     <string name="private_event">Приватное</string>
     <string name="password">Пароль</string>

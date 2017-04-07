@@ -66,9 +66,9 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
     }
 
     private fun setOnClickListeners() {
-        backBtn.setOnClickListener { finish() }
+        backButton.setOnClickListener { finish() }
 
-        rightBtn.setOnClickListener {
+        rightButton.setOnClickListener {
             sendEvent()
         }
 
@@ -143,7 +143,7 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         errorString = ""
 
         checkCondition(nameEdit.text.toString().isEmpty(), R.string.event_name_error)
-        checkCondition(EditEventActivity.latLng == null, R.string.wrong_event_location)
+        checkCondition(CreateEventActivity.latLng == null, R.string.wrong_event_location)
         checkCondition(!DateUtils.isAfterToday(startDate), R.string.wrong_event_date)
         checkCondition(!DateUtils.isAfter(startDate, endDate), R.string.wrong_event_end_date)
         checkCondition(userLimitValue.text.toString() == "0", R.string.wrong_event_user_limit)
@@ -172,8 +172,8 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         event.addProperty("starts_at", format.format(startDate))
         event.addProperty("ends_at", format.format(endDate))
         event.addProperty("address", locationText.text.toString())
-        event.addProperty("latitude", EditEventActivity.latLng!!.latitude)
-        event.addProperty("longitude", EditEventActivity.latLng!!.longitude)
+        event.addProperty("latitude", CreateEventActivity.latLng!!.latitude)
+        event.addProperty("longitude", CreateEventActivity.latLng!!.longitude)
         event.addProperty("user_limit", userLimitValue.text.toString())
         event.addProperty("team_limit", teamLimitValue.text.toString())
         event.addProperty("description", descriptionEdit.text.toString())
@@ -224,7 +224,7 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         locationText.text = AndroidUtilities.getStringFieldFromJson(event.get("address"))
         priceText.text = AndroidUtilities.getStringFieldFromJson(event.get("price")) + getString(R.string.ruble_sign)
 
-        latLng = LatLng(AndroidUtilities.getDoubleFieldFromJson(event.get("latitude")),
+        CreateEventActivity.latLng = LatLng(AndroidUtilities.getDoubleFieldFromJson(event.get("latitude")),
                 AndroidUtilities.getDoubleFieldFromJson(event.get("longitude")))
 
         parseMembersInfo(event)
@@ -235,7 +235,8 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
     private fun parseMembersInfo(obj: JsonObject) {
         userLimitValue.text = obj.get("user_limit").asString
         teamLimitValue.text = obj.get("team_limit").asString
-        membersInformation.text = getString(R.string.joined_code) + obj.get("user_count").asString + getString(R.string.from_code) + obj.get("user_limit").asString
+        membersInformation.text = String.format(resources.getString(R.string.joined_code),
+                obj.get("user_count").asString, obj.get("user_limit").asString)
     }
 
     private fun showPasswordView() {
@@ -408,10 +409,5 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         calendar.set(Calendar.MINUTE, endCalendar.get(Calendar.MINUTE))
 
         endDate = calendar.time
-    }
-
-    companion object {
-        var latLng: LatLng? = null
-        var selectedLocation: String? = null
     }
 }

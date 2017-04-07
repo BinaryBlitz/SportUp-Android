@@ -105,14 +105,16 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun setOnClickListeners() {
-        backBtn.setOnClickListener { finish() }
+        backButton.setOnClickListener { finish() }
 
-        rightBtn.setOnClickListener {
-            if (isUserEvent) {
-                val intent = Intent(this, EditEventActivity::class.java)
-                intent.putExtra(EXTRA_COLOR, color)
-                startActivity(intent)
+        rightButton.setOnClickListener {
+            if (!isUserEvent) {
+                return@setOnClickListener
             }
+
+            val intent = Intent(this, EditEventActivity::class.java)
+            intent.putExtra(EXTRA_COLOR, color)
+            startActivity(intent)
         }
     }
 
@@ -198,7 +200,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initToolbarButton() {
-        rightBtn.setImageResource(if (isUserEvent) R.drawable.ic_edit else R.drawable.icon_nav_comment_white)
+        rightButton.setImageResource(if (isUserEvent) R.drawable.ic_edit else R.drawable.icon_nav_comment_white)
     }
 
     fun getTimeString(date: String): SpannableStringBuilder {
