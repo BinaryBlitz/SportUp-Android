@@ -11,7 +11,6 @@ import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
-import ru.binaryblitz.SportUp.utils.LogUtil
 import java.util.*
 
 class PlayersPresenter(private val service: EndpointsService, private val view: UserListActivity) {
@@ -29,44 +28,50 @@ class PlayersPresenter(private val service: EndpointsService, private val view: 
     }
 
     private fun parseAnswer(array: JsonArray, userLimit: Int) {
-        view.onLoaded(collection = parseTeamNumbers(userLimit, array))
+        view.onLoaded(collection = parseTeams(userLimit, array))
     }
 
-    private fun parseTeamNumbers(userLimit: Int, array: JsonArray): ArrayList<Pair<String, Any>> {
+    private fun parseTeams(userLimit: Int, serverResponse: JsonArray): ArrayList<Pair<String, Any>> {
         val collection: ArrayList<Pair<String, Any>> = ArrayList()
 
-        val teams = (0..array.size() - 1)
-                .map { array.get(it).asJsonObject }
+        val teams = (0..serverResponse.size() - 1)
+                .map { serverResponse.get(it).asJsonObject }
                 .distinct()
                 .map { AndroidUtilities.getIntFieldFromJson(it.get("user").asJsonObject.get("team_number")) }
 
 
         for (team in teams) {
-            addPlayersToTeam(team, userLimit, array, collection)
+            addPlayersToTeam(team, userLimit, serverResponse, collection)
         }
 
         return collection
     }
 
-    private fun addPlayersToTeam(teamNumber: Int, userLimit: Int, array: JsonArray, collection: ArrayList<Pair<String, Any>>) {
+    private fun addPlayersToTeam(teamNumber: Int, userLimit: Int, serverResponse: JsonArray, collection: ArrayList<Pair<String, Any>>) {
         val startIndex = collection.size
 
-        (0..array.size() - 1)
-                .map { array.get(it).asJsonObject }
-                .filter { AndroidUtilities.getIntFieldFromJson(it.get("user").asJsonObject.get("team_number")) == teamNumber }
+        (0..serverResponse.size() - 1)
+                .map { serverResponse.get(it).asJsonObject }
+                .filter {
+                    AndroidUtilities.getIntFieldFromJson(it.get("user")
+                            .asJsonObject.get("team_number")) == teamNumber
+                }
                 .mapTo(collection) {
-                    if (AndroidUtilities.getIntFieldFromJson(it.get("user").asJsonObject.get("id"))
-                            == DeviceInfoStore.getUserObject(view)?.id) {
-                        Pair(PlayersAdapter.ME_CODE, getPlayerFromJson(it, teamNumber))
-                    } else {
-                        Pair(PlayersAdapter.BASIC_CODE, getPlayerFromJson(it, teamNumber))
-                    }
+                    addPlayerToTeam(teamNumber, it)
                 }
 
-        collection.add(startIndex, Pair(PlayersAdapter.HEADER_CODE, createPlayer(teamNumber, userLimit, 0)))
+        collection.add(startIndex, Pair(PlayersAdapter.HEADER_CODE, createHeaderForTeam(teamNumber, userLimit, 0)))
     }
 
-    private fun createPlayer(teamNumber: Int, userLimit: Int, userCount: Int): Player {
+    private fun addPlayerToTeam(teamNumber: Int, obj: JsonObject): Pair<String, Any> {
+        val isCurrentUser = AndroidUtilities.getIntFieldFromJson(obj.get("user").asJsonObject.get("id")) ==
+                DeviceInfoStore.getUserObject(view)?.id
+
+        return Pair(if (isCurrentUser) PlayersAdapter.ME_CODE else PlayersAdapter.BASIC_CODE,
+                getPlayerFromJsonToTeam(obj, teamNumber))
+    }
+
+    private fun createHeaderForTeam(teamNumber: Int, userLimit: Int, userCount: Int): Player {
         if (teamNumber == 0) {
             return Player(1, view.getString(R.string.no_team), "", 0, 0, 0, "")
         } else {
@@ -74,7 +79,7 @@ class PlayersPresenter(private val service: EndpointsService, private val view: 
         }
     }
 
-    private fun getPlayerFromJson(obj: JsonObject, teamNumber: Int): Player {
+    private fun getPlayerFromJsonToTeam(obj: JsonObject, teamNumber: Int): Player {
         return Player(
                 AndroidUtilities.getIntFieldFromJson(obj.get("user").asJsonObject.get("id")),
                 AndroidUtilities.getStringFieldFromJson(obj.get("user").asJsonObject.get("first_name")) + " " +
