@@ -108,6 +108,20 @@
             android:windowSoftInputMode="adjustPan" >
         </activity>
 
+        <service
+            android:name=".push.FirebasePushListenerService" android:exported="false" android:priority="500">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".push.MyInstanceIDListenerService" android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="886de8c1d524dbaa9dfdbd457b8c8469ecafdfd4" />
