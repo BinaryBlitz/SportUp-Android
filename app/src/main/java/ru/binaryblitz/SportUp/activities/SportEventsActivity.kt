@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 class SportEventsActivity : BaseActivity() {
     private lateinit var adapter: EventsAdapter
-    private var dialogOpened = false
+    private var isDialogOpened = false
     val EXTRA_COLOR = "color"
     val EXTRA_ID = "id"
     val EXTRA_NAME = "name"
@@ -51,7 +51,7 @@ class SportEventsActivity : BaseActivity() {
 
     fun showPasswordDialog(password: String, eventId: Int) {
         Handler().post {
-            dialogOpened = true
+            isDialogOpened = true
             Animations.animateRevealShow(findViewById(R.id.dialog_new_order), this@SportEventsActivity)
             passwordButton.setOnClickListener {
                 if (password == passwordEdit.text.toString()) {

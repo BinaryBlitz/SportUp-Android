@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 class UserEventsFragment : BaseFragment() {
     private lateinit var adapter: MyEventsAdapter
-    private var dialogOpened = false
+    private var isDialogOpened = false
 
     val EXTRA_ID = "id"
     val EXTRA_COLOR = "color"
@@ -56,7 +56,7 @@ class UserEventsFragment : BaseFragment() {
 
     fun showPasswordDialog(password: String, eventId: Int) {
         Handler().post {
-            dialogOpened = true
+            isDialogOpened = true
             Animations.animateRevealShow(view?.findViewById(R.id.dialog_new_order), activity)
             passwordButton.setOnClickListener {
                 if (password == passwordEdit.text.toString()) {

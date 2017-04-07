@@ -30,7 +30,7 @@ import javax.inject.Inject
 class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.TouchableWrapper.UpdateMapAfterUserInteraction, OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private var isEventOpened = false
-    private var dialogOpened = false
+    private var isDialogOpened = false
     private val markers = HashMap<LatLng, Int>()
 
     @Inject
@@ -60,7 +60,7 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
 
     fun showPasswordDialog(password: String, eventId: Int) {
         Handler().post {
-            dialogOpened = true
+            isDialogOpened = true
             Animations.animateRevealShow(findViewById(R.id.dialog_new_order), this@EventsMapActivity)
             passwordButton.setOnClickListener {
                 if (password == passwordEdit.text.toString()) {
