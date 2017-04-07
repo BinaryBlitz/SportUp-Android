@@ -198,6 +198,13 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         userLimit.text = event.userLimit.toString() + " / " + event.teamLimit.toString()
         price.text = event.price.toString() + getString(R.string.ruble_sign)
 
+        if (event.price == 0) {
+            price.setTextColor(SportEventsActivity.color)
+            price.text = getString(R.string.free)
+        } else {
+            price.text = event.price.toString() + getString(R.string.ruble_sign)
+        }
+
         isPublic.visibility = if (event.isPublic) View.GONE else View.VISIBLE
 
         cardView.setOnClickListener {

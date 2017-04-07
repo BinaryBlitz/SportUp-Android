@@ -25,6 +25,9 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
     private fun parseAnswer(array: JsonArray) {
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending {
+                    DateUtils.parse(AndroidUtilities.getStringFieldFromJson(it.get("starts_at")))
+                })
                 .map {
                     Event(AndroidUtilities.getIntFieldFromJson(it.get("id")),
                             AndroidUtilities.getStringFieldFromJson(it.get("name")),

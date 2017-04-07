@@ -71,6 +71,7 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
             (0..array.size())
                     .map { array.get(it).asJsonObject }
+                    .sortedWith(compareByDescending { getDateFromJson(it) })
                     .mapTo(collection) { Pair(MyEventsAdapter.INVITE_CODE, getEventFromJson(it)) }
         }
     }
@@ -80,10 +81,16 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending { getDateFromJson(it) })
                 .filter { isEventCreatedByUser(it) }
                 .mapTo(collection) { Pair(MyEventsAdapter.CREATED_CODE, getEventFromJson(it)) }
 
         addHeader(collection, startIndex, R.string.created_events)
+    }
+
+    private fun getDateFromJson(obj: JsonObject): Date {
+        return DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event")
+                .asJsonObject.get("starts_at")))
     }
 
     private fun addHeader(collection: ArrayList<Pair<String, Any>>, startIndex: Int, stringId: Int) {
@@ -102,8 +109,11 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending { getDateFromJson(it) })
                 .filter { !isEventCreatedByUser(it) && isAfterToday(it) }
                 .mapTo(collection) { Pair(MyEventsAdapter.CURRENT_CODE, getEventFromJson(it)) }
+
+
 
         addHeader(collection, startIndex, R.string.current_games)
     }
@@ -120,6 +130,7 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending { getDateFromJson(it) })
                 .filter { !isEventCreatedByUser(it) && !isAfterToday(it) }
                 .mapTo(collection) { Pair(MyEventsAdapter.CLOSED_CODE, getEventFromJson(it)) }
 

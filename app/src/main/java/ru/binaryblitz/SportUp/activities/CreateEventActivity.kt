@@ -61,6 +61,7 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         }
 
         setOnClickListeners()
+        initTimeFields()
     }
 
     override fun onResume() {
@@ -294,6 +295,17 @@ class CreateEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, 
         calendar.set(Calendar.MINUTE, minute)
         calendar.timeZone = TimeZone.getTimeZone("UTC")
         return calendar.time
+    }
+
+    private fun initTimeFields() {
+        val calendar = Calendar.getInstance()
+
+        dateStart.text = DateUtils.getDateStringRepresentationWithoutTime(calendar.time)
+        timeStart.text = DateUtils.getTimeStringRepresentationForStart(calendar.time)
+
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1)
+
+        endTime.text = DateUtils.getTimeStringRepresentationForStart(calendar.time)
     }
 
     override fun onTimeSet(view: TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {

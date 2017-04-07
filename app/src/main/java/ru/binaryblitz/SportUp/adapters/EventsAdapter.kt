@@ -45,7 +45,13 @@ class EventsAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
         holder.address.text = event.address
         holder.startsAt.text = DateUtils.getTimeStringRepresentation(event.startsAt)
         holder.userLimit.text = event.userLimit.toString() + " / " + event.teamLimit.toString()
-        holder.price.text = event.price.toString() + context.getString(R.string.ruble_sign)
+
+        if (event.price == 0) {
+            holder.price.setTextColor(SportEventsActivity.color)
+            holder.price.text = context.getString(R.string.free)
+        } else {
+            holder.price.text = event.price.toString() + context.getString(R.string.ruble_sign)
+        }
 
         holder.isPublic.visibility = if (event.isPublic) View.GONE else View.VISIBLE
 
