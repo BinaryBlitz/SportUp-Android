@@ -3,11 +3,13 @@ package ru.binaryblitz.SportUp.activities
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import devs.mulham.horizontalcalendar.HorizontalCalendar
 import devs.mulham.horizontalcalendar.HorizontalCalendarListener
 import kotlinx.android.synthetic.main.activity_events_feed.*
+import kotlinx.android.synthetic.main.dialog_password.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.adapters.EventsAdapter
 import ru.binaryblitz.SportUp.base.BaseActivity
@@ -16,13 +18,14 @@ import ru.binaryblitz.SportUp.presenters.EventsPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
+import ru.binaryblitz.SportUp.utils.Animations
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 class SportEventsActivity : BaseActivity() {
     private lateinit var adapter: EventsAdapter
-
+    private var isDialogOpened = false
     val EXTRA_COLOR = "color"
     val EXTRA_ID = "id"
     val EXTRA_NAME = "name"
@@ -44,6 +47,27 @@ class SportEventsActivity : BaseActivity() {
         setOnClickListeners()
 
         load(dateToString(Date()))
+    }
+
+    fun showPasswordDialog(password: String, eventId: Int) {
+        Handler().post {
+            isDialogOpened = true
+            Animations.animateRevealShow(findViewById(R.id.dialog_new_order), this@SportEventsActivity)
+            passwordButton.setOnClickListener {
+                if (password == passwordEdit.text.toString()) {
+                    openEvent(eventId)
+                } else {
+                    passwordEdit.setError(getString(R.string.wrong_password), null)
+                }
+            }
+        }
+    }
+
+    private fun openEvent(eventId: Int) {
+        val intent = Intent(this, EventActivity::class.java)
+        intent.putExtra(EXTRA_ID, eventId)
+        intent.putExtra(EXTRA_COLOR, SportEventsActivity.color)
+        startActivity(intent)
     }
 
     private fun initToolbar() {

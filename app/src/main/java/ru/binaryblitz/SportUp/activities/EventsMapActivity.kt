@@ -2,6 +2,7 @@ package ru.binaryblitz.SportUp.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
@@ -16,26 +17,26 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_events_map.*
+import kotlinx.android.synthetic.main.dialog_password.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.LocationDependentActivity
 import ru.binaryblitz.SportUp.custom.CustomMapFragment
 import ru.binaryblitz.SportUp.models.Event
 import ru.binaryblitz.SportUp.server.EndpointsService
-import ru.binaryblitz.SportUp.utils.AndroidUtilities
-import ru.binaryblitz.SportUp.utils.Animations
-import ru.binaryblitz.SportUp.utils.DateUtils
+import ru.binaryblitz.SportUp.utils.*
 import java.util.*
 import javax.inject.Inject
 
 class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.TouchableWrapper.UpdateMapAfterUserInteraction, OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private var isEventOpened = false
-
+    private var isDialogOpened = false
     private val markers = HashMap<LatLng, Int>()
 
     @Inject
     lateinit var api: EndpointsService
 
+    val EXTRA_ID = "id"
     val EXTRA_COLOR = "color"
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
@@ -50,9 +51,29 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         setOnClickListeners()
     }
 
+    private fun openEvent(eventId: Int) {
+        val intent = Intent(this, EventActivity::class.java)
+        intent.putExtra(EXTRA_ID, eventId)
+        intent.putExtra(EXTRA_COLOR, SportEventsActivity.color)
+        startActivity(intent)
+    }
+
+    fun showPasswordDialog(password: String, eventId: Int) {
+        Handler().post {
+            isDialogOpened = true
+            Animations.animateRevealShow(findViewById(R.id.dialog_new_order), this@EventsMapActivity)
+            passwordButton.setOnClickListener {
+                if (password == passwordEdit.text.toString()) {
+                    openEvent(eventId)
+                } else {
+                    passwordEdit.setError(getString(R.string.wrong_password), null)
+                }
+            }
+        }
+    }
+
     private fun initMap() {
-        val map = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
+        val map = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 
         Handler().post { map.getMapAsync(this@EventsMapActivity) }
     }
@@ -177,7 +198,19 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         userLimit.text = event.userLimit.toString() + " / " + event.teamLimit.toString()
         price.text = event.price.toString() + getString(R.string.ruble_sign)
 
-        isPublic.visibility = if (event.isPublic) View.VISIBLE else View.GONE
+        isPublic.visibility = if (event.isPublic) View.GONE else View.VISIBLE
+
+        cardView.setOnClickListener {
+            if (event.password != null) {
+                showPasswordDialog(event.password, event.id)
+                return@setOnClickListener
+            }
+            if (!AppConfig.checkIfUserLoggedIn(this@EventsMapActivity)) {
+                return@setOnClickListener
+            }
+
+            openEvent(event.id)
+        }
     }
 }
 
