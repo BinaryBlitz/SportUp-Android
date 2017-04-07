@@ -23,7 +23,7 @@ import ru.binaryblitz.SportUp.utils.CustomPhoneNumberTextWatcher
 import javax.inject.Inject
 
 class SelectCityActivity : LocationDependentActivity(), SwipeRefreshLayout.OnRefreshListener {
-    private var adapter: CitiesAdapter? = null
+    private lateinit var adapter: CitiesAdapter
     private var allCitiesList: ArrayList<CitiesAdapter.City>? = null
     private var phone: MaterialEditText? = null
     private var city: MaterialEditText? = null
@@ -32,10 +32,10 @@ class SelectCityActivity : LocationDependentActivity(), SwipeRefreshLayout.OnRef
     lateinit var api: EndpointsService
 
     override fun onLocationUpdated(latitude: Double?, longitude: Double?) {
-        if (adapter!!.itemCount == 0 || latitude == null || longitude == null) {
+        if (adapter.itemCount == 0 || latitude == null || longitude == null) {
             cityError()
         } else {
-            adapter?.selectCity(latitude, longitude)
+            adapter.selectCity(latitude, longitude)
         }
     }
 
@@ -140,8 +140,8 @@ class SelectCityActivity : LocationDependentActivity(), SwipeRefreshLayout.OnRef
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
-                    adapter?.setCollection(allCitiesList!!)
-                    adapter?.notifyDataSetChanged()
+                    adapter.setCollection(allCitiesList!!)
+                    adapter.notifyDataSetChanged()
                     return false
                 }
 
@@ -155,15 +155,11 @@ class SelectCityActivity : LocationDependentActivity(), SwipeRefreshLayout.OnRef
     }
 
     private fun searchForItems(query: String) {
-        if (adapter?.getCities() == null) {
-            return
-        }
-
-        val foundItems = adapter?.getCities()!!
+        val foundItems = adapter.getCities()
                 .sortedWith(compareBy { it.city.name })
                 .filter { AndroidUtilities.nameEqualsTo(it.city.name, query) }
-        adapter?.setCollection(foundItems)
-        adapter?.notifyDataSetChanged()
+        adapter.setCollection(foundItems)
+        adapter.notifyDataSetChanged()
     }
 
     private fun initToolbar() {
@@ -211,8 +207,8 @@ class SelectCityActivity : LocationDependentActivity(), SwipeRefreshLayout.OnRef
     fun onLoaded(collection: ArrayList<CitiesAdapter.City>) {
         allCitiesList = collection
 
-        adapter?.setCollection(collection)
-        adapter?.notifyDataSetChanged()
+        adapter.setCollection(collection)
+        adapter.notifyDataSetChanged()
     }
 
     private fun load() {
