@@ -117,7 +117,9 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         parseGeneralInfo(obj)
         parseMembersInfo(obj)
 
-        timeString.text = parseTime(obj)
+        val time = parseTime(obj)
+        VotesActivity.time = time
+        timeString.text = time
 
         parseEventStartDate(DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("starts_at"))))
 

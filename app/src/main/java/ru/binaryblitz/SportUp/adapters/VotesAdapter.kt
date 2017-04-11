@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.SportUp.R
+import ru.binaryblitz.SportUp.activities.VotesActivity
 import ru.binaryblitz.SportUp.models.Player
 import ru.binaryblitz.SportUp.utils.Image
 import java.util.*
 
 class VotesAdapter(private val context: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    val EXTRA_ID = "id"
-    val EXTRA_COLOR = "color"
-
     private var players: ArrayList<Player>
 
     init {
@@ -40,7 +38,7 @@ class VotesAdapter(private val context: Activity) : RecyclerView.Adapter<Recycle
         Image.loadAvatar(context, player.name, player.avatarUrl, holder.avatar)
 
         holder.itemView.setOnClickListener {
-
+            (context as VotesActivity).vote(player.id)
         }
     }
 
