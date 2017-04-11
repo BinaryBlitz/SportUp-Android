@@ -1,14 +1,12 @@
 package ru.binaryblitz.SportUp.presenters
 
 import android.graphics.Color
-import android.support.v4.util.Pair
 import com.google.gson.JsonArray
 import ru.binaryblitz.SportUp.fragments.SportsListFragment
 import ru.binaryblitz.SportUp.models.SportType
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
-import ru.binaryblitz.SportUp.utils.LogUtil
 import ru.binaryblitz.SportUp.utils.SportTypesUtil
 
 class SportTypesPresenter(private val service: EndpointsService, private val view: SportsListFragment) {
@@ -41,8 +39,11 @@ class SportTypesPresenter(private val service: EndpointsService, private val vie
             SportTypesUtil.add(type.asString())
         }
 
-        SportTypesUtil.saveTypes(view.context)
+        if (view.context == null) {
+            return
+        }
 
+        SportTypesUtil.saveTypes(view.context)
         view.onLoaded(collection = collection as ArrayList<SportType>)
     }
 
