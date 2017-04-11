@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.SpannableStringBuilder
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_votes.*
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.adapters.VotesAdapter
 import ru.binaryblitz.SportUp.base.BaseActivity
@@ -16,6 +18,7 @@ import ru.binaryblitz.SportUp.presenters.VotePresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
+import java.util.*
 import javax.inject.Inject
 
 class VotesActivity : BaseActivity() {
@@ -33,14 +36,39 @@ class VotesActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_votes)
+        dependencies()!!.inject(this)
 
         initToolbar()
         initList()
         setOnClickListeners()
+        initElements()
+    }
 
+    private fun initElements() {
         dialog = ProgressDialog(this)
         showPlayers()
         timeString.text = time
+        setVoteEndTimeText()
+    }
+
+    private fun setVoteEndTimeText() {
+        val calendar = getTimeBeforeEventStarts()
+        calendar?.add(Calendar.HOUR, 24)
+
+        timeUntilVoteEnds.text = String.format(resources.getString(R.string.time_until_voting_ends), calendar?.get(Calendar.HOUR),
+                calendar?.get(Calendar.MINUTE))
+    }
+
+    private fun getTimeBeforeEventStarts(): Calendar? {
+        if (endDate == null) {
+            return null
+        }
+
+        val millisUntilVotingEnds = endDate!!.time - System.currentTimeMillis()
+        val calendar = Calendar.getInstance()
+
+        calendar.time = DateTime(millisUntilVotingEnds, DateTimeZone.getDefault()).toDate()
+        return calendar
     }
 
     private fun initToolbar() {
@@ -73,7 +101,7 @@ class VotesActivity : BaseActivity() {
     }
 
     private fun generateJson(id: Int): JsonObject {
-        val vote = JsonObject();
+        val vote = JsonObject()
         vote.addProperty("voted_user_id", id)
 
         return vote
@@ -88,6 +116,7 @@ class VotesActivity : BaseActivity() {
     companion object {
         var players: ArrayList<Player> = ArrayList()
         var time: SpannableStringBuilder? = null
+        var endDate: Date? = null
     }
 }
 

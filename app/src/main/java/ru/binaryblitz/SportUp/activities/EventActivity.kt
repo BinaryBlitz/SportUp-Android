@@ -128,6 +128,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun parseTime(obj: JsonObject): SpannableStringBuilder {
+        VotesActivity.endDate = DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("ends_at")))
+
         return getTimeString(
                 DateUtils.getTimeStringRepresentation(
                         DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("starts_at")))

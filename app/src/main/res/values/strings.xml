@@ -97,6 +97,8 @@
     <string name="players_list">Список игроков</string>
     <string name="choose_best_player">Выберите лучшего игрока</string>
 
+    <string name="time_until_voting_ends">До завершения голосования %1$s ч %2$s мин</string>
+
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
         <item quantity="one">%1$d площадка</item>
