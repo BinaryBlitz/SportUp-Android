@@ -46,6 +46,11 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     var userLimit = 0
     var userCount = 0
 
+    var isCreatedByUser: Boolean = false
+    var isJoined: Boolean = false
+
+    var memberShipId = 0
+
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
 
@@ -63,15 +68,16 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     fun onEventJoined(id: Int) {
-
+        memberShipId = id
+        initButton(false, true)
     }
 
     fun onEventLeft() {
-
+        initButton(false, false)
     }
 
     fun onEventDeleted() {
-
+        finish()
     }
 
     private fun initToolbar() {
@@ -110,6 +116,16 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
             intent.putExtra(EXTRA_USER_LIMIT, userLimit)
             intent.putExtra(EXTRA_USER_COUNT, userCount)
             startActivity(intent)
+        }
+
+        joinBtn.setOnClickListener {
+            if (isJoined) {
+                presenter.leaveEvent(id, DeviceInfoStore.getToken(this))
+            } else if (!isJoined) {
+                presenter.joinEvent(id, DeviceInfoStore.getToken(this))
+            } else if (isCreatedByUser) {
+                presenter.deleteEvent(id, DeviceInfoStore.getToken(this))
+            }
         }
     }
 

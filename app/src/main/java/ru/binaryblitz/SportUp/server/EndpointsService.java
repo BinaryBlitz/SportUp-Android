@@ -452,6 +452,68 @@ public class EndpointsService {
                 });
     }
 
+    public void joinTeam(int id, JsonObject body, String token, final JsonObjectResponseListener callback) {
+        networkService.joinTeam(id, body, token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonObject>>() {
+                    @Override
+                    public ObservableSource<? extends JsonObject> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    public void updateTeam(int id, JsonObject body, String token, final JsonObjectResponseListener callback) {
+        networkService.updateTeam(id, body, token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new Function<Throwable, ObservableSource<? extends JsonObject>>() {
+                    @Override
+                    public ObservableSource<? extends JsonObject> apply(Throwable throwable) throws Exception {
+                        return Observable.error(throwable);
+                    }
+                })
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(JsonObject value) {
+                        callback.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
     public void leaveEvent(int id, String token, final JsonObjectResponseListener callback) {
         networkService.leaveEvent(id, token)
                 .subscribeOn(Schedulers.io())
