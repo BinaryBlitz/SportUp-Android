@@ -10,6 +10,7 @@ import ru.binaryblitz.SportUp.models.Player
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
+import ru.binaryblitz.SportUp.server.JsonObjectResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import java.util.*
 
@@ -25,6 +26,38 @@ class PlayersPresenter(private val service: EndpointsService, private val view: 
                 view.onInternetConnectionError()
             }
         })
+    }
+
+    fun joinTeam(id: Int, body: JsonObject, token: String) {
+        service.joinTeam(id, body, token, object : JsonObjectResponseListener {
+            override fun onSuccess(obj: JsonObject) {
+                parseJoinTeamRequest()
+            }
+
+            override fun onError(networkError: String) {
+                view.onInternetConnectionError()
+            }
+        })
+    }
+
+    fun updateTeam(id: Int, body: JsonObject, token: String) {
+        service.updateTeam(id, body, token, object : JsonObjectResponseListener {
+            override fun onSuccess(obj: JsonObject) {
+                parseUpdateTeamRequest()
+            }
+
+            override fun onError(networkError: String) {
+                view.onInternetConnectionError()
+            }
+        })
+    }
+
+    private fun parseJoinTeamRequest() {
+        view.onTeamJoined()
+    }
+
+    private fun parseUpdateTeamRequest() {
+        view.onTeamUpdate()
     }
 
     private fun parseAnswer(array: JsonArray, userLimit: Int) {

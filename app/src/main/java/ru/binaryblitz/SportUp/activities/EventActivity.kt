@@ -109,23 +109,27 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     private fun setOnClickListeners() {
         backBtn.setOnClickListener { finish() }
 
-        playersButton.setOnClickListener {
-            val intent = Intent(this@EventActivity, UserListActivity::class.java)
-            intent.putExtra(EXTRA_ID, id)
-            intent.putExtra(EXTRA_COLOR, color)
-            intent.putExtra(EXTRA_USER_LIMIT, userLimit)
-            intent.putExtra(EXTRA_USER_COUNT, userCount)
-            startActivity(intent)
-        }
+        playersButton.setOnClickListener { openPlayersActivity() }
 
-        joinBtn.setOnClickListener {
-            if (isJoined) {
-                presenter.leaveEvent(id, DeviceInfoStore.getToken(this))
-            } else if (!isJoined) {
-                presenter.joinEvent(id, DeviceInfoStore.getToken(this))
-            } else if (isCreatedByUser) {
-                presenter.deleteEvent(id, DeviceInfoStore.getToken(this))
-            }
+        joinBtn.setOnClickListener { processJoinButton() }
+    }
+
+    private fun openPlayersActivity() {
+        val intent = Intent(this@EventActivity, UserListActivity::class.java)
+        intent.putExtra(EXTRA_ID, id)
+        intent.putExtra(EXTRA_COLOR, color)
+        intent.putExtra(EXTRA_USER_LIMIT, userLimit)
+        intent.putExtra(EXTRA_USER_COUNT, userCount)
+        startActivity(intent)
+    }
+
+    private fun processJoinButton() {
+        if (isCreatedByUser) {
+            presenter.deleteEvent(id, DeviceInfoStore.getToken(this))
+        } else if (isJoined) {
+            presenter.leaveEvent(id, DeviceInfoStore.getToken(this))
+        } else {
+            presenter.joinEvent(id, DeviceInfoStore.getToken(this))
         }
     }
 
@@ -192,6 +196,9 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
+        this.isCreatedByUser = isCreatedByUser
+        this.isJoined = isJoined
+
         try {
             joinBtn.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
                 else ColorStateList.valueOf(color)
