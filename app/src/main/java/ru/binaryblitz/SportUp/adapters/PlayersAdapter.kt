@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.SportUp.R
+import ru.binaryblitz.SportUp.activities.VotesActivity
 import ru.binaryblitz.SportUp.models.Player
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.utils.Image
@@ -19,6 +20,10 @@ class PlayersAdapter(private val context: Activity) : RecyclerView.Adapter<Recyc
 
     fun setCollection(collection: ArrayList<Pair<String, Any>>) {
         this.collection = collection
+
+        VotesActivity.players.clear()
+        collection.filter { it.first == "B" || it.first == "M" }
+                .forEach { VotesActivity.players.add(it.second as Player) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

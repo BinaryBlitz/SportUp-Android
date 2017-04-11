@@ -4,11 +4,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Pair
-import kotlinx.android.synthetic.main.activity_players_list.*
+import kotlinx.android.synthetic.main.activity_votes.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.adapters.VotesAdapter
 import ru.binaryblitz.SportUp.base.BaseActivity
+import ru.binaryblitz.SportUp.models.Player
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import javax.inject.Inject
@@ -30,6 +30,8 @@ class VotesActivity : BaseActivity() {
         initToolbar()
         initList()
         setOnClickListeners()
+
+        showPlayers()
     }
 
     private fun initToolbar() {
@@ -51,13 +53,13 @@ class VotesActivity : BaseActivity() {
         backBtn.setOnClickListener { finish() }
     }
 
-    fun onLoaded(collection: ArrayList<Pair<String, Any>>) {
-
+    fun showPlayers() {
+        adapter.setCollection(players)
+        adapter.notifyDataSetChanged()
     }
 
-    private fun load() {
-
+    companion object {
+        var players: ArrayList<Player> = ArrayList()
     }
-
 }
 

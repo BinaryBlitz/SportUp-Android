@@ -1,5 +1,6 @@
 package ru.binaryblitz.SportUp.activities
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -22,6 +23,8 @@ class UserListActivity : BaseActivity() {
     val EXTRA_USER_COUNT = "user_count"
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
+    var color = 0
+
     private lateinit var adapter: PlayersAdapter
 
     @Inject
@@ -39,7 +42,7 @@ class UserListActivity : BaseActivity() {
     }
 
     private fun initToolbar() {
-        val color = intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR)
+        color = intent.getIntExtra(EXTRA_COLOR, DEFAULT_COLOR)
         appBarView.setBackgroundColor(color)
         AndroidUtilities.colorAndroidBar(this, color)
     }
@@ -55,6 +58,13 @@ class UserListActivity : BaseActivity() {
 
     private fun setOnClickListeners() {
         backBtn.setOnClickListener { finish() }
+
+        votesButton.setOnClickListener {
+            val intent = Intent(this@UserListActivity, VotesActivity::class.java)
+            intent.putExtra(EXTRA_ID, 1)
+            intent.putExtra(EXTRA_COLOR, color)
+            startActivity(intent)
+        }
     }
 
     fun onLoaded(collection: ArrayList<Pair<String, Any>>) {
