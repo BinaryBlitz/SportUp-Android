@@ -24,6 +24,7 @@ class UserListActivity : BaseActivity() {
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
     var id = 0
+    var isJoinedTeam = false
 
     lateinit var presenter: PlayersPresenter
 
@@ -44,11 +45,11 @@ class UserListActivity : BaseActivity() {
     }
 
     fun joinTeam(number: Int) {
-        presenter.joinTeam(id, generateJson(number), DeviceInfoStore.getToken(this))
-    }
-
-    fun leaveTeam(number: Int) {
-        presenter.updateTeam(id, generateJson(number), DeviceInfoStore.getToken(this))
+        if (isJoinedTeam) {
+            presenter.updateTeam(id, generateJson(number), DeviceInfoStore.getToken(this))
+        } else {
+            presenter.joinTeam(id, generateJson(number), DeviceInfoStore.getToken(this))
+        }
     }
 
     private fun generateJson(number: Int): JsonObject {
@@ -60,11 +61,11 @@ class UserListActivity : BaseActivity() {
     }
 
     fun onTeamJoined() {
-
+        adapter.notifyDataSetChanged()
     }
 
     fun onTeamUpdate() {
-
+        adapter.notifyDataSetChanged()
     }
 
     private fun initToolbar() {
