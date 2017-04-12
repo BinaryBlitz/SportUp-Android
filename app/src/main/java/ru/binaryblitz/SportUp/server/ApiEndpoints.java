@@ -34,6 +34,9 @@ public interface ApiEndpoints {
     @POST("events")
     Observable<JsonObject> createEvent(@Body JsonObject object, @Query("api_token") String token);
 
+    @PATCH("events/{id}")
+    Observable<JsonObject> editEvent(@Body JsonObject object, @Path("id") int id, @Query("api_token") String token);
+
     @GET("cities/{id}/sport_types")
     Observable<JsonArray> getSportTypes(@Path("id") int id);
 

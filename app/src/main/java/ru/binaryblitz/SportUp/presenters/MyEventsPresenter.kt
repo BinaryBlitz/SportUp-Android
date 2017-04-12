@@ -13,6 +13,7 @@ import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonArrayResponseListener
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 import ru.binaryblitz.SportUp.utils.DateUtils
+import ru.binaryblitz.SportUp.utils.LogUtil
 import java.util.*
 
 class MyEventsPresenter(private val service: EndpointsService, private val view: UserEventsFragment) {
@@ -20,6 +21,7 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
     fun getEvents(token: String) {
         service.getMyEvents(token, object : JsonArrayResponseListener {
             override fun onSuccess(array: JsonArray) {
+                LogUtil.logError(array.toString())
                 getInvites(token, array)
             }
 
@@ -58,7 +60,9 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
                 DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("starts_at"))),
                 DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("ends_at"))),
                 AndroidUtilities.getUrlFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("icon_url")),
-                Color.parseColor(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("color")))
+                Color.parseColor(AndroidUtilities.getStringFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("color"))),
+                AndroidUtilities.getIntFieldFromJson(obj.get("event").asJsonObject.get("sport_type").asJsonObject.get("id"))
+                AndroidUtilities.getPasswordFromJson(obj.get("event").asJsonObject.get("password"))
         )
     }
 
@@ -72,6 +76,7 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
             (0..array.size())
                     .map { array.get(it).asJsonObject }
+                    .sortedWith(compareByDescending { getDateFromJson(it) })
                     .mapTo(collection) { Pair(MyEventsAdapter.INVITE_CODE, getEventFromJson(it)) }
         }
     }
@@ -81,10 +86,16 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending { getDateFromJson(it) })
                 .filter { isEventCreatedByUser(it) }
                 .mapTo(collection) { Pair(MyEventsAdapter.CREATED_CODE, getEventFromJson(it)) }
 
         addHeader(collection, startIndex, R.string.created_events)
+    }
+
+    private fun getDateFromJson(obj: JsonObject): Date {
+        return DateUtils.parse(AndroidUtilities.getStringFieldFromJson(obj.get("event")
+                .asJsonObject.get("starts_at")))
     }
 
     private fun addHeader(collection: ArrayList<Pair<String, Any>>, startIndex: Int, stringId: Int) {
@@ -111,8 +122,11 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending { getDateFromJson(it) })
                 .filter { !isEventCreatedByUser(it) && isAfterToday(it) }
                 .mapTo(collection) { Pair(MyEventsAdapter.CURRENT_CODE, getEventFromJson(it)) }
+
+
 
         addHeader(collection, startIndex, R.string.current_games)
     }
@@ -129,6 +143,7 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
 
         (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareByDescending { getDateFromJson(it) })
                 .filter { !isEventCreatedByUser(it) && !isAfterToday(it) }
                 .mapTo(collection) { Pair(MyEventsAdapter.CLOSED_CODE, getEventFromJson(it)) }
 

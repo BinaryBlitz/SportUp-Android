@@ -1,5 +1,6 @@
 package ru.binaryblitz.SportUp.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -23,14 +24,12 @@ import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.base.BaseActivity
 import ru.binaryblitz.SportUp.presenters.EventPresenter
 import ru.binaryblitz.SportUp.server.EndpointsService
-import ru.binaryblitz.SportUp.utils.AndroidUtilities
-import ru.binaryblitz.SportUp.utils.DateUtils
-import ru.binaryblitz.SportUp.utils.TimeSpan
 import javax.inject.Inject
 import com.google.android.gms.maps.model.MapStyleOptions
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
+import ru.binaryblitz.SportUp.utils.*
 import ru.binaryblitz.SportUp.utils.LogUtil
 import java.util.*
 
@@ -40,11 +39,13 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     val DEFAULT_COLOR = Color.parseColor("#212121")
     val EXTRA_USER_LIMIT = "user_limit"
     val EXTRA_USER_COUNT = "user_count"
-
+  
     var color = 0
     var id = 0
     var userLimit = 0
     var userCount = 0
+    var isUserEvent = false
+    lateinit var dialog: ProgressDialog
 
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
@@ -56,6 +57,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
         dependencies()!!.inject(this)
+
+        dialog = ProgressDialog(this)
 
         initToolbar()
         setOnClickListeners()
@@ -92,6 +95,13 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         load()
     }
 
+    override fun onResume() {
+        super.onResume()
+        load()
+        appBarView.setBackgroundColor(color)
+        AndroidUtilities.colorAndroidBar(this, color)
+    }
+
     private fun setUpMap() {
         googleMap?.uiSettings?.isMyLocationButtonEnabled = false
         googleMap?.uiSettings?.isMapToolbarEnabled = false
@@ -111,9 +121,21 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
             intent.putExtra(EXTRA_USER_COUNT, userCount)
             startActivity(intent)
         }
+
+        rightButton.setOnClickListener {
+            if (!isUserEvent) {
+                return@setOnClickListener
+            }
+
+            val intent = Intent(this, EditEventActivity::class.java)
+            intent.putExtra(EXTRA_COLOR, color)
+            startActivity(intent)
+        }
     }
 
     fun onLoaded(obj: JsonObject) {
+        eventJson = obj
+
         parseGeneralInfo(obj)
         parseMembersInfo(obj)
 
@@ -123,6 +145,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
         onLoaded(AndroidUtilities.getDoubleFieldFromJson(obj.get("latitude")),
                 AndroidUtilities.getDoubleFieldFromJson(obj.get("longitude")))
+
+        dialog.dismiss()
     }
 
     private fun parseTime(obj: JsonObject): SpannableStringBuilder {
@@ -141,7 +165,15 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         idText.text = "#" + AndroidUtilities.getStringFieldFromJson(obj.get("id"))
         descriptionText.text = AndroidUtilities.getStringFieldFromJson(obj.get("description"))
         locationText.text = AndroidUtilities.getStringFieldFromJson(obj.get("address"))
-        priceText.text = AndroidUtilities.getStringFieldFromJson(obj.get("price")) + getString(R.string.ruble_sign)
+
+        val price = AndroidUtilities.getIntFieldFromJson(obj.get("price"))
+
+        if (price == 0) {
+            priceText.setTextColor(color)
+            priceText.text = getString(R.string.free)
+        } else {
+            priceText.text = price.toString() + getString(R.string.ruble_sign)
+        }
     }
 
     private fun parseEventStartDate(date: Date) {
@@ -170,9 +202,12 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
                 " / " + AndroidUtilities.getStringFieldFromJson(obj.get("user_limit"))
 
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
-
-        initButton(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
+        initButtons(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
                 obj.get("membership") != null && !obj.get("membership").isJsonNull)
+    }
+
+    private fun initMainButton(isCreatedByUser: Boolean, isJoined: Boolean) {
+        initButton(isCreatedByUser, isJoined)
     }
 
     private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
@@ -183,6 +218,16 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         } catch (e: Exception) {
             LogUtil.logException(e)
         }
+    }
+
+    private fun initButtons(isCreatedByUser: Boolean, isJoined: Boolean) {
+        isUserEvent = isCreatedByUser
+        initMainButton(isCreatedByUser, isJoined)
+        initToolbarButton()
+    }
+
+    private fun initToolbarButton() {
+        rightButton.setImageResource(if (isUserEvent) R.drawable.ic_edit else R.drawable.icon_nav_comment_white)
     }
 
     fun getTimeString(date: String): SpannableStringBuilder {
@@ -231,8 +276,15 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun load() {
+        dialog.show()
         presenter = EventPresenter(api, this)
         id = intent.getIntExtra(EXTRA_ID, 0)
         presenter.getEvent(id, DeviceInfoStore.getToken(this))
+    }
+
+    companion object {
+        lateinit var eventJson: JsonObject
+        var sportTypeId: Int? = null
+        var color = 0
     }
 }

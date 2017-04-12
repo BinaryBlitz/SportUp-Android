@@ -2,6 +2,7 @@ package ru.binaryblitz.SportUp.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Pair
@@ -9,18 +10,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_user_events.*
+import kotlinx.android.synthetic.main.dialog_password.*
 import ru.binaryblitz.SportUp.R
+import ru.binaryblitz.SportUp.activities.EventActivity
+import ru.binaryblitz.SportUp.activities.SportEventsActivity
 import ru.binaryblitz.SportUp.activities.CreateEventActivity
 import ru.binaryblitz.SportUp.adapters.MyEventsAdapter
 import ru.binaryblitz.SportUp.base.BaseFragment
 import ru.binaryblitz.SportUp.presenters.MyEventsPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
+import ru.binaryblitz.SportUp.utils.Animations
 import ru.binaryblitz.SportUp.utils.AppConfig
 import javax.inject.Inject
 
 class UserEventsFragment : BaseFragment() {
     private lateinit var adapter: MyEventsAdapter
+    private var isDialogOpened = false
+
+    val EXTRA_ID = "id"
+    val EXTRA_COLOR = "color"
 
     @Inject
     lateinit var api: EndpointsService
@@ -45,12 +54,33 @@ class UserEventsFragment : BaseFragment() {
         }
     }
 
+    fun showPasswordDialog(password: String, eventId: Int) {
+        Handler().post {
+            isDialogOpened = true
+            Animations.animateRevealShow(view?.findViewById(R.id.dialog_new_order), activity)
+            passwordButton.setOnClickListener {
+                if (password == passwordEdit.text.toString()) {
+                    openEvent(eventId)
+                } else {
+                    passwordEdit.setError(getString(R.string.wrong_password), null)
+                }
+            }
+        }
+    }
+
+    private fun openEvent(eventId: Int) {
+        val intent = Intent(context, EventActivity::class.java)
+        intent.putExtra(EXTRA_ID, eventId)
+        intent.putExtra(EXTRA_COLOR, SportEventsActivity.color)
+        context.startActivity(intent)
+    }
+
     fun initList() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.setHasFixedSize(true)
 
-        adapter = MyEventsAdapter(activity)
+        adapter = MyEventsAdapter(this)
         recyclerView.adapter = adapter
     }
 
