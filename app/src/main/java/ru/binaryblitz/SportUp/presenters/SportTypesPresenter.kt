@@ -40,8 +40,11 @@ class SportTypesPresenter(private val service: EndpointsService, private val vie
             SportTypesUtil.add(type.asString())
         }
 
-        SportTypesUtil.saveTypes(view.context)
+        if (view.context == null) {
+            return
+        }
 
+        SportTypesUtil.saveTypes(view.context)
         view.onLoaded(collection = collection as ArrayList<SportType>)
     }
 

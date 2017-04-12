@@ -99,6 +99,10 @@
     <string name="leave_item">Покинуть</string>
     <string name="no_team">Неопределившиеся игроки</string>
     <string name="players_list">Список игроков</string>
+    <string name="choose_best_player">Выберите лучшего игрока</string>
+
+    <string name="time_until_voting_ends">До завершения голосования %1$s ч %2$s мин</string>
+
     <string name="edit_event">Редактирование события</string>
     <string name="cancel_event">Отменить игру</string>
     <string name="set_password">Указать пароль</string>

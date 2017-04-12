@@ -25,6 +25,9 @@ public interface ApiEndpoints {
     @POST("events/{id}/memberships")
     Observable<JsonObject> joinEvent(@Path("id") int id, @Query("api_token") String token);
 
+    @POST("events/{event_id}/votes")
+    Observable<JsonObject> vote(@Path("event_id") int id, @Body JsonObject object, @Query("api_token") String token);
+
     @POST("events/{id}/teams")
     Observable<JsonObject> joinTeam(@Path("id") int id, @Body JsonObject object, @Query("api_token") String token);
 
