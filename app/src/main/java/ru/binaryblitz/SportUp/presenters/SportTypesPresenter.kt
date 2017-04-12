@@ -26,6 +26,7 @@ class SportTypesPresenter(private val service: EndpointsService, private val vie
     private fun parseAnswer(array: JsonArray) {
         val collection = (0..array.size() - 1)
                 .map { array.get(it).asJsonObject }
+                .sortedWith(compareBy { AndroidUtilities.getStringFieldFromJson(it.get("name")) })
                 .map {
                     SportType(AndroidUtilities.getIntFieldFromJson(it.get("id")),
                             AndroidUtilities.getStringFieldFromJson(it.get("name")),

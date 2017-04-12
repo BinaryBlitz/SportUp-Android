@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.VotesActivity
+import ru.binaryblitz.SportUp.activities.UserListActivity
 import ru.binaryblitz.SportUp.models.Player
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.utils.Image
@@ -63,6 +64,8 @@ class PlayersAdapter(private val context: Activity) : RecyclerView.Adapter<Recyc
             bindHeader(viewHolder as HeaderViewHolder , (collection[position].second as Player))
         } else if (getItemViewType(position) == BASIC) {
             bindBasic(position, viewHolder as BasicViewHolder)
+        } else if (getItemViewType(position) == BUTTON) {
+            bindButton(viewHolder as JoinButtonViewHolder, (collection[position].second as Player))
         } else {
             bindMe(position, viewHolder as MeViewHolder)
         }
@@ -71,6 +74,13 @@ class PlayersAdapter(private val context: Activity) : RecyclerView.Adapter<Recyc
     private fun bindHeader(view: HeaderViewHolder, information: Player) {
         view.name.text = information.name
         view.headerInformation.text = information.role
+    }
+
+    private fun bindButton(view: JoinButtonViewHolder, information: Player) {
+        view.name.text = information.name
+        view.itemView.setOnClickListener {
+            joinTeam(information.name.split(" ")[1].toInt())
+        }
     }
 
     private fun bindMe(position: Int, holder: MeViewHolder) {
@@ -104,6 +114,10 @@ class PlayersAdapter(private val context: Activity) : RecyclerView.Adapter<Recyc
         }
     }
 
+    private fun joinTeam(number: Int) {
+        (context as UserListActivity).joinTeam(number)
+    }
+
     override fun getItemCount(): Int {
         return collection.size
     }
@@ -111,6 +125,10 @@ class PlayersAdapter(private val context: Activity) : RecyclerView.Adapter<Recyc
     private inner class HeaderViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById(R.id.header) as TextView
         val headerInformation = itemView.findViewById(R.id.headerInformation) as TextView
+    }
+
+    private inner class JoinButtonViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val name = itemView.findViewById(R.id.header) as TextView
     }
 
     private inner class MeViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -130,9 +148,11 @@ class PlayersAdapter(private val context: Activity) : RecyclerView.Adapter<Recyc
         private val HEADER = 1
         private val BASIC = 2
         private val ME = 3
+        private val BUTTON = 4
 
         val HEADER_CODE = "H"
         val BASIC_CODE = "B"
         val ME_CODE = "M"
+        private val BUTTON_CODE = "BU"
     }
 }

@@ -37,6 +37,7 @@ import java.net.URLEncoder
 import java.util.*
 
 class MapActivity : LocationDependentActivity(), OnMapReadyCallback {
+    val EXTRA_EDIT = "edit"
 
     override fun onLocationUpdated(latitude: Double?, longitude: Double?) {
         selectedLocation = LatLng(latitude!!, longitude!!)

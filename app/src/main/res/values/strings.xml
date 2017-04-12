@@ -59,15 +59,15 @@
     <string name="add_description">Добавить описание игры</string>
     <string name="public_event">Публичное</string>
     <string name="event_location">Место проведения игры</string>
-    <string name="event_name_error">Название события не может быть пустым</string>
-    <string name="wrong_event_date">Неверная дата начала события</string>
-    <string name="wrong_event_end_date">Неверная дата окончания события</string>
-    <string name="wrong_event_user_limit">Неверный лимит количества участников</string>
-    <string name="wrong_event_team_limit">Неверный лимит количества команд</string>
-    <string name="wrong_event_sport_type">Не выбран вид спорта</string>
+    <string name="event_name_error">Укажите название игры</string>
+    <string name="wrong_event_date">Укажите дату и время начала</string>
+    <string name="wrong_event_end_date">Укажите дату окончания игры</string>
+    <string name="wrong_event_user_limit">Выберите количество участников</string>
+    <string name="wrong_event_team_limit">Укажите количество команд</string>
+    <string name="wrong_event_sport_type">Выберите вид спорта</string>
     <string name="error">Ошибка</string>
     <string name="ok">OK</string>
-    <string name="wrong_event_location">Неверное местоположение события</string>
+    <string name="wrong_event_location">Выберите адрес</string>
     <string name="input_hint">Стоимость</string>
     <string name="save">Продолжить</string>
     <string name="search">Поиск</string>
@@ -87,6 +87,10 @@
     <string name="code_title">Введите код</string>
     <string name="lastName">Фамилия</string>
     <string name="first_name">Имя</string>
+    <string name="login">Войти</string>
+    <string name="password_help">Введите пароль для входа в закрытую игру</string>
+    <string name="password">Пароль</string>
+    <string name="wrong_password">Неверный пароль</string>
     <string name="wrong_location">Неверное местоположение</string>
     <string name="edit_profile">Редактировать профиль</string>
     <string name="update">Обновить</string>
@@ -99,6 +103,29 @@
 
     <string name="time_until_voting_ends">До завершения голосования %1$s ч %2$s мин</string>
 
+    <string name="edit_event">Редактирование события</string>
+    <string name="cancel_event">Отменить игру</string>
+    <string name="set_password">Указать пароль</string>
+    <string name="joined_code">"Учавствуют %1$s из %2$s"</string>
+    <string name="select_password">Указать</string>
+    <string name="private_event">Приватное</string>
+    <string name="password">Пароль</string>
+    <string name="password_error">Пароль не указан</string>
+    <string name="free">Бесплатно</string>
+    <string name="city_not_found">Не нашли свой город?</string>
+    <string name="city_not_found_helper">Оставьте контактные данные и мы оповестим вас, когда сервис станет доступен в вашем городе</string>
+    <string name="city">Город</string>
+    <string name="phone">Номер телефона</string>
+    <string name="send_code">ОТПРАВИТЬ</string>
+    <string name="back_code">НАЗАД</string>
+    <string name="wrong_phone_code">Неверно введен номер телефона</string>
+    <string name="wrong_city_code">Неверно введен город</string>
+    <string name="promo_hint">Промокод</string>
+    <string name="promo_help">Введите промокод</string>
+    <string name="congratulations">Поздравляем</string>
+    <string name="you_are_best_player">Вы признаны лучшим игроком</string>
+    <string name="your_price">Вы получаете в подарок</string>
+  
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
         <item quantity="one">%1$d площадка</item>

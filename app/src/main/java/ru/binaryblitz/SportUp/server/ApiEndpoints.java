@@ -28,6 +28,12 @@ public interface ApiEndpoints {
     @POST("events/{event_id}/votes")
     Observable<JsonObject> vote(@Path("event_id") int id, @Body JsonObject object, @Query("api_token") String token);
 
+    @POST("events/{id}/teams")
+    Observable<JsonObject> joinTeam(@Path("id") int id, @Body JsonObject object, @Query("api_token") String token);
+
+    @PATCH("events/{id}/teams")
+    Observable<JsonObject> updateTeam(@Path("id") int id, @Body JsonObject object, @Query("api_token") String token);
+
     @DELETE("memberships/{id}")
     Observable<JsonObject> leaveEvent(@Path("id") int id, @Query("api_token") String token);
 
@@ -36,6 +42,9 @@ public interface ApiEndpoints {
 
     @POST("events")
     Observable<JsonObject> createEvent(@Body JsonObject object, @Query("api_token") String token);
+
+    @PATCH("events/{id}")
+    Observable<JsonObject> editEvent(@Body JsonObject object, @Path("id") int id, @Query("api_token") String token);
 
     @GET("cities/{id}/sport_types")
     Observable<JsonArray> getSportTypes(@Path("id") int id);

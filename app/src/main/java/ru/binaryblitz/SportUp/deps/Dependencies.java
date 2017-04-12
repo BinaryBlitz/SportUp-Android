@@ -6,6 +6,7 @@ import dagger.Component;
 
 import ru.binaryblitz.SportUp.activities.CreateEventActivity;
 import ru.binaryblitz.SportUp.activities.CreateAccountActivity;
+import ru.binaryblitz.SportUp.activities.EditEventActivity;
 import ru.binaryblitz.SportUp.activities.EventActivity;
 import ru.binaryblitz.SportUp.activities.EventsMapActivity;
 import ru.binaryblitz.SportUp.activities.MainActivity;
@@ -42,6 +43,8 @@ public interface Dependencies {
     void inject(MainActivity mainActivity);
 
     void inject(UserListActivity userListActivity);
-
+  
     void inject(VotesActivity votesActivity);
+  
+    void inject(EditEventActivity editEventActivity);
 }

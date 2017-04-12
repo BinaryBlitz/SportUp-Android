@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.CreateAccountActivity
+import ru.binaryblitz.SportUp.activities.PromocodeActivity
 import ru.binaryblitz.SportUp.base.BaseFragment
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.utils.Image
@@ -26,6 +27,11 @@ class ProfileFragment : BaseFragment() {
         rightBtn.setOnClickListener {
             val intent = Intent(context, CreateAccountActivity::class.java)
             intent.putExtra(EXTRA_EDIT, true)
+            startActivity(intent)
+        }
+
+        promoButton.setOnClickListener {
+            val intent = Intent(context, PromocodeActivity::class.java)
             startActivity(intent)
         }
     }

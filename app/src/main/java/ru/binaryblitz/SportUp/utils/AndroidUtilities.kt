@@ -111,6 +111,14 @@ object AndroidUtilities {
         }
     }
 
+    fun getPasswordFromJson(element: JsonElement?): String? {
+        if (element == null || element.isJsonNull) {
+            return null
+        } else {
+            return element.asString
+        }
+    }
+
     fun getIntFieldFromJson(element: JsonElement?): Int {
         if (element == null || element.isJsonNull) {
             return 0

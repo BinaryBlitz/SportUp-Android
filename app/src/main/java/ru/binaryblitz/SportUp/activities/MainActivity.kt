@@ -11,6 +11,7 @@ import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 import ru.binaryblitz.SportUp.presenters.UserPresenter
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
 import ru.binaryblitz.SportUp.server.EndpointsService
+import ru.binaryblitz.SportUp.utils.AppConfig
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
@@ -28,7 +29,9 @@ class MainActivity : BaseActivity() {
                     switchFragment(SportsListFragment())
                 }
                 R.id.tab_my_events -> {
-                    switchFragment(UserEventsFragment())
+                    if (AppConfig.checkIfUserLoggedIn(this)) {
+                        switchFragment(UserEventsFragment())
+                    }
                 }
                 R.id.tab_profile -> {
                     switchFragment(ProfileFragment())
