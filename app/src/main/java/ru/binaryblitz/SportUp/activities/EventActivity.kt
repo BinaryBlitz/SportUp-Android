@@ -47,6 +47,11 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     var isUserEvent = false
     lateinit var dialog: ProgressDialog
 
+    var isCreatedByUser: Boolean = false
+    var isJoined: Boolean = false
+
+    var memberShipId = 0
+
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
 
@@ -66,15 +71,18 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     fun onEventJoined(id: Int) {
-
+        memberShipId = id
+        isJoined = true
+        initButton()
     }
 
     fun onEventLeft() {
-
+        isJoined = false
+        initButton()
     }
 
     fun onEventDeleted() {
-
+        finish()
     }
 
     private fun initToolbar() {
@@ -113,13 +121,27 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     private fun setOnClickListeners() {
         backBtn.setOnClickListener { finish() }
 
-        playersButton.setOnClickListener {
-            val intent = Intent(this@EventActivity, UserListActivity::class.java)
-            intent.putExtra(EXTRA_ID, id)
-            intent.putExtra(EXTRA_COLOR, color)
-            intent.putExtra(EXTRA_USER_LIMIT, userLimit)
-            intent.putExtra(EXTRA_USER_COUNT, userCount)
-            startActivity(intent)
+        playersButton.setOnClickListener { openPlayersActivity() }
+
+        joinBtn.setOnClickListener { processJoinButton() }
+    }
+
+    private fun openPlayersActivity() {
+        val intent = Intent(this@EventActivity, UserListActivity::class.java)
+        intent.putExtra(EXTRA_ID, id)
+        intent.putExtra(EXTRA_COLOR, color)
+        intent.putExtra(EXTRA_USER_LIMIT, userLimit)
+        intent.putExtra(EXTRA_USER_COUNT, userCount)
+        startActivity(intent)
+    }
+
+    private fun processJoinButton() {
+        if (isCreatedByUser) {
+            presenter.deleteEvent(id, DeviceInfoStore.getToken(this))
+        } else if (isJoined) {
+            presenter.leaveEvent(id, DeviceInfoStore.getToken(this))
+        } else {
+            presenter.joinEvent(id, DeviceInfoStore.getToken(this))
         }
 
         rightButton.setOnClickListener {
@@ -202,8 +224,11 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
                 " / " + AndroidUtilities.getStringFieldFromJson(obj.get("user_limit"))
 
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
-        initButtons(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
-                obj.get("membership") != null && !obj.get("membership").isJsonNull)
+
+        this.isCreatedByUser = obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id
+        this.isJoined = obj.get("membership") != null && !obj.get("membership").isJsonNull
+
+        initButton()
     }
 
     private fun initMainButton(isCreatedByUser: Boolean, isJoined: Boolean) {

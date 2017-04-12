@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Pair
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_players_list.*
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.adapters.PlayersAdapter
@@ -22,6 +23,11 @@ class UserListActivity : BaseActivity() {
     val EXTRA_USER_COUNT = "user_count"
     val DEFAULT_COLOR = Color.parseColor("#212121")
 
+    var id = 0
+    var isJoinedTeam = false
+
+    lateinit var presenter: PlayersPresenter
+
     private lateinit var adapter: PlayersAdapter
 
     @Inject
@@ -36,6 +42,30 @@ class UserListActivity : BaseActivity() {
         initList()
         setOnClickListeners()
         load()
+    }
+
+    fun joinTeam(number: Int) {
+        if (isJoinedTeam) {
+            presenter.updateTeam(id, generateJson(number), DeviceInfoStore.getToken(this))
+        } else {
+            presenter.joinTeam(id, generateJson(number), DeviceInfoStore.getToken(this))
+        }
+    }
+
+    private fun generateJson(number: Int): JsonObject {
+        val obj = JsonObject()
+
+        obj.addProperty("team_number", number)
+
+        return obj
+    }
+
+    fun onTeamJoined() {
+        adapter.notifyDataSetChanged()
+    }
+
+    fun onTeamUpdate() {
+        adapter.notifyDataSetChanged()
     }
 
     private fun initToolbar() {
@@ -63,10 +93,12 @@ class UserListActivity : BaseActivity() {
     }
 
     private fun load() {
-        val presenter = PlayersPresenter(api, this)
+        presenter = PlayersPresenter(api, this)
         val userLimit = intent.getIntExtra(EXTRA_USER_LIMIT, 0)
         val userCount = intent.getIntExtra(EXTRA_USER_COUNT, 0)
         idText.text = "$userCount / $userLimit"
-        presenter.getTeams(intent.getIntExtra(EXTRA_ID, 0), DeviceInfoStore.getToken(this), userLimit)
+
+        id = intent.getIntExtra(EXTRA_ID, 0)
+        presenter.getTeams(id, DeviceInfoStore.getToken(this), userLimit)
     }
 }
