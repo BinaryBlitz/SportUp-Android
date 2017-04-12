@@ -69,11 +69,13 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
     fun onEventJoined(id: Int) {
         memberShipId = id
-        initButton(false, true)
+        isJoined = true
+        initButton()
     }
 
     fun onEventLeft() {
-        initButton(false, false)
+        isJoined = false
+        initButton()
     }
 
     fun onEventDeleted() {
@@ -191,14 +193,13 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
 
         teamsText.text = "( " + obj.get("team_limit").asString + getString(R.string.teams_code)
 
-        initButton(obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id,
-                obj.get("membership") != null && !obj.get("membership").isJsonNull)
+        this.isCreatedByUser = obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id
+        this.isJoined = obj.get("membership") != null && !obj.get("membership").isJsonNull
+
+        initButton()
     }
 
-    private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
-        this.isCreatedByUser = isCreatedByUser
-        this.isJoined = isJoined
-
+    private fun initButton() {
         try {
             joinBtn.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
                 else ColorStateList.valueOf(color)
