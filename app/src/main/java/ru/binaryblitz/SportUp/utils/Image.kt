@@ -4,14 +4,12 @@ import android.content.Context
 import android.widget.ImageView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-
 import ru.binaryblitz.SportUp.custom.AvatarView
-import ru.binaryblitz.SportUp.models.User
 
 object Image {
-    fun loadAvatar(context: Context, user: User?, path: String?, imageView: ImageView) {
-        if ((path == null || path.isEmpty() || path == "null") && user != null) {
-            setAvatar(context, user, imageView)
+    fun loadAvatar(context: Context, name: String?, path: String?, imageView: ImageView) {
+        if ((path == null || path.isEmpty() || path == "null") && name != null) {
+            setAvatar(context, name, imageView)
             return
         }
 
@@ -20,7 +18,7 @@ object Image {
             }
 
             override fun onError() {
-                setAvatar(context, user!!, imageView)
+                setAvatar(context, name!!, imageView)
             }
         }
 
@@ -31,9 +29,9 @@ object Image {
                 .into(imageView, callback)
     }
 
-    private fun setAvatar(context: Context, user: User,
+    private fun setAvatar(context: Context, name: String,
                           imageView: ImageView) {
-        imageView.setImageDrawable(AvatarView(context, user))
+        imageView.setImageDrawable(AvatarView(context, name))
     }
 
     fun loadPhoto(path: String?, imageView: ImageView) {

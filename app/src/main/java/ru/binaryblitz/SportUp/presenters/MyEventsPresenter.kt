@@ -67,6 +67,10 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
     }
 
     private fun parseInvites(array: JsonArray, collection: ArrayList<Pair<String, Any>>) {
+        if (view.context == null) {
+            return
+        }
+
         if (array.size() != 0) {
             collection.add(Pair(MyEventsAdapter.HEADER_CODE, view.context.getString(R.string.invite_code)))
 
@@ -95,12 +99,20 @@ class MyEventsPresenter(private val service: EndpointsService, private val view:
     }
 
     private fun addHeader(collection: ArrayList<Pair<String, Any>>, startIndex: Int, stringId: Int) {
+        if (view.context == null) {
+            return
+        }
+
         if (collection.size > startIndex) {
             collection.add(startIndex, Pair(MyEventsAdapter.HEADER_CODE, view.context.getString(stringId)))
         }
     }
 
     private fun isEventCreatedByUser(obj: JsonObject): Boolean {
+        if (view.context == null) {
+            return false
+        }
+
         return AndroidUtilities.getIntFieldFromJson(obj.get("event").asJsonObject.get("creator").asJsonObject.get("id")) ==
                 DeviceInfoStore.getUserObject(view.context)?.id
     }

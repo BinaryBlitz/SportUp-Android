@@ -38,7 +38,7 @@ class ProfileFragment : BaseFragment() {
 
     private fun initUser() {
         val user = DeviceInfoStore.getUserObject(context)
-        Image.loadAvatar(context, user, user?.avatarUrl, profileImage)
+        Image.loadAvatar(context, user?.firstName, user?.avatarUrl, profileImage)
         nameText.text = user?.firstName + " " + user?.lastName
 
         eventsCount.text = user?.eventsCount.toString()

@@ -7,10 +7,9 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import ru.binaryblitz.SportUp.models.AppColors
-import ru.binaryblitz.SportUp.models.User
 import ru.binaryblitz.SportUp.utils.AndroidUtilities
 
-class AvatarView(context: Context, user: User) : Drawable() {
+class AvatarView(context: Context, name: String) : Drawable() {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var namePaint: TextPaint? = null
     private var color: Int = 0
@@ -23,7 +22,7 @@ class AvatarView(context: Context, user: User) : Drawable() {
     private val DEFAULT_SIZE = AndroidUtilities.convertDpToPixel(84f, context).toInt()
 
     init {
-        setInfo(context, user)
+        setInfo(context, name)
     }
 
     private fun initPaint() {
@@ -40,12 +39,12 @@ class AvatarView(context: Context, user: User) : Drawable() {
         namePaint!!.textSize = AndroidUtilities.convertDpToPixel(size, context)
     }
 
-    private fun setText(user: User) {
-        if (user.firstName == null) {
+    private fun setText(name: String?) {
+        if (name == null || name.isEmpty()) {
             return
         }
 
-        val text = user.firstName!!.substring(0, 1)
+        val text = name.substring(0, 1)
         setColor(text)
         initTextLayout(text)
     }
@@ -86,11 +85,11 @@ class AvatarView(context: Context, user: User) : Drawable() {
         return AndroidUtilities.convertDpToPixel(value, context).toInt()
     }
 
-    private fun setInfo(context: Context, user: User) {
+    private fun setInfo(context: Context, name: String) {
         initPaint()
         initPaintSize(context)
         initSize(context)
-        setText(user)
+        setText(name)
     }
 
     override fun draw(canvas: Canvas) {

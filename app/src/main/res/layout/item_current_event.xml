@@ -72,22 +72,13 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/delete"
-        android:paddingLeft="10dp"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:background="@drawable/leave_background"
-        android:layout_marginRight="8dp"
-        android:id="@+id/leave"
+    <ImageView
+        android:layout_width="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_height="28dp"
         android:layout_gravity="center_vertical|end"
-        android:textSize="12sp"
-        android:layout_height="wrap_content" />
+        android:src="@drawable/ic_next" />
 
     <View android:layout_width="match_parent"
         android:layout_gravity="bottom"

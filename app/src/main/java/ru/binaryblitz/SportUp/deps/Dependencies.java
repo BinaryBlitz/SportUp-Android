@@ -13,6 +13,8 @@ import ru.binaryblitz.SportUp.activities.MainActivity;
 import ru.binaryblitz.SportUp.activities.RegistrationActivity;
 import ru.binaryblitz.SportUp.activities.SelectCityActivity;
 import ru.binaryblitz.SportUp.activities.SportEventsActivity;
+import ru.binaryblitz.SportUp.activities.UserListActivity;
+import ru.binaryblitz.SportUp.activities.VotesActivity;
 import ru.binaryblitz.SportUp.fragments.SportsListFragment;
 import ru.binaryblitz.SportUp.fragments.UserEventsFragment;
 import ru.binaryblitz.SportUp.server.ServerApi;
@@ -40,5 +42,9 @@ public interface Dependencies {
 
     void inject(MainActivity mainActivity);
 
+    void inject(UserListActivity userListActivity);
+  
+    void inject(VotesActivity votesActivity);
+  
     void inject(EditEventActivity editEventActivity);
 }

@@ -94,6 +94,15 @@
     <string name="wrong_location">Неверное местоположение</string>
     <string name="edit_profile">Редактировать профиль</string>
     <string name="update">Обновить</string>
+    <string name="yet_not_ended">Игра еще не закончилась</string>
+    <string name="not_selected">Не выбран</string>
+    <string name="leave_item">Покинуть</string>
+    <string name="no_team">Неопределившиеся игроки</string>
+    <string name="players_list">Список игроков</string>
+    <string name="choose_best_player">Выберите лучшего игрока</string>
+
+    <string name="time_until_voting_ends">До завершения голосования %1$s ч %2$s мин</string>
+
     <string name="edit_event">Редактирование события</string>
     <string name="cancel_event">Отменить игру</string>
     <string name="set_password">Указать пароль</string>

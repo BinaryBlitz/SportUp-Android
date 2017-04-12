@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import ru.binaryblitz.SportUp.activities.EventActivity
 import ru.binaryblitz.SportUp.server.EndpointsService
 import ru.binaryblitz.SportUp.server.JsonObjectResponseListener
+import ru.binaryblitz.SportUp.utils.LogUtil
 
 class EventPresenter(private val service: EndpointsService, private val view: EventActivity) {
 
@@ -38,7 +39,7 @@ class EventPresenter(private val service: EndpointsService, private val view: Ev
             }
 
             override fun onError(networkError: String) {
-                view.onInternetConnectionError()
+                onEventLeft()
             }
         })
     }
@@ -50,7 +51,8 @@ class EventPresenter(private val service: EndpointsService, private val view: Ev
             }
 
             override fun onError(networkError: String) {
-                view.onInternetConnectionError()
+                LogUtil.logError(networkError)
+                onEventDeleted()
             }
         })
     }
