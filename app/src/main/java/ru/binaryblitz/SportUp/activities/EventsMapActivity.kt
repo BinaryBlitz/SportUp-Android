@@ -4,7 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -12,10 +14,9 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_events_map.*
 import kotlinx.android.synthetic.main.dialog_password.*
 import ru.binaryblitz.SportUp.R
@@ -33,12 +34,34 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
     private var isDialogOpened = false
     private val markers = HashMap<LatLng, Int>()
 
+    private lateinit var icon: BitmapDescriptor
+
     @Inject
     lateinit var api: EndpointsService
 
     val EXTRA_ID = "id"
     val EXTRA_COLOR = "color"
     val DEFAULT_COLOR = Color.parseColor("#212121")
+
+    internal var target: Target = object : Target {
+        override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+            if (SportEventsActivity.eventsCollection.size == 0) {
+                return
+            }
+
+            icon = BitmapDescriptorFactory.fromBitmap(
+                    SportTypesUtil.getMarker(SportEventsActivity.eventsCollection[0].sportTypeId, this@EventsMapActivity, bitmap))
+            onLoaded()
+        }
+
+        override fun onBitmapFailed(errorDrawable: Drawable?) {
+
+        }
+
+        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +72,14 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
         initGoogleApiClient()
         initMap()
         setOnClickListeners()
+
+        if (SportEventsActivity.eventsCollection.size == 0) {
+            return
+        }
+
+        Picasso.with(this)
+                .load(SportTypesUtil.findIcon(this, SportEventsActivity.eventsCollection[0].sportTypeId))
+                .into(target)
     }
 
     private fun openEvent(eventId: Int) {
@@ -169,8 +200,6 @@ class EventsMapActivity : LocationDependentActivity(), CustomMapFragment.Touchab
     }
 
     fun onLoaded() {
-        val icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pins_footballmid)
-
         for (event in SportEventsActivity.eventsCollection) {
             markers.put(LatLng (event.latitude, event.longitude), event.id)
             googleMap?.addMarker(MarkerOptions()
