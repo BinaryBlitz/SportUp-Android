@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="48dp">
+    <ImageView
+        android:layout_width="48dp"
+        android:id="@+id/markerBackground"
+        android:src="@drawable/ic_default_marker"
+        android:layout_height="48dp" />
+
+    <ImageView
+        android:layout_width="22dp"
+        android:id="@+id/sportTypeIcon"
+        android:layout_gravity="center"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_height="22dp" />
+</FrameLayout>

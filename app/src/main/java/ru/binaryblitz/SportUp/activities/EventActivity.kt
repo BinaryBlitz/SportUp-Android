@@ -3,7 +3,9 @@ package ru.binaryblitz.SportUp.activities
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
@@ -26,6 +28,8 @@ import ru.binaryblitz.SportUp.presenters.EventPresenter
 import ru.binaryblitz.SportUp.server.EndpointsService
 import javax.inject.Inject
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
@@ -54,8 +58,31 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
 
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+
     @Inject
     lateinit var api: EndpointsService
+
+    internal var target: Target = object : Target {
+        override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+            val icon = BitmapDescriptorFactory.fromBitmap(SportTypesUtil.getMarker(sportTypeId!!, this@EventActivity, bitmap))
+
+            googleMap?.addMarker(MarkerOptions()
+                    .position(LatLng(latitude, longitude))
+                    .icon(icon))
+
+            moveCamera(latitude, longitude)
+        }
+
+        override fun onBitmapFailed(errorDrawable: Drawable?) {
+
+        }
+
+        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -299,13 +326,12 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     fun onLoaded(latitude: Double, longitude: Double) {
-        val icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pins_footballmid)
+        this.latitude = latitude
+        this.longitude = longitude
 
-        googleMap?.addMarker(MarkerOptions()
-                .position(LatLng(latitude, longitude))
-                .icon(icon))
-
-        moveCamera(latitude, longitude)
+        Picasso.with(this)
+                .load(SportTypesUtil.findIcon(this, sportTypeId!!))
+                .into(target)
     }
 
     private fun load() {
