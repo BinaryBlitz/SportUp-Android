@@ -72,12 +72,12 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     fun onEventJoined(id: Int) {
         memberShipId = id
         isJoined = true
-        initButton()
+        initMainButton()
     }
 
     fun onEventLeft() {
         isJoined = false
-        initButton()
+        initMainButton()
     }
 
     fun onEventDeleted() {
@@ -231,14 +231,10 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         this.isCreatedByUser = obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id
         this.isJoined = obj.get("membership") != null && !obj.get("membership").isJsonNull
 
-        initButton()
-    }
-
-    private fun initMainButton() {
         initButtons()
     }
 
-    private fun initButton() {
+    private fun initMainButton() {
         try {
             joinButton.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
                 else ColorStateList.valueOf(color)
