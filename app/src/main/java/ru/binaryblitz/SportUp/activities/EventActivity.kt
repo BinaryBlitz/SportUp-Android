@@ -120,6 +120,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     private fun setOnClickListeners() {
         backButton.setOnClickListener { finish() }
 
+        rightButton.setOnClickListener { openEditEventActivity() }
+
         playersButton.setOnClickListener { openPlayersActivity() }
 
         joinButton.setOnClickListener { processJoinButton() }
@@ -134,8 +136,16 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         startActivity(intent)
     }
 
+    private fun openEditEventActivity() {
+        val intent = Intent(this@EventActivity, EditEventActivity::class.java)
+        intent.putExtra(EXTRA_ID, id)
+        intent.putExtra(EXTRA_COLOR, color)
+        startActivity(intent)
+    }
+
     private fun processJoinButton() {
         if (isCreatedByUser) {
+            LogUtil.logError(id)
             presenter.deleteEvent(id, DeviceInfoStore.getToken(this))
         } else if (isJoined) {
             presenter.leaveEvent(id, DeviceInfoStore.getToken(this))
