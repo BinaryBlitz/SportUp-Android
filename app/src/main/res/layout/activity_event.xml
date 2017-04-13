@@ -365,7 +365,7 @@
                 android:background="#f7f9fa"
                 android:layout_height="100dp">
                 <Button
-                    android:id="@+id/joinBtn"
+                    android:id="@+id/joinButton"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="170dp"
                     android:layout_height="48dp"

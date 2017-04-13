@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import ru.binaryblitz.SportUp.R
 import ru.binaryblitz.SportUp.activities.EventActivity
-import ru.binaryblitz.SportUp.activities.SportEventsActivity
 import ru.binaryblitz.SportUp.fragments.UserEventsFragment
 import ru.binaryblitz.SportUp.models.MyEvent
 import ru.binaryblitz.SportUp.utils.AppConfig
@@ -86,7 +85,7 @@ class MyEventsAdapter(private val context: UserEventsFragment) : RecyclerView.Ad
             if (!AppConfig.checkIfUserLoggedIn(context.activity)) {
                 return@setOnClickListener
             }
-            val intent = Intent(context, EventActivity::class.java)
+            val intent = Intent(context.activity, EventActivity::class.java)
             EventActivity.sportTypeId = event.sportTypeId
             intent.putExtra(EXTRA_ID, event.eventId)
             intent.putExtra(EXTRA_COLOR, event.color)

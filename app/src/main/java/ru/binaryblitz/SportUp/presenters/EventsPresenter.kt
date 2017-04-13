@@ -40,7 +40,7 @@ class EventsPresenter(private val service: EndpointsService, private val view: S
                             AndroidUtilities.getIntFieldFromJson(it.get("price")),
                             AndroidUtilities.getDoubleFieldFromJson(it.get("latitude")),
                             AndroidUtilities.getDoubleFieldFromJson(it.get("longitude")),
-                            sportTypeId)
+                            sportTypeId,
                             AndroidUtilities.getPasswordFromJson(it.get("password")))
                 }
 

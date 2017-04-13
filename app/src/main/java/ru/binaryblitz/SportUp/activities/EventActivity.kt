@@ -44,7 +44,6 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     var id = 0
     var userLimit = 0
     var userCount = 0
-    var isUserEvent = false
     lateinit var dialog: ProgressDialog
 
     var isCreatedByUser: Boolean = false
@@ -119,11 +118,11 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun setOnClickListeners() {
-        backBtn.setOnClickListener { finish() }
+        backButton.setOnClickListener { finish() }
 
         playersButton.setOnClickListener { openPlayersActivity() }
 
-        joinBtn.setOnClickListener { processJoinButton() }
+        joinButton.setOnClickListener { processJoinButton() }
     }
 
     private fun openPlayersActivity() {
@@ -145,7 +144,7 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         }
 
         rightButton.setOnClickListener {
-            if (!isUserEvent) {
+            if (!isCreatedByUser) {
                 return@setOnClickListener
             }
 
@@ -235,28 +234,27 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         initButton()
     }
 
-    private fun initMainButton(isCreatedByUser: Boolean, isJoined: Boolean) {
-        initButton(isCreatedByUser, isJoined)
+    private fun initMainButton() {
+        initButtons()
     }
 
-    private fun initButton(isCreatedByUser: Boolean, isJoined: Boolean) {
+    private fun initButton() {
         try {
-            joinBtn.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
+            joinButton.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
                 else ColorStateList.valueOf(color)
-            joinBtn.text = if (isCreatedByUser) getString(R.string.delete) else if (isJoined) getString(R.string.leave) else getString(R.string.join)
+            joinButton.text = if (isCreatedByUser) getString(R.string.delete) else if (isJoined) getString(R.string.leave) else getString(R.string.join)
         } catch (e: Exception) {
             LogUtil.logException(e)
         }
     }
 
-    private fun initButtons(isCreatedByUser: Boolean, isJoined: Boolean) {
-        isUserEvent = isCreatedByUser
-        initMainButton(isCreatedByUser, isJoined)
+    private fun initButtons() {
+        initMainButton()
         initToolbarButton()
     }
 
     private fun initToolbarButton() {
-        rightButton.setImageResource(if (isUserEvent) R.drawable.ic_edit else R.drawable.icon_nav_comment_white)
+        rightButton.setImageResource(if (isCreatedByUser) R.drawable.ic_edit else R.drawable.icon_nav_comment_white)
     }
 
     fun getTimeString(date: String): SpannableStringBuilder {
