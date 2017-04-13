@@ -49,6 +49,8 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
 
     lateinit var dialog: ProgressDialog
 
+    lateinit var presenter: EditEventPresenter
+
     @Inject
     lateinit var api: EndpointsService
 
@@ -63,6 +65,29 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         initToolbar()
         loadEventInformation()
         setOnClickListeners()
+    }
+
+    private fun showDeleteDialog() {
+        MaterialDialog.Builder(this)
+                .title(getString(R.string.delete_event))
+                .content(getString(R.string.are_you_sure))
+                .positiveText(getString(R.string.yes))
+                .negativeText(getString(R.string.no))
+                .onPositive { _, _ ->
+                    deleteEvent()
+                }
+                .show()
+    }
+
+    private fun deleteEvent() {
+        presenter.deleteEvent(event.get("id").asInt, DeviceInfoStore.getToken(this))
+    }
+
+    fun onEventDeleted() {
+        val intent = Intent(this@EditEventActivity, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
     }
 
     private fun setOnClickListeners() {
@@ -85,6 +110,8 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         priceButton.setOnClickListener { showPriceDialog() }
 
         passwordView.setOnClickListener { showPasswordDialog() }
+
+        deleteEventButton.setOnClickListener { showDeleteDialog() }
 
         locationButton.setOnClickListener {
             val intent = Intent(this@EditEventActivity, MapActivity::class.java)
@@ -201,7 +228,7 @@ class EditEventActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener, Da
         dialog = ProgressDialog(this)
         dialog.show()
 
-        val presenter = EditEventPresenter(api, this)
+        presenter = EditEventPresenter(api, this)
         presenter.editEvent(event.get("id").asInt, generateJson(), DeviceInfoStore.getToken(this))
     }
 

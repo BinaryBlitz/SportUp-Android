@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -170,10 +171,21 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         startActivity(intent)
     }
 
+    private fun showDeleteDialog() {
+        MaterialDialog.Builder(this)
+                .title(getString(R.string.delete_event))
+                .content(getString(R.string.are_you_sure))
+                .positiveText(getString(R.string.yes))
+                .negativeText(getString(R.string.no))
+                .onPositive { _, _ ->
+                    presenter.deleteEvent(id, DeviceInfoStore.getToken(this))
+                }
+                .show()
+    }
+    
     private fun processJoinButton() {
         if (isCreatedByUser) {
-            LogUtil.logError(id)
-            presenter.deleteEvent(id, DeviceInfoStore.getToken(this))
+            showDeleteDialog()
         } else if (isJoined) {
             presenter.leaveEvent(id, DeviceInfoStore.getToken(this))
         } else {
