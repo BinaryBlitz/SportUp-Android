@@ -124,7 +124,11 @@
     <string name="congratulations">Поздравляем</string>
     <string name="you_are_best_player">Вы признаны лучшим игроком</string>
     <string name="your_price">Вы получаете в подарок</string>
-  
+    <string name="delete_event">Удаление события</string>
+    <string name="are_you_sure">Вы уверены?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+
     <plurals name="places">
         <item quantity="zero">0 площадок</item>
         <item quantity="one">%1$d площадка</item>

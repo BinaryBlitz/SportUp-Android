@@ -3,13 +3,16 @@ package ru.binaryblitz.SportUp.activities
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,6 +29,8 @@ import ru.binaryblitz.SportUp.presenters.EventPresenter
 import ru.binaryblitz.SportUp.server.EndpointsService
 import javax.inject.Inject
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import ru.binaryblitz.SportUp.server.DeviceInfoStore
@@ -54,8 +59,31 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private lateinit var presenter: EventPresenter
 
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+
     @Inject
     lateinit var api: EndpointsService
+
+    internal var target: Target = object : Target {
+        override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+            val icon = BitmapDescriptorFactory.fromBitmap(SportTypesUtil.getMarker(sportTypeId!!, this@EventActivity, bitmap))
+
+            googleMap?.addMarker(MarkerOptions()
+                    .position(LatLng(latitude, longitude))
+                    .icon(icon))
+
+            moveCamera(latitude, longitude)
+        }
+
+        override fun onBitmapFailed(errorDrawable: Drawable?) {
+
+        }
+
+        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,12 +100,12 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     fun onEventJoined(id: Int) {
         memberShipId = id
         isJoined = true
-        initButton()
+        initMainButton()
     }
 
     fun onEventLeft() {
         isJoined = false
-        initButton()
+        initMainButton()
     }
 
     fun onEventDeleted() {
@@ -120,6 +148,8 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     private fun setOnClickListeners() {
         backButton.setOnClickListener { finish() }
 
+        rightButton.setOnClickListener { openEditEventActivity() }
+
         playersButton.setOnClickListener { openPlayersActivity() }
 
         joinButton.setOnClickListener { processJoinButton() }
@@ -134,9 +164,28 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         startActivity(intent)
     }
 
+    private fun openEditEventActivity() {
+        val intent = Intent(this@EventActivity, EditEventActivity::class.java)
+        intent.putExtra(EXTRA_ID, id)
+        intent.putExtra(EXTRA_COLOR, color)
+        startActivity(intent)
+    }
+
+    private fun showDeleteDialog() {
+        MaterialDialog.Builder(this)
+                .title(getString(R.string.delete_event))
+                .content(getString(R.string.are_you_sure))
+                .positiveText(getString(R.string.yes))
+                .negativeText(getString(R.string.no))
+                .onPositive { _, _ ->
+                    presenter.deleteEvent(id, DeviceInfoStore.getToken(this))
+                }
+                .show()
+    }
+    
     private fun processJoinButton() {
         if (isCreatedByUser) {
-            presenter.deleteEvent(id, DeviceInfoStore.getToken(this))
+            showDeleteDialog()
         } else if (isJoined) {
             presenter.leaveEvent(id, DeviceInfoStore.getToken(this))
         } else {
@@ -231,14 +280,10 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
         this.isCreatedByUser = obj.get("creator").asJsonObject.get("id").asInt == DeviceInfoStore.getUserObject(this)?.id
         this.isJoined = obj.get("membership") != null && !obj.get("membership").isJsonNull
 
-        initButton()
-    }
-
-    private fun initMainButton() {
         initButtons()
     }
 
-    private fun initButton() {
+    private fun initMainButton() {
         try {
             joinButton.backgroundTintList = if (isJoined) ColorStateList.valueOf(ContextCompat.getColor(this, R.color.redColor))
                 else ColorStateList.valueOf(color)
@@ -293,13 +338,12 @@ class EventActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     fun onLoaded(latitude: Double, longitude: Double) {
-        val icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pins_footballmid)
+        this.latitude = latitude
+        this.longitude = longitude
 
-        googleMap?.addMarker(MarkerOptions()
-                .position(LatLng(latitude, longitude))
-                .icon(icon))
-
-        moveCamera(latitude, longitude)
+        Picasso.with(this)
+                .load(SportTypesUtil.findIcon(this, sportTypeId!!))
+                .into(target)
     }
 
     private fun load() {

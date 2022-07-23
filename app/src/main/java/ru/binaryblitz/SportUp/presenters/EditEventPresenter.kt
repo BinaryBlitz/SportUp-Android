@@ -19,6 +19,22 @@ class EditEventPresenter(private val service: EndpointsService, private val view
         })
     }
 
+    fun deleteEvent(id: Int, token: String) {
+        service.deleteEvent(id, token, object : JsonObjectResponseListener {
+            override fun onSuccess(obj: JsonObject) {
+                onEventDeleted()
+            }
+
+            override fun onError(networkError: String) {
+                onEventDeleted()
+            }
+        })
+    }
+
+    private fun onEventDeleted() {
+        view.onEventDeleted()
+    }
+
     private fun parseAnswer() {
         view.onLoaded()
     }
