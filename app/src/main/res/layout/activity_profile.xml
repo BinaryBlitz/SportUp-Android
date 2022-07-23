@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            app:elevation="0dp"
+            android:layout_height="wrap_content">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:contentInsetStart="0dp"
+                    android:contentInsetLeft="0dp"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp"
+                    android:background="#ffffff"
+                    android:minHeight="?attr/actionBarSize">
+                    <FrameLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/action_bar">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:layout_gravity="center"
+                            android:id="@+id/nameText"
+                            android:gravity="center_vertical"
+                            android:typeface="sans"
+                            android:textSize="18sp"
+                            android:textColor="#212121" />
+
+                        <ImageView
+                            android:id="@+id/rightBtn"
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/icon_nav_edit_black"
+                            android:padding="13dp"
+                            android:layout_gravity="end"
+                            />
+                    </FrameLayout>
+                </android.support.v7.widget.Toolbar>
+                <com.miguelcatalan.materialsearchview.MaterialSearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+        </android.support.design.widget.AppBarLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content">
+                <com.github.siyamed.shapeimageview.CircularImageView
+                    app:siBorderWidth="2dp"
+                    app:siBorderColor="#ffffff"
+                    android:id="@+id/profileImage"
+                    android:layout_width="62dp"
+                    android:layout_height="62dp"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:scaleType="centerCrop" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1.0"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/icon_bestplayer"
+                        android:layout_height="22dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:id="@+id/votesCount"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="24sp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:textColor="#727272"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/best_player"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:textColor="#727272"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1.0"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/icon_playedgame" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:id="@+id/eventsCount"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="24sp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:textColor="#727272"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/played_games"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:textColor="#727272"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1.0"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/icon_yellowcardsmoll"
+                        android:layout_height="22dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:id="@+id/violationsCount"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="24sp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:textColor="#727272"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/yellows"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp"
+                    android:textColor="#727272"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="#b6b6b6"
+            android:layout_height="1px"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#f7f9fa"
+            android:layout_height="12dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#b6b6b6"
+            android:layout_height="1px"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_marginStart="16dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/icon_wallet_gray" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="@string/balance"
+                android:textColor="#212121"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#b6b6b6"
+            android:layout_height="1px"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#f7f9fa"
+            android:layout_height="12dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#f7f9fa"
+            android:layout_height="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="@string/buy_tickets"
+            android:paddingStart="12dp"
+            android:background="#f7f9fa"
+            android:paddingLeft="12dp"
+            android:textColor="#212121"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#f7f9fa"
+            android:layout_height="12dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#b6b6b6"
+            android:layout_height="1px"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_marginStart="16dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/icon_ticketsmoll_action" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="2"
+                android:textColor="#727272"
+                android:gravity="center_vertical"
+                android:textSize="22sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content" />
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:text="@string/_30"
+                android:gravity="center"
+                android:layout_gravity="end|center_vertical"
+                android:textColor="#ffffff"
+                android:id="@+id/add_btn"
+                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="#b6b6b6"
+            android:layout_height="1px"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_marginStart="16dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/icon_ticketsmoll_action" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="5"
+                android:textColor="#727272"
+                android:gravity="center_vertical"
+                android:textSize="22sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content" />
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:text="@string/_100"
+                android:gravity="center"
+                android:layout_gravity="end|center_vertical"
+                android:textColor="#ffffff"
+                android:id="@+id/fivebtn"
+                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="#b6b6b6"
+            android:layout_height="1px"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_marginStart="16dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/icon_ticketsmoll_action" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="10"
+                android:textColor="#727272"
+                android:gravity="center_vertical"
+                android:textSize="22sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content" />
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:text="@string/_150"
+                android:gravity="center"
+                android:layout_gravity="end|center_vertical"
+                android:textColor="#ffffff"
+                android:id="@+id/tenBtn"
+                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#b6b6b6"
+            android:layout_height="1px"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#f7f9fa"
+            android:layout_height="12dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#f7f9fa"
+            android:layout_height="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="@string/earn_tickets"
+            android:paddingStart="12dp"
+            android:background="#f7f9fa"
+            android:paddingLeft="12dp"
+            android:textColor="#212121"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#f7f9fa"
+            android:layout_height="12dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#b6b6b6"
+            android:layout_height="1px"/>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <ImageView
+        android:layout_width="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/icon_ticketsmoll_action" />
+
+        <TextView
+        android:layout_width="0dp"
+        android:text="1"
+        android:textColor="#727272"
+        android:gravity="center_vertical"
+        android:textSize="22sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1.0"
+        android:layout_height="wrap_content" />
+
+        <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_height="match_parent">
+        <TextView
+        android:layout_width="0dp"
+        android:text="@string/reply"
+        android:textColor="#727272"
+        android:gravity="center_vertical"
+        android:textSize="14sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1.0"
+        android:layout_height="wrap_content" />
+        <ImageView
+        android:layout_width="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical|end"
+        android:src="@drawable/icon_feedback" />
+        </LinearLayout>
+        </LinearLayout>
+        <View
+        android:layout_width="match_parent"
+        android:background="#b6b6b6"
+        android:layout_height="1px"/>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <ImageView
+        android:layout_width="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/icon_ticketsmoll_action" />
+
+        <TextView
+        android:layout_width="0dp"
+        android:text="2"
+        android:textColor="#727272"
+        android:gravity="center_vertical"
+        android:textSize="22sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1.0"
+        android:layout_height="wrap_content" />
+
+        <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_height="match_parent">
+        <TextView
+        android:layout_width="0dp"
+        android:text="@string/invite_friend"
+        android:textColor="#727272"
+        android:gravity="center_vertical"
+        android:textSize="14sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1.0"
+        android:layout_height="wrap_content" />
+        <ImageView
+        android:layout_width="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical|end"
+        android:src="@drawable/icon_invitefriend" />
+        </LinearLayout>
+        </LinearLayout>
+        <View
+        android:layout_width="match_parent"
+        android:background="#b6b6b6"
+        android:layout_height="1px"/>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <ImageView
+        android:layout_width="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/icon_ticketsmoll_action" />
+
+        <TextView
+        android:layout_width="0dp"
+        android:text="3"
+        android:textColor="#727272"
+        android:gravity="center_vertical"
+        android:textSize="22sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1.0"
+        android:layout_height="wrap_content" />
+
+        <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_height="match_parent">
+        <TextView
+        android:layout_width="0dp"
+        android:text="@string/share_app"
+        android:textColor="#727272"
+        android:gravity="center_vertical"
+        android:textSize="14sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1.0"
+        android:layout_height="wrap_content" />
+        <ImageView
+        android:layout_width="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical|end"
+        android:src="@drawable/icon_share" />
+        </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#b6b6b6"
+            android:layout_height="1px"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="#f7f9fa"
+            android:layout_height="12dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:background="#f7f9fa"
+            android:layout_height="100dp">
+            <Button
+                android:id="@+id/promoButton"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="170dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/type_promocode"
+                android:textColor="#ffffff"
+                android:textSize="14sp" />
+        </FrameLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

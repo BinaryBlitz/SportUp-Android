@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/appBarView"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:contentInsetStart="0dp"
+                android:contentInsetLeft="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                android:minHeight="?attr/actionBarSize">
+                <FrameLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/action_bar">
+
+                    <ImageView
+                        android:id="@+id/backBtn"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_back"
+                        android:padding="13dp"
+                        android:layout_gravity="start"
+                        />
+
+                    <ImageView
+                        android:id="@+id/rightBtn"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_nav_map_white"
+                        android:padding="13dp"
+                        android:layout_gravity="end"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:layout_gravity="center"
+                        android:id="@+id/titleTextView"
+                        android:gravity="center_vertical"
+                        android:typeface="sans"
+                        android:textSize="22sp"
+                        android:textColor="#ffffff" />
+
+                </FrameLayout>
+            </android.support.v7.widget.Toolbar>
+            <devs.mulham.horizontalcalendar.HorizontalCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:textColorSelected="#FFFF"/>
+        </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+    <ru.binaryblitz.SportUp.custom.RecyclerListView
+        android:id="@+id/recyclerView"
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ru.binaryblitz.SportUp.custom.RecyclerListView>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="#99000000"
+        android:id="@+id/dialog_new_order"
+        android:visibility="gone"
+        android:elevation="8dp"
+        android:clickable="true"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/dialog_password" />
+
+    </FrameLayout>
+</io.codetail.widget.RevealFrameLayout>
